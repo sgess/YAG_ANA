@@ -913,7 +913,8 @@ for j  = 1:nb					% loop over all beamline sections of BL-file
           I_pkj(jc) = I_pk1;                        % peak current in bunch center [kA]
 		  I_pkfj(jc) = max(If);
         end  
-        fcutj(jc)    = 1 - Ne1/Ne0;					% fraction of particles cut [ ]
+        %fcutj(jc)    = 1 - Ne1/Ne0;					% fraction of particles cut [ ]
+        fcutj(jc) = Nesim;
       end
     end
   end                                               % end cod < 0 | cod == 99 stuff
