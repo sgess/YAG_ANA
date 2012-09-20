@@ -77,12 +77,12 @@ IND_02_10_wFB = LINAC_ISON & KLYS_02_10;
 IND_11_20_wFB = LINAC_ISON & KLYS_11_20;
 
 % Sum energy with FBCK
-S10E = sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB)))+1000.*state.lem.energy(1)
-S20E = sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB)))+1000.*state.lem.energy(2)
+S10E = sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB)))+1000.*state.lem.energy(1);
+S20E = sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB)))+1000.*state.lem.energy(2);
 
 %LEM 2-10
 LINAC_ENLD(IND_02_10_wFB) = 1000*state.lem.energy(2)/S10E * LINAC_ENLD(IND_02_10_wFB);
-RES10 = 1000*state.lem.energy(2) - sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB))) - 1000*state.lem.energy(1)
+RES10 = 1000*state.lem.energy(2) - sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB))) - 1000*state.lem.energy(1);
 
 %Still not there?
 if RES10 ~= 0
@@ -91,15 +91,13 @@ end
 
 %LEM 11-20
 LINAC_ENLD(IND_11_20_wFB) = 1000*state.lem.energy(3)/S20E * LINAC_ENLD(IND_11_20_wFB);
-RES20 = 1000*state.lem.energy(3) - sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB))) - 1000*state.lem.energy(2)
+RES20 = 1000*state.lem.energy(3) - sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB))) - 1000*state.lem.energy(2);
 
 %Still not there?
 if RES20 ~= 0
-    LINAC_ENLD(i17) = LINAC_ENLD(i17) + RES20/length(LINAC_ENLD(i17));
+    LINAC_ENLD(i91) = LINAC_ENLD(i91) + RES10;
 end
 
-AMPL = LINAC_ENLD;
-PHAS = LINAC_PTOT;
 
 % 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%% S10 CHICKEN %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
