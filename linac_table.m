@@ -1,4 +1,5 @@
-load('/Users/sgess/Desktop/FACET/2012/DATA/July_3/E200_1443/E200_1443_State.mat');
+%load('/Users/sgess/Desktop/FACET/2012/DATA/July_3/E200_1443/E200_1443_State.mat');
+load('/Users/sgess/Desktop/data/E200_DATA/July_3/E200_1467/E200_1467_State.mat');
 
 %%%%%%%%%%%%%%%%%%
 % Sector 02 - 10 %
@@ -89,9 +90,8 @@ LI02_LI10_cell(1,15) = {'LINAC PDES E'};
 LI02_LI10_cell(2:(n_klys+1),15) = num2cell(cumsum(state.klys.ENLD(KLYS_02_10_ind).*cos(pi/180*LI_02_10_PDES))/1000 ...
     +state.lem.energy(1));
 
-fname = 'LI02_LI10_table.txt';
+fname = '/Users/sgess/Desktop/data/E200_DATA/July_3/E200_1467/LI02_LI10_table.txt';
 fid = fopen(fname, 'w');
-width = 8*ones(n_klys+1,15);
 fprintf(fid, '%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n', LI02_LI10_cell{1,:});
 for row=2:(n_klys+1)
     fprintf(fid, '%s \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f\n', LI02_LI10_cell{row,:});
@@ -187,9 +187,8 @@ LI11_LI20_cell(1,15) = {'LINAC PDES E'};
 LI11_LI20_cell(2:(n_klys+1),15) = num2cell(cumsum(state.klys.ENLD(KLYS_11_20_ind).*cos(pi/180*LI_11_20_PDES))/1000 ...
     +state.lem.energy(2));
 
-fname = 'LI11_LI20_table.txt';
+fname = '/Users/sgess/Desktop/data/E200_DATA/July_3/E200_1467/LI11_LI20_table.txt';
 fid = fopen(fname, 'w');
-width = 8*ones(n_klys+1,15);
 fprintf(fid, '%s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s \t %s\n', LI11_LI20_cell{1,:});
 for row=2:(n_klys+1)
     fprintf(fid, '%s \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f\n', LI11_LI20_cell{row,:});
