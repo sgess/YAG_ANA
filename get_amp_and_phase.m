@@ -1,4 +1,4 @@
-function [AMPL, PHAS] = get_amp_and_phase(state_file)
+%function [AMPL, PHAS] = get_amp_and_phase(state_file)
 % [AMPL, PHAS] = get_amp_and_phase() retrieves kylstron amplitude and phase
 % information with calculated feedback phases and LEM fudge factors
 
@@ -57,9 +57,9 @@ else
 end
 
 % Supply missing energy with FBs
-if E20_miss < sum(LINAC_ENLD(i17) + LINAC_ENLD(i18))
+if E20_miss < (sum(LINAC_ENLD(i17 & LINAC_ISON)) + sum(LINAC_ENLD(i18 & LINAC_ISON)))
     %All energy can be supplied with FB tubes, determine phase accordingly
-    FB20_PHAS = acosd(E20_miss/sum(LINAC_ENLD(i17) + LINAC_ENLD(i18)));
+    FB20_PHAS = acosd(E20_miss/(sum(LINAC_ENLD(i17 & LINAC_ISON)) + sum(LINAC_ENLD(i18 & LINAC_ISON))));
 else
     %All energy cannot be supplied with FB tubes, set FB phase to zero
     FB20_PHAS = 0;    
@@ -77,12 +77,12 @@ IND_02_10_wFB = LINAC_ISON & KLYS_02_10;
 IND_11_20_wFB = LINAC_ISON & KLYS_11_20;
 
 % Sum energy with FBCK
-S10E = sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB)))+1000.*state.lem.energy(1)
-S20E = sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB)))+1000.*state.lem.energy(2)
+S10E = sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB)))+1000.*state.lem.energy(1);
+S20E = sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB)))+1000.*state.lem.energy(2);
 
 %LEM 2-10
 LINAC_ENLD(IND_02_10_wFB) = 1000*state.lem.energy(2)/S10E * LINAC_ENLD(IND_02_10_wFB);
-RES10 = 1000*state.lem.energy(2) - sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB))) - 1000*state.lem.energy(1)
+RES10 = 1000*state.lem.energy(2) - sum(LINAC_ENLD(IND_02_10_wFB).*cos(pi/180*LINAC_PTOT(IND_02_10_wFB))) - 1000*state.lem.energy(1);
 
 %Still not there?
 if RES10 ~= 0
@@ -91,14 +91,17 @@ end
 
 %LEM 11-20
 LINAC_ENLD(IND_11_20_wFB) = 1000*state.lem.energy(3)/S20E * LINAC_ENLD(IND_11_20_wFB);
-RES20 = 1000*state.lem.energy(3) - sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB))) - 1000*state.lem.energy(2)
+RES20 = 1000*state.lem.energy(3) - sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB))) - 1000*state.lem.energy(2);
+disp(sum(LINAC_ENLD(IND_11_20_wFB).*cos(pi/180*LINAC_PTOT(IND_11_20_wFB))) + 1000*state.lem.energy(2))
 
+
+disp(LINAC_ENLD(i17 & LINAC_ISON))
 %Still not there?
 if RES20 ~= 0
-    LINAC_ENLD(i17) = LINAC_ENLD(i17) + RES20/length(LINAC_ENLD(i17));
+    LINAC_ENLD(i17 & LINAC_ISON) = LINAC_ENLD(i17 & LINAC_ISON) + RES20/length(LINAC_ENLD(i17 & LINAC_ISON));
 end
-
-AMPL = LINAC_ENLD;
+disp(LINAC_ENLD(i17 & LINAC_ISON))
+AMPL = LINAC_ENLD.*LINAC_ISON;
 PHAS = LINAC_PTOT;
 
 % 
