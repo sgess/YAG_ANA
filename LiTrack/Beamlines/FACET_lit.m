@@ -22,8 +22,10 @@ E0     = 1.19;		% initial electron energy [GeV]
 % z0_bar = 0.000E-3;	% axial offset of bunch [m] (used also with file input - mean of file removed first)
 d0_bar = 0.000E-2;	% relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
 Nbin   = 200;		% number of bins for z-coordinate (and dE/E for plots)
-gzfit   = 1;		% if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+gzfit   = 0;		% if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
 gdfit   = 0;		% if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
+contf=1;		 % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+
 
 % The follwing array of file names, "wake_fn", is the point-charge wakefield filename(s) to be used.  The pointer
 % to the used filename appears in the 5th column (wake ON/OFF) of the 'beamline' array below.  A "zero" (i.e. 0)
@@ -64,7 +66,7 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 % chicane R56 keeps dropping from 0.074 down to 0.066...
 % 2.2E10, 40.8, -20.6 gave 22.6kA, 15.4µm with as built LBCCR56 -0.076
 
-Efinal = 20; %23
+Efinal = 20.35; %23
 T566 = 0.10;
 % contf = 1;
 
