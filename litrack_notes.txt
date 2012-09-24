@@ -1,0 +1,10 @@
+FACET TO LITRACK NOTES
+
+9/20 23:15
+Finished first state to amp and phase function, need to translate to LIT file
+
+00:00
+comparing to MDW's FACET_lit file. found issue in LI10-LI11. It seems that he is missing KLYS:LI10:81 and I am missing KLYS:LI11:31
+
+01:00
+OK, KLYS:LI10:81 does not exist, that is where the S10 chicken is. KLYS:LI11:31 also does not exist. There is a solenoid there but I don't know what it does.
