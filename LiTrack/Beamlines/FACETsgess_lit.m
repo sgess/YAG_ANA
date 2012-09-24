@@ -249,10 +249,11 @@
     -22     5.9E-5     0          0           0        0         % LBCC ISR energy spread
      37     0.01       1          0           0        0         % Z-cut
     
-    % LI11: SBST PDES ~ 0, I removed LI11:KLYS:31 because it is a solenoid
-    %       but MDW has it in his file
+    % LI11: SBST PDES ~ 0, LI11:KLYS:31 does not show up in Nate's list so
+    %       it is added by hand
      11     ampl( 72)  phas( 72)  lambdaS     1        leff( 72) % LI11:KLYS:11
      11     ampl( 73)  phas( 73)  lambdaS     1        leff( 73) % LI11:KLYS:21
+     11     0          0          lambdaS     1        6.7180    % LI11:KLYS:31
      11     ampl( 74)  phas( 74)  lambdaS     1        leff( 74) % LI11:KLYS:41
      11     ampl( 75)  phas( 75)  lambdaS     1        leff( 75) % LI11:KLYS:51
      11     ampl( 76)  phas( 76)  lambdaS     1        leff( 76) % LI11:KLYS:61
