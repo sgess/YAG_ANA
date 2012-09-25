@@ -1,13 +1,14 @@
-  %Extract klystron egain, phase, and length from Nate's facet_getMachine states
-  %state_file = '/Users/sgess/Desktop/FACET/2012/DATA/July_3/E200_1443/E200_1443_State.mat';
-  state_file = '/Users/sgess/Desktop/data/E200_DATA/July_3/E200_1443/E200_1443_State.mat';
-
-  [ampl,phas,leff]=get_amp_and_phase(state_file);
+  num = 1467;
+  MACH=get_amp_and_phase(num,0,0,0);
+  ampl = MACH.KLYS.AMPL;
+  phas = MACH.KLYS.PHAS;
+  leff = MACH.KLYS.LEFF;
 
   % FACET energy set points. We are pretty sure about these, I think. . .
   E0=1.19;                    % GeV ... initial energy
   E1=9.0;                     % GeV ... energy at LBCC
   E2=20.35;                   % GeV ... energy at FACET
+  lambdaS=2.99792458e8/2856e6;% S-band wavelength
   
   %%%%%%%%%%%%
   % MDW vals %
@@ -121,7 +122,7 @@
   comment='FACET (sgess''s best guess)'; % text comment which appears at bottom of plots
 
 %==============|==============================================================================================
-%	CODES        |		 1				        2				        3				        4				        5				        6
+%	CODES      |		1				2				3				4				5				6
 %==============|==============================================================================================
 % compressor   |	code= 6           R56/m          T566/m          E_nom/GeV       U5666/m            -
 % chicane      |	code= 7           R56/m         E_nom/GeV           -               -               -
@@ -144,13 +145,13 @@
 %=============================================================================================================
 % FACET
 %=============================================================================================================
-  lambdaS=2.99792458e8/2856e6; % S-band wavelength
+  
   beamline=[
       
     % RTL: The energy cut is a little tighter than in the file MJH gave me.
      -1     0		   0          0           0        0         % initial particles
     -11     NRTL_ampl  NRTL_phas  lambdaS     1        2.1694    % NRTL compressor
-    -26     -0.021	   0.021      0           0        0         % energy spread cut
+     26     -0.021	   0.021      0           0        0         % energy spread cut
      -6     NRTL_R56   NRTL_T566  E0          0        0         % NRTL R56, T566
      
     % LI02: SBST PDES ~ 0
@@ -161,7 +162,7 @@
      11     ampl(  5)  phas(  5)  lambdaS     1        leff(  5) % LI02:KLYS:51
      11     ampl(  6)  phas(  6)  lambdaS     1        leff(  6) % LI02:KLYS:61
      11     ampl(  7)  phas(  7)  lambdaS     1        leff(  7) % LI02:KLYS:71
-     11     ampl(  8)  phas(  8)  lambdaS     1        leff(  8) % LI02:KLYS:81
+    -11     ampl(  8)  phas(  8)  lambdaS     1        leff(  8) % LI02:KLYS:81
      
     % LI03: SBST PDES ~ 11
      11     ampl(  9)  phas(  9)  lambdaS     1        leff(  9) % LI03:KLYS:11
@@ -171,7 +172,7 @@
      11     ampl( 13)  phas( 13)  lambdaS     1        leff( 13) % LI03:KLYS:51
      11     ampl( 14)  phas( 14)  lambdaS     1        leff( 14) % LI03:KLYS:61
      11     ampl( 15)  phas( 15)  lambdaS     1        leff( 15) % LI03:KLYS:71
-     11     ampl( 16)  phas( 16)  lambdaS     1        leff( 16) % LI03:KLYS:81
+    -11     ampl( 16)  phas( 16)  lambdaS     1        leff( 16) % LI03:KLYS:81
      
     % LI04: SBST PDES ~ 22
      11     ampl( 17)  phas( 17)  lambdaS     1        leff( 17) % LI04:KLYS:11
@@ -181,7 +182,7 @@
      11     ampl( 21)  phas( 21)  lambdaS     1        leff( 21) % LI04:KLYS:51
      11     ampl( 22)  phas( 22)  lambdaS     1        leff( 22) % LI04:KLYS:61
      11     ampl( 23)  phas( 23)  lambdaS     1        leff( 23) % LI04:KLYS:71
-     11     ampl( 24)  phas( 24)  lambdaS     1        leff( 24) % LI04:KLYS:81
+    -11     ampl( 24)  phas( 24)  lambdaS     1        leff( 24) % LI04:KLYS:81
      
     % LI05: SBST PDES ~ 33
      11     ampl( 25)  phas( 25)  lambdaS     1        leff( 25) % LI05:KLYS:11
@@ -191,7 +192,7 @@
      11     ampl( 29)  phas( 29)  lambdaS     1        leff( 29) % LI05:KLYS:51
      11     ampl( 30)  phas( 30)  lambdaS     1        leff( 30) % LI05:KLYS:61
      11     ampl( 31)  phas( 31)  lambdaS     1        leff( 31) % LI05:KLYS:71
-     11     ampl( 32)  phas( 32)  lambdaS     1        leff( 32) % LI05:KLYS:81
+    -11     ampl( 32)  phas( 32)  lambdaS     1        leff( 32) % LI05:KLYS:81
      
     % LI06: SBST PDES ~ 44
      11     ampl( 33)  phas( 33)  lambdaS     1        leff( 33) % LI06:KLYS:11
@@ -201,7 +202,7 @@
      11     ampl( 37)  phas( 37)  lambdaS     1        leff( 37) % LI06:KLYS:51
      11     ampl( 38)  phas( 38)  lambdaS     1        leff( 38) % LI06:KLYS:61
      11     ampl( 39)  phas( 39)  lambdaS     1        leff( 39) % LI06:KLYS:71
-     11     ampl( 40)  phas( 40)  lambdaS     1        leff( 40) % LI06:KLYS:81
+    -11     ampl( 40)  phas( 40)  lambdaS     1        leff( 40) % LI06:KLYS:81
      
     % LI07: SECTOR OFF
      11     ampl( 41)  phas( 41)  lambdaS     1        leff( 41) % LI07:KLYS:11
@@ -211,7 +212,7 @@
      11     ampl( 45)  phas( 45)  lambdaS     1        leff( 45) % LI07:KLYS:51
      11     ampl( 46)  phas( 46)  lambdaS     1        leff( 46) % LI07:KLYS:61
      11     ampl( 47)  phas( 47)  lambdaS     1        leff( 47) % LI07:KLYS:71
-     11     ampl( 48)  phas( 48)  lambdaS     1        leff( 48) % LI07:KLYS:81
+    -11     ampl( 48)  phas( 48)  lambdaS     1        leff( 48) % LI07:KLYS:81
      
     % LI08: SECTOR OFF
      11     ampl( 49)  phas( 49)  lambdaS     1        leff( 49) % LI08:KLYS:11
@@ -221,7 +222,7 @@
      11     ampl( 53)  phas( 53)  lambdaS     1        leff( 53) % LI08:KLYS:51
      11     ampl( 54)  phas( 54)  lambdaS     1        leff( 54) % LI08:KLYS:61
      11     ampl( 55)  phas( 55)  lambdaS     1        leff( 55) % LI08:KLYS:71
-     11     ampl( 56)  phas( 56)  lambdaS     1        leff( 56) % LI08:KLYS:81
+    -11     ampl( 56)  phas( 56)  lambdaS     1        leff( 56) % LI08:KLYS:81
     
     % LI09: SBST PDES ~ 0, 9-1 and 9-2 are FB tubes w/fast phase shifters
      11     ampl( 57)  phas( 57)  lambdaS     1        leff( 57) % LI09:KLYS:11
@@ -231,7 +232,7 @@
      11     ampl( 61)  phas( 61)  lambdaS     1        leff( 61) % LI09:KLYS:51
      11     ampl( 62)  phas( 62)  lambdaS     1        leff( 62) % LI09:KLYS:61
      11     ampl( 63)  phas( 63)  lambdaS     1        leff( 63) % LI09:KLYS:71
-     11     ampl( 64)  phas( 64)  lambdaS     1        leff( 64) % LI09:KLYS:81
+    -11     ampl( 64)  phas( 64)  lambdaS     1        leff( 64) % LI09:KLYS:81
      
     % LI10: SBST PDES ~ 55, The facet_getMachine state has the LI10:KLYS:81 
     %       but I removed it in get_amp_and_phase because it was replaced 
@@ -242,12 +243,13 @@
      11     ampl( 68)  phas( 68)  lambdaS     1        leff( 68) % LI10:KLYS:41
      11     ampl( 69)  phas( 69)  lambdaS     1        leff( 69) % LI10:KLYS:51
      11     ampl( 70)  phas( 70)  lambdaS     1        leff( 70) % LI10:KLYS:61
-     11     ampl( 71)  phas( 71)  lambdaS     1        leff( 71) % LI10:KLYS:71
+    -11     ampl( 71)  phas( 71)  lambdaS     1        leff( 71) % LI10:KLYS:71
+    -13     E1         0.235      -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
      
     % S10 CHCKN: MJH file has S10 chicken in two sections but only need one
 	  7	    LBCC_R56   E1	      0           0        0         % LBCC chicane
-    -22     5.9E-5     0          0           0        0         % LBCC ISR energy spread
-     37     0.01       1          0           0        0         % Z-cut
+     22     5.9E-5     0          0           0        0         % LBCC ISR energy spread
+    -37     0.01       1          0           0        0         % Z-cut
     
     % LI11: SBST PDES ~ 0, LI11:KLYS:31 does not show up in Nate's list so
     %       it is added by hand
@@ -258,7 +260,7 @@
      11     ampl( 75)  phas( 75)  lambdaS     1        leff( 75) % LI11:KLYS:51
      11     ampl( 76)  phas( 76)  lambdaS     1        leff( 76) % LI11:KLYS:61
      11     ampl( 77)  phas( 77)  lambdaS     1        leff( 77) % LI11:KLYS:71
-     11     ampl( 78)  phas( 78)  lambdaS     1        leff( 78) % LI11:KLYS:81
+    -11     ampl( 78)  phas( 78)  lambdaS     1        leff( 78) % LI11:KLYS:81
     
     % LI12: SBST PDES ~ 0
      11     ampl( 79)  phas( 79)  lambdaS     1        leff( 79) % LI12:KLYS:11
@@ -268,7 +270,7 @@
      11     ampl( 83)  phas( 83)  lambdaS     1        leff( 83) % LI12:KLYS:51
      11     ampl( 84)  phas( 84)  lambdaS     1        leff( 84) % LI12:KLYS:61
      11     ampl( 85)  phas( 85)  lambdaS     1        leff( 85) % LI12:KLYS:71
-     11     ampl( 86)  phas( 86)  lambdaS     1        leff( 86) % LI12:KLYS:81
+    -11     ampl( 86)  phas( 86)  lambdaS     1        leff( 86) % LI12:KLYS:81
      
     % LI13: SBST PDES ~ 0
      11     ampl( 87)  phas( 87)  lambdaS     1        leff( 87) % LI13:KLYS:11
@@ -278,7 +280,7 @@
      11     ampl( 91)  phas( 91)  lambdaS     1        leff( 91) % LI13:KLYS:51
      11     ampl( 92)  phas( 92)  lambdaS     1        leff( 92) % LI13:KLYS:61
      11     ampl( 93)  phas( 93)  lambdaS     1        leff( 93) % LI13:KLYS:71
-     11     ampl( 94)  phas( 94)  lambdaS     1        leff( 94) % LI13:KLYS:81
+    -11     ampl( 94)  phas( 94)  lambdaS     1        leff( 94) % LI13:KLYS:81
      
     % LI14: SBST PDES ~ 0
      11     ampl( 95)  phas( 95)  lambdaS     1        leff( 95) % LI14:KLYS:11
@@ -288,7 +290,7 @@
      11     ampl( 99)  phas( 99)  lambdaS     1        leff( 99) % LI14:KLYS:51
      11     ampl(100)  phas(100)  lambdaS     1        leff(100) % LI14:KLYS:61
      11     ampl(101)  phas(101)  lambdaS     1        leff(101) % LI14:KLYS:71
-     11     ampl(102)  phas(102)  lambdaS     1        leff(102) % LI14:KLYS:81
+    -11     ampl(102)  phas(102)  lambdaS     1        leff(102) % LI14:KLYS:81
      
     % LI15: SBST PDES ~ 0
      11     ampl(103)  phas(103)  lambdaS     1        leff(103) % LI15:KLYS:11
@@ -298,7 +300,7 @@
      11     ampl(107)  phas(107)  lambdaS     1        leff(107) % LI15:KLYS:51
      11     ampl(108)  phas(108)  lambdaS     1        leff(108) % LI15:KLYS:61
      11     ampl(109)  phas(109)  lambdaS     1        leff(109) % LI15:KLYS:71
-     11     ampl(110)  phas(110)  lambdaS     1        leff(110) % LI15:KLYS:81
+    -11     ampl(110)  phas(110)  lambdaS     1        leff(110) % LI15:KLYS:81
      
     % LI16: SBST PDES ~ 0
      11     ampl(111)  phas(111)  lambdaS     1        leff(111) % LI16:KLYS:11
@@ -308,7 +310,7 @@
      11     ampl(115)  phas(115)  lambdaS     1        leff(115) % LI16:KLYS:51
      11     ampl(116)  phas(116)  lambdaS     1        leff(116) % LI16:KLYS:61
      11     ampl(117)  phas(117)  lambdaS     1        leff(117) % LI16:KLYS:71
-     11     ampl(118)  phas(118)  lambdaS     1        leff(118) % LI16:KLYS:81
+    -11     ampl(118)  phas(118)  lambdaS     1        leff(118) % LI16:KLYS:81
      
     % LI17: Entire sector phase set by fast FB phase shifter
      11     ampl(119)  phas(119)  lambdaS     1        leff(119) % LI17:KLYS:11
@@ -318,7 +320,7 @@
      11     ampl(123)  phas(123)  lambdaS     1        leff(123) % LI17:KLYS:51
      11     ampl(124)  phas(124)  lambdaS     1        leff(124) % LI17:KLYS:61
      11     ampl(125)  phas(125)  lambdaS     1        leff(125) % LI17:KLYS:71
-     11     ampl(126)  phas(126)  lambdaS     1        leff(126) % LI17:KLYS:81
+    -11     ampl(126)  phas(126)  lambdaS     1        leff(126) % LI17:KLYS:81
      
     % LI18: Entire sector phase set by fast FB phase shifter (opposite S18)
      11     ampl(127)  phas(127)  lambdaS     1        leff(127) % LI18:KLYS:11
@@ -328,7 +330,7 @@
      11     ampl(131)  phas(131)  lambdaS     1        leff(131) % LI18:KLYS:51
      11     ampl(132)  phas(132)  lambdaS     1        leff(132) % LI18:KLYS:61
      11     ampl(133)  phas(133)  lambdaS     1        leff(133) % LI18:KLYS:71
-     11     ampl(134)  phas(134)  lambdaS     1        leff(134) % LI18:KLYS:81
+    -11     ampl(134)  phas(134)  lambdaS     1        leff(134) % LI18:KLYS:81
      
     % LI19: SBST PDES ~ 0
      11     ampl(135)  phas(135)  lambdaS     1        leff(135) % LI19:KLYS:11
@@ -337,10 +339,11 @@
      11     ampl(138)  phas(138)  lambdaS     1        leff(138) % LI19:KLYS:41
      11     ampl(139)  phas(139)  lambdaS     1        leff(139) % LI19:KLYS:51
      11     ampl(140)  phas(140)  lambdaS     1        leff(140) % LI19:KLYS:61
-     11     ampl(141)  phas(141)  lambdaS     1        leff(141) % LI19:KLYS:81
-     
+    -11     ampl(141)  phas(141)  lambdaS     1        leff(141) % LI19:KLYS:81
+    -13		E2	       1.88       -90.0	      90.0     lambdaS   % SCAV energy feedback
+
     % LI20: FACET CHICANE
-     -6     LI20_R56   LI20_T566  E2          0        0         % LI20 R56, T566
+      6     LI20_R56   LI20_T566  E2          0        0         % LI20 R56, T566
      22     0.8E-5     0          0           0        0         % FFTB ISR energy spread
      37     0.01       1          0           0        0         % Z-cut
     -99		0          0          0           0        0         % end

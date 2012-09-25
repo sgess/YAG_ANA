@@ -8,3 +8,22 @@ comparing to MDW's FACET_lit file. found issue in LI10-LI11. It seems that he is
 
 01:00
 OK, KLYS:LI10:81 does not exist, that is where the S10 chicken is. KLYS:LI11:31 also does not exist. There is a solenoid there but I don't know what it does.
+
+9/24 21:15
+To do:
+1. Energy profiles for:
+	-machine no feedback
+	-machine with state feedback and lem
+	-machine with my feedback and lem
+9/25 00:00
+Ultimately decided to plot machine profiles for
+	-state no lem
+	-state with lem
+	-my calculated feedback and LEM
+
+2. Comparison of full machine vs. sectored linac
+03:15
+	-averaged sector phase
+	-did energy profile by sector, matches profile by klystron
+
+3. Make the sector LiTrack deck
