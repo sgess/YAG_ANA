@@ -27,3 +27,11 @@ Ultimately decided to plot machine profiles for
 	-did energy profile by sector, matches profile by klystron
 
 3. Make the sector LiTrack deck
+	-works and matches by klystron deck
+
+9/26 20:15
+4. Make compression parameters global
+	-also need a record of all parameters used (make new file param.txt)
+
+5. Go back to original Litrack deck and investigate effect of sectoring and changing final energy
+	-reoptimize parameters for different energies?

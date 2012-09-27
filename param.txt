@@ -1,0 +1,276 @@
+FACET_lit (hogan)
+
+% 'G'=gausian, 'U'=uniform, string.zd=name of file with z(mm) and dE/E(%) (see e.g. "atf1.zd"):
+% ============================================================================================
+%inp = 'lcls_145.zd';   % name of file with 2-columns [Z/mm dE/E/%] (sigz and sigd not used in this case)
+inp = 'G';      % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
+%inp = 'U';     % uniform  Z and dE/E (see sigz0 =..., sigd0 =...[note: FW = sig*sqrt(12)]
+ 
+ 
+% The folowing items only used when "inp" = 'G' or 'U' (i.e. used when no particle coordinate file is read)
+% ========================================================================================================
+sigz0 = 5.6E-3;     % rms bunch length used when inp=G or U above [m]
+sigd0 = 7.39E-4;    % rms relative energy spread used when inp=G or U above [ ]
+Nesim = 200000;     % number of particles to generate for simulation when inp=G or U (reasonable: ~1000 to ~100000)
+asym  = -0.245;     % for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
+tail  = 0.0;        % for inp='M' or 'G': sets rise/fall time width (0<=tail<1)
+cut   = 6;          % for inp='G': sets rise/fall time width (0.5<=cut<inf)
+% ========================================================================================================
+ 
+splots = 0;         % if =1, use small plots and show no wakes (for publish size plots)
+plot_frac = 0.05;   % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
+E0     = 1.19;      % initial electron energy [GeV]
+% Ne     = 2.20E10; % number of particles initially in bunch
+% z0_bar = 0.000E-3;    % axial offset of bunch [m] (used also with file input - mean of file removed first)
+d0_bar = 0.000E-2;  % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
+Nbin   = 200;       % number of bins for z-coordinate (and dE/E for plots)
+gzfit   = 0;        % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+gdfit   = 0;        % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
+contf=1;         % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+
+
+% 2.2E10, 41.2, -21 gave 25kA, 14µm with 5.6mm, -0.245, 7.4E-4dE/E
+% 2.2E10, 41.?, -20.6 gave 24kA, 15µm
+% 2.2E10, 41, -20.8 gave 22.4kA, 15.6µm with 6mm, -0.28, 7.4E-4dE/E
+% 2.2E10, 40.8, -22 gave 24kA, 14.5µm can get similar parametes as the
+% chicane R56 keeps dropping from 0.074 down to 0.066...
+% 2.2E10, 40.8, -20.6 gave 22.6kA, 15.4µm with as built LBCCR56 -0.076
+ 
+%Efinal = 20.35; %23
+Efinal = 23.; %23
+ 
+T566 = 0.10;
+% contf = 1;
+ 
+% FACET Li20 for long (SLC) bunch:
+% z0in_deg = 0;
+% Ne = 2.0E10;
+% compressor = 0.032;
+% subphase = 5;
+% ramp = -5;
+% RTLR56 = 0.603;
+% LBCCR56 = 0;
+% FACETR56 = 0.004;
+% RTLupper = 0.025;
+% RTLlower = -0.025;
+% SouthMS = -0.03;
+% NorthMS = 0.03;
+% 
+% FACET Nominal Design Parameters:
+z0in_deg = 0;
+Ne = 2.2E10;
+compressor = 0.0408;
+subphase = -21.2;
+ramp = 0;
+RTLR56 = 0.603;
+LBCCR56 = -0.0760;
+FACETR56 = 0.0040;
+RTLupper = 0.025;
+RTLlower = -0.025;
+SouthMS = -0.03;
+NorthMS = 0.03;
+ 
+% 23GeV with the 10cm T566:
+% Using SPPS design NDR parameters:
+% sigz0 = 6E-3
+% sigd0 = 7.39E-4
+% asym  = -0.28
+% Maximum Peak Current = 20.6298 kA with Sigmaz = 0.0149146 µm
+% Charge in NDR = 2.2E+10
+% Compressor (actual is x E0/E_SLC) = 0.0402
+% Li02-06 Phase =  -21.6
+% Phase Ramp =      0
+% RTL R56 =  0.603
+% FACET R56 =  0.004
+% NR into NRTL Timing Jitter =      0
+% RTL High E Acceptance =  0.025
+% RTL Low E Acceptance  = -0.025
+% NDR E0 =   1.19
+% LBCC R56 = -0.076
+% FACET South Momentum Slit =  -0.03
+% FACET North Momentum Slit =   0.03
+ 
+% or with E-167 NDR parameters:
+% sigz0 = 5.6E-3
+% sigd0 = 7.39E-4
+% asym  = -0.245
+% Best parameters from the scan:
+% Maximum Peak Current =  22.5kA with Sigmaz =  14.4µm
+% Charge in NDR = 2.2E+10
+% Compressor (actual is x E0/E_SLC) = 0.0408
+% Li02-06 Phase =  -21.2
+% Phase Ramp =      0
+% RTL R56 =  0.603
+% FACET R56 =  0.004
+% NR into NRTL Timing Jitter =      0
+% RTL High E Acceptance =  0.025
+% RTL Low E Acceptance  = -0.025
+% NDR E0 =   1.19
+% LBCC R56 = -0.076
+% FACET South Momentum Slit =  -0.03
+% FACET North Momentum Slit =   0.03
+ 
+phase = subphase + ramp;
+mperdeg = 0.104969/360;
+% Efinal = 25;
+% T566 = 2*FACETR56;
+thewake = 1;
+z0_bar = z0in_deg*mperdeg;
+
+FACETsect_lit (sgess)
+
+% get FACET energy profile
+% (NOTE: LEMG=4 is "LEMNOCHN"; LEMG=5 is "LEM_FCET")
+% =========================================================================
+  %LEMG=5;
+  LEMG=0;
+  tnum=0; % supply a datenum to get Channel Archiver data
+  %[ampl,phas]=FACET_LiTrack_setup(LEMG,tnum);
+ 
+  E0=1.19;                    % GeV ... initial energy
+  E1=9.0;                     % GeV ... energy at LBCC
+  E2=20.35;                   % GeV ... energy at FACET
+  NRTL_ampl=1e-3*(43.0);      % AMPL DR13 11 VDES
+  NRTL_phas=90;               % on the zero-crossing
+  NRTL_R56=-(-0.602601);      % MAD and LiTrack have a sign difference
+  NRTL_T566=-(-1.07572);      % MAD and LiTrack have a sign difference
+  LBCC_R56=-(0.075786);       % MAD and LiTrack have a sign difference
+  LBCC_T566=-(-0.114020);     % MAD and LiTrack have a sign difference
+  LI20_R56=-(-0.003996);      % MAD and LiTrack have a sign difference
+  LI20_T566=-(-0.803843E-01); % MAD and LiTrack have a sign difference
+ 
+% Hogan's values
+  NRTL_ampl=1e-3*(42.0);      % AMPL DR13 11 VDES
+  NRTL_R56=-(-0.590);         % MAD and LiTrack have a sign difference
+  NRTL_T566=-(-1.0535);       % MAD and LiTrack have a sign difference
+  LBCC_R56=-(0.0760);         % MAD and LiTrack have a sign difference
+ 
+% 'G'=gausian, 'U'=uniform, string.zd=name of file with z(mm) and dE/E(%) (see e.g. "atf1.zd"):
+% ============================================================================================
+% inp = 'lcls_145.zd'; % name of file with 2-columns [Z/mm dE/E/%] (sigz and sigd not used in this case)
+  inp = 'G';               % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
+% inp = 'U';               % uniform  Z and dE/E (see sigz0 =..., sigd0 =...[note: FW = sig*sqrt(12)]
+ 
+% the folowing items only used when "inp" = 'G' or 'U' (i.e. used when no particle coordinate file is read)
+% ========================================================================================================
+  sigz0=6.0E-3;   % rms bunch length used when inp=G or U above [m]
+  sigd0=0.080E-2;   % rms relative energy spread used when inp=G or U above [ ]
+  Nesim=200000;     % number of particles to generate for simulation when inp=G or U (reasonable: ~1000 to ~100000)
+  asym=-0.28;         % for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
+  tail=0;             % for inp='M' or 'G': sets rise/fall time width (0<=tail<1)
+  cut=6;              % for inp='G': sets rise/fall time width (0.5<=cut<inf)
+% ========================================================================================================
+ 
+  splots=0;          % if =1, use small plots and show no wakes (for publish size plots)
+  plot_frac=0.1; % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
+  Ne=2.3e10;       % number of particles initially in bunch
+  z0_bar=0;      % axial offset of bunch [m] (used also with file input - mean of file removed first)
+  d0_bar=0;      % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
+  Nbin=200;        % number of bins for z-coordinate (and dE/E for plots)
+  gzfit=1;         % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+  gdfit=0;         % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
+  contf=1;         % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+
+
+
+FACET2012_lit (MDW)
+
+
+% FACET energy set points. We are pretty sure about these, I think. . .
+  E0=1.19;                    % GeV ... initial energy
+  E1=9.0;                     % GeV ... energy at LBCC
+  E2=20.35;                   % GeV ... energy at FACET
+  lambdaS=2.99792458e8/2856e6;% S-band wavelength
+ 
+  %%%%%%%%%%%%
+  % MDW vals %
+  %%%%%%%%%%%%
+  % NRTL compressor klystron and R56 #s
+  %NRTL_ampl=1e-3*(43.0);      % AMPL DR13 11 VDES
+  %NRTL_phas=90;               % on the zero-crossing
+  %NRTL_R56=0.602601;          % This is design val
+  %NRTL_T566=1.07572;          % Design val?
+  % S10 chcn #s
+  %LBCC_R56=-0.075786;         % Measured val?
+  %LBCC_T566=0.114020;         % Measured val?
+  % S20 chcn R56 #s
+  %LI20_R56=0.003996;          % Measured val?
+  %LI20_T566=0.803843E-01;     % Measured val?
+ 
+  %%%%%%%%%%%%
+  % MJH vals %
+  %%%%%%%%%%%%
+  % NRTL compressor klystron and R56 #s
+  %NRTL_ampl=1e-3*(42.0);      % AMPL DR13 11 VDES
+  %NRTL_phas=90;               % on the zero-crossing
+  %NRTL_R56=0.590;             % E164 val
+  %NRTL_T566=1.0535;           % E164 val
+  % S10 chcn #s
+  %LBCC_R56=-0.0760;           % "as built"
+  %LBCC_T566=0.114020;         % copied from MDW
+  % S20 chcn R56 #s
+  %LI20_R56=0.0040;            % design
+  %LI20_T566=0.10;             % design?
+ 
+  %%%%%%%%%%%%%%%%%%%%
+  % FACET paper vals %
+  %%%%%%%%%%%%%%%%%%%%
+  % NRTL compressor klystron and R56 #s
+  NRTL_ampl=0.0408;           % AMPL DR13 11 VDES
+  NRTL_phas=90;               % on the zero-crossing
+  NRTL_R56=0.603;             % E164 val
+  NRTL_T566=1.0535;           % E164 val
+  % S10 chcn #s
+  LBCC_R56=-0.0760;           % "as built"
+  LBCC_T566=0.114020;         % copied from MDW
+  % S20 chcn R56 #s
+  LI20_R56=0.0040;            % design
+  LI20_T566=0.10;             % design?
+  
+  % The bunch is gaussian? Insert not-so-witty comment here. . .
+  inp = 'G';                  % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
+ 
+  %%%%%%%%%%%%
+  % MDW vals %
+  %%%%%%%%%%%%
+  % 6mm bunches coming out of the ring teensy energy spread.
+  %sigz0=6.0E-3;                  % rms bunch length used when inp=G or U above [m]
+  %sigd0=0.080E-2;            % rms relative energy spread used when inp=G or U above [ ]
+  
+  %%%%%%%%%%%%%%%%%%%%
+  % FACET paper vals %
+  %%%%%%%%%%%%%%%%%%%%
+  % 6mm bunches coming out of the ring teensy energy spread.
+  sigz0=5.6E-3;               % rms bunch length used when inp=G or U above [m]
+  sigd0=7.39E-4;              % rms relative energy spread used when inp=G or U above [ ]
+  
+  % 200K sim particles = 100K electrons per sim particle
+  Nesim=200000;               % number of particles to generate for simulation when inp=G or U (reasonable: ~1000 to ~100000)
+  
+  %%%%%%%%%%%%
+  % MDW vals %
+  %%%%%%%%%%%%
+  % The Holtzapple skew. Someday they'll name a skew after me. . .
+  %asym=-0.28;                % for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
+  
+  %%%%%%%%%%%%%%%%%%%%
+  % FACET paper vals %
+  %%%%%%%%%%%%%%%%%%%%
+  % The Holtzapple skew. Someday they'll name a skew after me. . .
+  asym=-0.245;                % for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
+  
+  % Our beam has no tail? That's a tall tale! Jesus I hope no one reads this. . .
+  tail=0;                     % for inp='M' or 'G': sets rise/fall time width (0<=tail<1)
+  cut=6;                      % for inp='G': sets rise/fall time width (0.5<=cut<inf)
+ 
+  % Other stuff
+  splots=0;      % if =1, use small plots and show no wakes (for publish size plots)
+  plot_frac=0.1; % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
+  Ne=2.2e10;     % number of particles initially in bunch
+  z0_bar=0;      % axial offset of bunch [m] (used also with file input - mean of file removed first)
+  d0_bar=0;      % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
+  Nbin=200;      % number of bins for z-coordinate (and dE/E for plots)
+  gzfit=0;       % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+  gdfit=0;       % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
+  contf=1;       % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+

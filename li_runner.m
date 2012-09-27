@@ -1,6 +1,43 @@
+% Parameters
+global PARAM;
+
+
+PARAM.INIT.SIGZ0 = 5.6E-3;  %RMS bunch length (m)
+PARAM.INIT.SIGD0 = 7.39E-4; %RMS energy spread
+PARAM.INIT.NESIM = 2E5;     %Number of simulated macro particles
+PARAM.INIT.ASYM  = -0.245;  %The Holtzapple skew
+PARAM.INIT.TAIL  = 0;       %Not sure what this is
+PARAM.INIT.CUT   = 6;       %Not sure what this is
+
+PARAM.NRTL.AMPL  = 0.0408;  %RTL compressor amplitude (GV)
+PARAM.NRTL.PHAS  = 90;      %RTL compressor phase (deg)
+PARAM.NRTL.R56   = 0.603;   %RTL chicane R56 (m)
+PARAM.NRTL.T566  = 1.0535;  %RTL chicane T566 (m)
+PARAM.NRTL.ELO   = -0.025;  %RTL lower momentum cut (GeV)
+PARAM.NRTL.EHI   = 0.025;   %RTL upper momentum cut (GeV)
+
+PARAM.LI10.R56   = -0.076;  %Sector 10 chicane R56 (m)
+PARAM.LI10.T566  = 0.10;    %Sector 10 chicane T566 (m)
+PARAM.LI10.ISR   = 5.9E-5;  %ISR energy spread from bends
+
+PARAM.LI20.R56   = 0.004;   %Sector 20 chicane R56 (m)
+PARAM.LI20.T566  = 0.10;    %Sector 20 chicane T566 (m)
+PARAM.LI20.ISR   = 0.8E-5;  %ISR energy spread from bends
+PARAM.LI20.ELO   = -0.03;   %RTL lower momentum cut (GeV)
+PARAM.LI20.EHI   = 0.03;    %RTL upper momentum cut (GeV)
+
+PARAM.ENRG.E0    = 1.19;    %Energy from ring (GeV)
+PARAM.ENRG.E1    = 9.0;     %Energy at S10 (GeV)
+PARAM.ENRG.E2    = 20.35;   %Energy at S20 (GeV)
+
+
+
 %[k_microns,k_percent,ke_average,ke_fwhm,kz_fwhm,kz_average,ke_avg_cut,knum_part]=LiTrack('FACETsgess');
 
 %[s_microns,s_percent,se_average,se_fwhm,sz_fwhm,sz_average,se_avg_cut,snum_part]=LiTrack('FACETsect');
+
+%[f_microns,f_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET2');
+[f_microns,f_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET');
 
 num = 1467;
 MACH = get_amp_and_phase(num,0,0,0);
@@ -50,6 +87,7 @@ e1 = 1.19*ones(1,100);
 e2 = 9*ones(1,100);
 e3 = 20.35*ones(1,100);
 
+if 0
 plot(Z_LIST,ke_average,':',Z_LIST,se_average,'s',z,e1,'--c',z,e2,'--m',z,e3,'--y');
 line([Z_LIST(12) Z_LIST(12)],[0,21],'LineStyle','--');
 text(1000,8,'Sector 10 Chicane','Fontsize',16);
@@ -60,7 +98,9 @@ title('Simulated energy profile for full and sector averaged linac','fontsize',1
 l = legend('Energy Profile, All Klystrons','Energy Profile, By Sector',...
     '1.19 GeV','9 GeV','20.35 GeV','Location','Northwest');
 set(l,'fontsize',13);
-saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_eProf.pdf']);
+%saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_eProf.pdf']);
+
+figure;
 
 semilogy(Z_LIST,kz_fwhm*1000,':c',Z_LIST,sz_fwhm*1000,'sr');
 line([Z_LIST(12) Z_LIST(12)],[50,12000],'LineStyle','--');
@@ -71,6 +111,7 @@ ylabel('FWHM Bunch Length (\mum)','fontsize',16);
 title('Simulated bunch length for full and sector averaged linac','fontsize',16);
 l = legend('Bunch Length, All Klystrons','Bunch Length, By Sector');
 set(l,'fontsize',13);
-saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_blfwhm.pdf']);
+%saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_blfwhm.pdf']);
+end
 
 
