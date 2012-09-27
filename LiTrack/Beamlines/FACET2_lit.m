@@ -8,15 +8,25 @@
   % NRTL compressor klystron and R56 #s
   NRTL_ampl = PARAM.NRTL.AMPL;  % AMPL DR13 11 VDES
   NRTL_phas = PARAM.NRTL.PHAS;  % on the zero-crossing
+  NRTL_leff = PARAM.NRTL.LEFF;  % cavity length
   NRTL_R56  = PARAM.NRTL.R56;   % This is design val
   NRTL_T566 = PARAM.NRTL.T566;  % Design val?
   NRTL_ELO  = PARAM.NRTL.ELO;   % NRTL low energy cut
   NRTL_EHI  = PARAM.NRTL.EHI;   % NRTL high energy cut
   
+  % Phase and length of 02-10
+  LONE_leff = PARAM.LONE.LEFF;  % Length of LI02-LI10 (m)
+  LONE_phas = PARAM.LONE.PHAS;  % Chirp phase
+  LONE_ampl = PARAM.LONE.FBAM;  % feedback amplitude (GV)
+  
   % S10 chcn #s
-  LBCC_R56  = PARAM.LI10.R56;   % Measured val?
-  LBCC_T566 = PARAM.LI10.T566;  % Measured val?
-  LBCC_ISR  = PARAM.LI10.ISR;   %
+  LI10_R56  = PARAM.LI10.R56;   % Measured val?
+  LI10_T566 = PARAM.LI10.T566;  % Measured val?
+  LI10_ISR  = PARAM.LI10.ISR;   %
+  
+  % Energy gain and length of 02-10
+  LTWO_leff = PARAM.LTWO.LEFF;  % Length of LI02-LI10 (m)
+  LTWO_phas = PARAM.LTWO.PHAS;  % Chirp phase
   
   % S20 chcn R56 #s
   LI20_R56  = PARAM.LI20.R56;   % Measured val?
@@ -91,23 +101,20 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 %=============================================================================================================
 % CODE<0 makes a plot here, CODE>0 gives no plot here.
 
-phase = -21.2;
-ramp  = 0;
-%Egain = (E2-E1)/cosd(phase);
-Egain = 8.44;
+Egain = (E1-E0)/cosd(LONE_phas);
 
 beamline = [
        -11		0              0                    lambdaS   0		  0        % S-band
-       -11		NRTL_ampl      NRTL_phas            lambdaS   1		  2.13     % Compressor cavity AMPL DR13 13 VDES
+       -11		NRTL_ampl      NRTL_phas            lambdaS   1		  NRTL_leff% Compressor cavity AMPL DR13 13 VDES
         26	    NRTL_ELO       NRTL_EHI             0		  0       0        % Approximate energy acceptance of NRTL
        -6		NRTL_R56       NRTL_T566            E0        0		  0        % Design NRTL ~0.603, BDES to KMOD for E-164 gives 0.588
-       -11		Egain          phase                lambdaS   1       809.5    % 2-6, nominal 9GeV, no feedback
-       -13      E1             0.235*3             -90        90      lambdaS  % Energy feedback to set 9GeV in chicane
-       7	    LBCC_R56/2     E1                   0         0       0        % 1st half of the chicane. Design was -0.0745, as built -0.076
-       7	    LBCC_R56/2     E1                   0         0       0        % 2nd half of the chicane. Design was -0.0745, as built -0.076
-       22       LBCC_ISR       0                    0         0       0        % Approximate SR growth in E-spread from chicane
+       -11		Egain          LONE_phas            lambdaS   1       LONE_leff% 2-6, nominal 9GeV, no feedback
+       -13      E1             LONE_ampl           -90        90      lambdaS  % Energy feedback to set 9GeV in chicane
+       7	    LI10_R56/2     E1                   0         0       0        % 1st half of the chicane. Design was -0.0745, as built -0.076
+       7	    LI10_R56/2     E1                   0         0       0        % 2nd half of the chicane. Design was -0.0745, as built -0.076
+       22       LI10_ISR       0                    0         0       0        % Approximate SR growth in E-spread from chicane
        -37		0.01           1                    0		  0		  0        % Clip any rediculously long tails
-       -10      E2             ramp                 lambdaS   1       868      % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
+       -10      E2             LTWO_phas            lambdaS   1       LTWO_leff% Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
        6		LI20_R56       LI20_T566            E2        0		  0        % FACET 'dogleg' like chicane
        22       LI20_ISR       0                    0         0       0        % Approximate SR growth in E-spread from dogleg
        37       0.01           1                    0		  0		  0        % Clip any rediculously long tails

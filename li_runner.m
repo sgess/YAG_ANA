@@ -2,42 +2,57 @@
 global PARAM;
 
 
-PARAM.INIT.SIGZ0 = 5.6E-3;  %RMS bunch length (m)
-PARAM.INIT.SIGD0 = 7.39E-4; %RMS energy spread
-PARAM.INIT.NESIM = 2E5;     %Number of simulated macro particles
-PARAM.INIT.ASYM  = -0.245;  %The Holtzapple skew
-PARAM.INIT.TAIL  = 0;       %Not sure what this is
-PARAM.INIT.CUT   = 6;       %Not sure what this is
+PARAM.INIT.SIGZ0 = 5.6E-3;  % RMS bunch length (m)
+PARAM.INIT.SIGD0 = 7.40E-4; % RMS energy spread
+PARAM.INIT.NESIM = 2E5;     % Number of simulated macro particles
+PARAM.INIT.ASYM  = -0.245;  % The Holtzapple skew
+PARAM.INIT.TAIL  = 0;       % Not sure what this is
+PARAM.INIT.CUT   = 6;       % Not sure what this is
 
-PARAM.NRTL.AMPL  = 0.0408;  %RTL compressor amplitude (GV)
-PARAM.NRTL.PHAS  = 90;      %RTL compressor phase (deg)
-PARAM.NRTL.R56   = 0.603;   %RTL chicane R56 (m)
-PARAM.NRTL.T566  = 1.0535;  %RTL chicane T566 (m)
-PARAM.NRTL.ELO   = -0.025;  %RTL lower momentum cut (GeV)
-PARAM.NRTL.EHI   = 0.025;   %RTL upper momentum cut (GeV)
+PARAM.NRTL.AMPL  = 0.0412;  % RTL compressor amplitude (GV)
+PARAM.NRTL.PHAS  = 90;      % RTL compressor phase (deg)
+PARAM.NRTL.LEFF  = 2.13;    % RTL cavity length (m)
+PARAM.NRTL.R56   = 0.603;   % RTL chicane R56 (m)
+PARAM.NRTL.T566  = 1.0535;  % RTL chicane T566 (m)
+PARAM.NRTL.ELO   = -0.025;  % RTL lower momentum cut (GeV)
+PARAM.NRTL.EHI   = 0.025;   % RTL upper momentum cut (GeV)
 
-PARAM.LI10.R56   = -0.076;  %Sector 10 chicane R56 (m)
-PARAM.LI10.T566  = 0.10;    %Sector 10 chicane T566 (m)
-PARAM.LI10.ISR   = 5.9E-5;  %ISR energy spread from bends
+PARAM.LONE.LEFF  = 809.5;   % Length of LI02-LI10 (m)
+PARAM.LONE.PHAS  = -21.0;   % Chirp phase
+PARAM.LONE.FBAM  = 0.235*3; % feedback amplitude (GV)
 
-PARAM.LI20.R56   = 0.004;   %Sector 20 chicane R56 (m)
-PARAM.LI20.T566  = 0.10;    %Sector 20 chicane T566 (m)
-PARAM.LI20.ISR   = 0.8E-5;  %ISR energy spread from bends
-PARAM.LI20.ELO   = -0.03;   %RTL lower momentum cut (GeV)
-PARAM.LI20.EHI   = 0.03;    %RTL upper momentum cut (GeV)
+PARAM.LI10.R56   = -0.076;  % Sector 10 chicane R56 (m)
+PARAM.LI10.T566  = 0.10;    % Sector 10 chicane T566 (m)
+PARAM.LI10.ISR   = 5.9E-5;  % ISR energy spread from bends
 
-PARAM.ENRG.E0    = 1.19;    %Energy from ring (GeV)
-PARAM.ENRG.E1    = 9.0;     %Energy at S10 (GeV)
-PARAM.ENRG.E2    = 20.35;   %Energy at S20 (GeV)
+PARAM.LTWO.LEFF  = 868;     % Length of LI02-LI10 (m)
+PARAM.LTWO.PHAS  = 0;       % Ramp phase
 
+PARAM.LI20.R56   = 0.004;   % Sector 20 chicane R56 (m)
+PARAM.LI20.T566  = 0.10;    % Sector 20 chicane T566 (m)
+PARAM.LI20.ISR   = 0.8E-5;  % ISR energy spread from bends
+PARAM.LI20.ELO   = -0.03;   % RTL lower momentum cut (GeV)
+PARAM.LI20.EHI   = 0.03;    % RTL upper momentum cut (GeV)
+
+PARAM.ENRG.E0    = 1.19;    % Energy from ring (GeV)
+PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
+PARAM.ENRG.E2    = 23.00;   % Energy at S20 (GeV)
 
 
 %[k_microns,k_percent,ke_average,ke_fwhm,kz_fwhm,kz_average,ke_avg_cut,knum_part]=LiTrack('FACETsgess');
-
 %[s_microns,s_percent,se_average,se_fwhm,sz_fwhm,sz_average,se_avg_cut,snum_part]=LiTrack('FACETsect');
+[f_microns,f_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET2',1);
+%[d_microns,d_percent,de_average,de_fwhm,dz_fwhm,dz_average,de_avg_cut,dnum_part]=LiTrack('FACET',1);
 
-%[f_microns,f_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET2');
-[f_microns,f_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET');
+z_min = min(f_microns(1:fnum_part(8),8));
+z_max = max(f_microns(1:fnum_part(8),8));
+e_min = min(f_percent(1:fnum_part(8),8));
+e_max = max(f_percent(1:fnum_part(8),8));
+zz = linspace(z_min,z_max,200);
+ee = linspace(e_min,e_max,200);
+h = hist2(f_percent(1:fnum_part(8),8),f_microns(1:fnum_part(8),8),ee,zz);
+image(ee,zz,h);
+%max(max(h))
 
 num = 1467;
 MACH = get_amp_and_phase(num,0,0,0);
