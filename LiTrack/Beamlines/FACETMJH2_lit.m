@@ -66,35 +66,35 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 
 Efinal = 23; %23
 T566 = 0.10;
+% contf = 1;
 
-% FACET Li20:
-z0in_deg = 0;
-Ne = 2.2E10; %2E10;
-compressor = 0.0408;
-subphase = -21.2; %-20.4;
-ramp = 0;
-RTLR56 = 0.603;
-LBCCR56 = -0.0760;
-FACETR56 = 0.004;
-RTLupper = 0.025;
-RTLlower = -0.025;
-SouthMS = -0.03;
-NorthMS = 0.03;
-
-% FACET Nominal Design Parameters:
-% % FACET Li20:
+% FACET Li20 for long (SLC) bunch:
 % z0in_deg = 0;
-% Ne = 2.2E10;
-% compressor = 0.0408;
-% subphase = -21.2;
-% ramp = 0;
+% Ne = 2.0E10;
+% compressor = 0.032;
+% subphase = 5;
+% ramp = -5;
 % RTLR56 = 0.603;
-% LBCCR56 = -0.0760;
-% FACETR56 = 0.0040;
+% LBCCR56 = 0;
+% FACETR56 = 0.004;
 % RTLupper = 0.025;
 % RTLlower = -0.025;
 % SouthMS = -0.03;
 % NorthMS = 0.03;
+% 
+% FACET Nominal Design Parameters:
+z0in_deg = 0;
+Ne = 2.2E10;
+compressor = 0.0408;
+subphase = -21.2;
+ramp = 0;
+RTLR56 = 0.603;
+LBCCR56 = -0.0760;
+FACETR56 = 0.0040;
+RTLupper = 0.025;
+RTLlower = -0.025;
+SouthMS = -0.03;
+NorthMS = 0.03;
 
 % 23GeV with the 10cm T566:
 % Using SPPS design NDR parameters:
@@ -155,7 +155,7 @@ beamline = [
        22       5.9E-5         0                    0         0       0        % Approximate SR growth in E-spread from chicane
        37		0.01           1                    0		  0		  0        % Clip any rediculously long tails
       -10       Efinal         ramp                 0.104969  thewake 868      % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
-      -6		FACETR56       T566                 Efinal    0		  0        % FACET dogleg
+      -6		FACETR56       T566                 Efinal    0		  0        % FACET 'dogleg' like chicane
        22       0.8E-5         0                    0         0       0        % Approximate SR growth in E-spread from dogleg
        37       0.01           1                    0		  0		  0        % Clip any rediculously long tails
        26       SouthMS        NorthMS              0         0       0        % Momentum Slits in FACET

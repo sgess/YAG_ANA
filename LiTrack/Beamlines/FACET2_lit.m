@@ -17,6 +17,7 @@
   % Phase and length of 02-10
   LONE_leff = PARAM.LONE.LEFF;  % Length of LI02-LI10 (m)
   LONE_phas = PARAM.LONE.PHAS;  % Chirp phase
+  LONE_gain = PARAM.LONE.GAIN;  % energy gain in LI02-LI10 (GeV)
   LONE_ampl = PARAM.LONE.FBAM;  % feedback amplitude (GV)
   
   % S10 chcn #s
@@ -101,14 +102,16 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 %=============================================================================================================
 % CODE<0 makes a plot here, CODE>0 gives no plot here.
 
-Egain = (E1-E0)/cosd(LONE_phas);
+if LONE_gain == 0
+    LONE_gain = (E1-E0)/cosd(LONE_phas);
+end
 
 beamline = [
        -11		0              0                    lambdaS   0		  0        % S-band
        -11		NRTL_ampl      NRTL_phas            lambdaS   1		  NRTL_leff% Compressor cavity AMPL DR13 13 VDES
         26	    NRTL_ELO       NRTL_EHI             0		  0       0        % Approximate energy acceptance of NRTL
        -6		NRTL_R56       NRTL_T566            E0        0		  0        % Design NRTL ~0.603, BDES to KMOD for E-164 gives 0.588
-       -11		Egain          LONE_phas            lambdaS   1       LONE_leff% 2-6, nominal 9GeV, no feedback
+       -11		LONE_gain      LONE_phas            lambdaS   1       LONE_leff% 2-6, nominal 9GeV, no feedback
        -13      E1             LONE_ampl           -90        90      lambdaS  % Energy feedback to set 9GeV in chicane
        7	    LI10_R56/2     E1                   0         0       0        % 1st half of the chicane. Design was -0.0745, as built -0.076
        7	    LI10_R56/2     E1                   0         0       0        % 2nd half of the chicane. Design was -0.0745, as built -0.076
