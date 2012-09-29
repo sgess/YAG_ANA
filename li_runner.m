@@ -19,8 +19,10 @@ PARAM.NRTL.EHI   = 0.025;   % RTL upper momentum cut (GeV)
 
 PARAM.LONE.LEFF  = 809.5;   % Length of LI02-LI10 (m)
 PARAM.LONE.PHAS  = -21.2;   % Chirp phase
-PARAM.LONE.GAIN  = 8.444;   % energy gain in LI02-LI10 (GeV)
-PARAM.LONE.FBAM  = 0.235*3; % feedback amplitude (GV)
+PARAM.LONE.GAIN  = 0;   % energy gain in LI02-LI10 (GeV)
+%PARAM.LONE.GAIN  = 8.444;   % energy gain in LI02-LI10 (GeV)
+
+PARAM.LONE.FBAM  = 0.235;   % feedback amplitude (GV)
 
 PARAM.LI10.R56   = -0.076;  % Sector 10 chicane R56 (m)
 PARAM.LI10.T566  = 0.10;    % Sector 10 chicane T566 (m)
@@ -28,6 +30,7 @@ PARAM.LI10.ISR   = 5.9E-5;  % ISR energy spread from bends
 
 PARAM.LTWO.LEFF  = 868;     % Length of LI02-LI10 (m)
 PARAM.LTWO.PHAS  = 0;       % Ramp phase
+PARAM.LTWO.FBAM  = 1.88;    % feedback amplitude (GV)
 
 PARAM.LI20.R56   = 0.004;   % Sector 20 chicane R56 (m)
 PARAM.LI20.T566  = 0.10;    % Sector 20 chicane T566 (m)
@@ -39,18 +42,31 @@ PARAM.ENRG.E0    = 1.19;    % Energy from ring (GeV)
 PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
 PARAM.ENRG.E2    = 23.00;   % Energy at S20 (GeV)
 
+%LiTrack('FACET2');
+LiTrack('FACETDSECT');
 
 %[k_microns,k_percent,ke_average,ke_fwhm,kz_fwhm,kz_average,ke_avg_cut,knum_part]=LiTrack('FACETsgess');
 %[s_microns,s_percent,se_average,se_fwhm,sz_fwhm,sz_average,se_avg_cut,snum_part]=LiTrack('FACETsect');
-[f3_microns,f3_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET2',1);
+%[f_microns,f_percent,fe_average,fe_fwhm,fz_fwhm,fz_average,fe_avg_cut,fnum_part]=LiTrack('FACET2',1);
 %[d_microns,d_percent,de_average,de_fwhm,dz_fwhm,dz_average,de_avg_cut,dnum_part]=LiTrack('FACET',1);
+%[microns,percent,e_average,e_fwhm,z_fwhm,z_average,e_avg_cut,num_part]=LiTrack('FACETDSECT',1);
 
-z_min = min(f3_microns(1:fnum_part(8),8));
-z_max = max(f3_microns(1:fnum_part(8),8));
-e_min = min(f3_percent(1:fnum_part(8),8));
-e_max = max(f3_percent(1:fnum_part(8),8));
-zz = linspace(z_min,z_max,200);
-ee = linspace(e_min,e_max,200);
+
+
+
+
+
+% z_min = min(microns(1:num_part(8),8));
+% z_max = max(microns(1:num_part(8),8));
+% e_min = min(percent(1:num_part(8),8));
+% e_max = max(percent(1:num_part(8),8));
+% zz = linspace(z_min,z_max,200);
+% ee = linspace(e_min,e_max,200);
+% h = hist(microns(1:num_part(8),8),200);
+% [sig,mu,norm] = mygaussfit(zz,h);
+% y = norm * exp(-(zz-mu).^2/(2*sig^2));
+% plot(zz,h,zz,y,'.r');
+% text(z_min+z_max/10,max(h)-100,['\sigma = ' num2str(sig*1e6)]);
 %h3 = hist2(f3_percent(1:fnum_part(8),8),f3_microns(1:fnum_part(8),8),ee,zz);
 %image(ee,zz,h3);
 %max(max(h))
@@ -98,36 +114,57 @@ Z_LIST(23)    = MACH.SECT.Z(18)+86.4108 - 10;
 Z_LIST(24)    = MACH.SECT.Z(18)+86.4108;
 Z_LIST(25)    = MACH.SECT.Z(19)+86.4108;
 
-z = linspace(0,2100);
-e1 = 1.19*ones(1,100);
-e2 = 9*ones(1,100);
-e3 = 20.35*ones(1,100);
+% for j=1:25
+%     
+%     z_min(j) = min(microns(1:num_part(j),j));
+%     z_max(j) = max(microns(1:num_part(j),j));
+%     e_min(j) = min(percent(1:num_part(j),j));
+%     e_max(j) = max(percent(1:num_part(j),j));
+%     
+%     zz = linspace(z_min(j),z_max(j),200);
+%     ee = linspace(e_min(j),e_max(j),200);
+%     
+%     h = hist(microns(1:num_part(j),j),200);
+%     [sig,mu,norm] = mygaussfit(zz,h);
+%     y = norm * exp(-(zz-mu).^2/(2*sig^2));
+%     plot(zz,h,zz,y,'.r');
+%     text(z_min(j)+z_max(j)/10,max(h)-100,['\sigma = ' num2str(sig*1e6)]);
+%     xlabel('Bunch Profile (\mum)');
+%     title(Z_NAME{j});
+%     pause;
+%     
+% end
 
-if 0
-plot(Z_LIST,ke_average,':',Z_LIST,se_average,'s',z,e1,'--c',z,e2,'--m',z,e3,'--y');
-line([Z_LIST(12) Z_LIST(12)],[0,21],'LineStyle','--');
-text(1000,8,'Sector 10 Chicane','Fontsize',16);
-axis([0 2100 0 21]);
-xlabel('Z (meters)','fontsize',16);
-ylabel('Energy (GeV)','fontsize',16);
-title('Simulated energy profile for full and sector averaged linac','fontsize',16);
-l = legend('Energy Profile, All Klystrons','Energy Profile, By Sector',...
-    '1.19 GeV','9 GeV','20.35 GeV','Location','Northwest');
-set(l,'fontsize',13);
-%saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_eProf.pdf']);
-
-figure;
-
-semilogy(Z_LIST,kz_fwhm*1000,':c',Z_LIST,sz_fwhm*1000,'sr');
-line([Z_LIST(12) Z_LIST(12)],[50,12000],'LineStyle','--');
-text(1000,1000,'Sector 10 Chicane','Fontsize',16);
-axis([0 2100 90 13000]);
-xlabel('Z (meters)','fontsize',16);
-ylabel('FWHM Bunch Length (\mum)','fontsize',16);
-title('Simulated bunch length for full and sector averaged linac','fontsize',16);
-l = legend('Bunch Length, All Klystrons','Bunch Length, By Sector');
-set(l,'fontsize',13);
-%saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_blfwhm.pdf']);
-end
+% z = linspace(0,2100);
+% e1 = 1.19*ones(1,100);
+% e2 = 9*ones(1,100);
+% e3 = 20.35*ones(1,100);
+% 
+% if 0
+% plot(Z_LIST,ke_average,':',Z_LIST,se_average,'s',z,e1,'--c',z,e2,'--m',z,e3,'--y');
+% line([Z_LIST(12) Z_LIST(12)],[0,21],'LineStyle','--');
+% text(1000,8,'Sector 10 Chicane','Fontsize',16);
+% axis([0 2100 0 21]);
+% xlabel('Z (meters)','fontsize',16);
+% ylabel('Energy (GeV)','fontsize',16);
+% title('Simulated energy profile for full and sector averaged linac','fontsize',16);
+% l = legend('Energy Profile, All Klystrons','Energy Profile, By Sector',...
+%     '1.19 GeV','9 GeV','20.35 GeV','Location','Northwest');
+% set(l,'fontsize',13);
+% %saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_eProf.pdf']);
+% 
+% figure;
+% 
+% semilogy(Z_LIST,kz_fwhm*1000,':c',Z_LIST,sz_fwhm*1000,'sr');
+% line([Z_LIST(12) Z_LIST(12)],[50,12000],'LineStyle','--');
+% text(1000,1000,'Sector 10 Chicane','Fontsize',16);
+% axis([0 2100 90 13000]);
+% xlabel('Z (meters)','fontsize',16);
+% ylabel('FWHM Bunch Length (\mum)','fontsize',16);
+% title('Simulated bunch length for full and sector averaged linac','fontsize',16);
+% l = legend('Bunch Length, All Klystrons','Bunch Length, By Sector');
+% set(l,'fontsize',13);
+% %saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sim_blfwhm.pdf']);
+% end
 
 
