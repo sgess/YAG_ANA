@@ -1,10 +1,10 @@
-  MACH=des_amp_and_phase('uniform');
-  ampl = MACH.SECT.AMPL;
-  phas = MACH.SECT.PHAS;
-  leff = MACH.SECT.LEFF;
+  global LINAC; % Linac amplitude and phase
+  
+  ampl = LINAC.SECT.AMPL;
+  phas = LINAC.SECT.PHAS;
+  leff = LINAC.SECT.LEFF;
 
-  global PARAM;  
-
+  global PARAM; % Initial beam and machine parameters  
   % FACET energy set points. We are pretty sure about these, I think. . .
   E0        = PARAM.ENRG.E0;    % GeV ... initial energy
   E1        = PARAM.ENRG.E1;    % GeV ... energy at LBCC
@@ -42,7 +42,7 @@
   LI20_ELO  = PARAM.LI20.ELO;   % S20 low energy cut
   LI20_EHI  = PARAM.LI20.EHI;   % S20 high energy cut
   
-  % The bunch is gaussian? Insert not-so-witty comment here. . .
+  % Initial beam parameters
   inp       = 'G';		        % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
   
   % 6mm bunches coming out of the ring teensy energy spread.
@@ -61,14 +61,14 @@
 
   % Other stuff
   splots    = 0;	     % if =1, use small plots and show no wakes (for publish size plots)
-  plot_frac = 0.1;       % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
+  plot_frac = 0.05;      % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
   Ne        = 2.2e10;	 % number of particles initially in bunch
   z0_bar    = 0;	     % axial offset of bunch [m] (used also with file input - mean of file removed first)
   d0_bar    = 0;	     % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
   Nbin      = 200;		 % number of bins for z-coordinate (and dE/E for plots)
-  gzfit     = 0;		 % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+  gzfit     = 1;		 % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
   gdfit     = 0;		 % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
-  contf     = 1;		 % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+  contf     = 0;		 % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
   
   % S-band wavelength
   lambdaS   = 2.99792458e8/2856e6;

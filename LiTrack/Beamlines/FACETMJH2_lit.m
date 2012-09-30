@@ -64,7 +64,7 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 % chicane R56 keeps dropping from 0.074 down to 0.066...
 % 2.2E10, 40.8, -20.6 gave 22.6kA, 15.4µm with as built LBCCR56 -0.076
 
-Efinal = 23; %23
+Efinal = 20.35; %23
 T566 = 0.10;
 % contf = 1;
 
