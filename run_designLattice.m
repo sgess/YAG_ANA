@@ -1,8 +1,8 @@
 % Parameters
 global PARAM;
+global LINAC;
 
-PARAM.MACH.LTC   ='uniform';PARAM.LONE.PHAS  = -21.2; % uniform chirp phase
-%PARAM.MACH.LTC   ='decker'; PARAM.LONE.PHAS  = -11.5275; % decker's staged phase
+
 PARAM.MACH.RAMP  = 0;       % phase ramp
 
 PARAM.INIT.SIGZ0 = 5.6E-3;  % RMS bunch length (m)
@@ -44,6 +44,59 @@ PARAM.ENRG.E0    = 1.19;    % Energy from ring (GeV)
 PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
 PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
-global LINAC;
+PARAM.MACH.LTC   ='uniform'; PARAM.LONE.PHAS  = -21.2; % uniform chirp phase
 LINAC = des_amp_and_phase();
-LiTrack('FACETDSECT');
+%[u_bl,u_es,u_eavg,u_efwhm,u_zfwhm,u_zavg,u_eavgcut,u_numpart] = LiTrack('FACETDSECT');
+
+PARAM.MACH.LTC   ='decker'; PARAM.LONE.PHAS  = -11.5275; % decker's staged phase
+LINAC = des_amp_and_phase();
+%[d_bl,d_es,d_eavg,d_efwhm,d_zfwhm,d_zavg,d_eavgcut,d_numpart] = LiTrack('FACETDSECT');
+
+% overwrite parameters
+MDW_param;
+LINAC = get_amp_and_phase(1467,0,0,0);
+[m_bl,m_es,m_eavg,m_efwhm,m_zfwhm,m_zavg,m_eavgcut,m_numpart] = LiTrack('FACETDSECT');
+
+Z_NAME     = cell(25,1);
+Z_NAME{1}  = 'Initial Beam from NDR';
+Z_NAME{2}  = 'After RTL Compressor';
+Z_NAME{3}  = 'After RTL Chicane';
+Z_NAME{4}  = 'END LI02';
+Z_NAME{5}  = 'END LI03';
+Z_NAME{6}  = 'END LI04';
+Z_NAME{7}  = 'END LI05';
+Z_NAME{8}  = 'END LI06';
+Z_NAME{9}  = 'END LI07';
+Z_NAME{10} = 'END LI08';
+Z_NAME{11} = 'END LI09';
+Z_NAME{12} = 'END LI10';
+Z_NAME{13} = 'After S10 Energy Feedback';
+Z_NAME{14} = 'After S10 Chicane w/ISR';
+Z_NAME{15} = 'END LI11';
+Z_NAME{16} = 'END LI12';
+Z_NAME{17} = 'END LI13';
+Z_NAME{18} = 'END LI14';
+Z_NAME{19} = 'END LI15';
+Z_NAME{20} = 'END LI16';
+Z_NAME{21} = 'END LI17';
+Z_NAME{22} = 'END LI18';
+Z_NAME{23} = 'END LI19';
+Z_NAME{24} = 'After S20 Energy Feedback';
+Z_NAME{25} = 'After FACET Chicane';
+
+for i=1:25
+    
+%     subplot(1,2,1);
+%     plot(u_bl(1:u_numpart(i),i),u_es(1:u_numpart(i),i),'.r');
+%     subplot(1,2,2);
+%     plot(d_bl(1:d_numpart(i),i),d_es(1:d_numpart(i),i),'.r');
+
+    plot(m_bl(1:m_numpart(i),i),m_es(1:m_numpart(i),i),'.r');
+    
+    ax = axes('position',[0,0,1,1],'visible','off');
+    tx = text(0.4,0.95,Z_NAME(i));
+    set(tx,'fontweight','bold');
+    
+    pause;
+    
+end
