@@ -30,7 +30,7 @@ PARAM.LI10.R56   = -0.076;  % Sector 10 chicane R56 (m)
 PARAM.LI10.T566  = 0.10;    % Sector 10 chicane T566 (m)
 PARAM.LI10.ISR   = 5.9E-5;  % ISR energy spread from bends
 
-PARAM.LTWO.LEFF  = 868;     % Length of LI02-LI10 (m)
+PARAM.LTWO.LEFF  = 848;     % Length of LI02-LI10 (m)
 PARAM.LTWO.PHAS  = 0;       % 11-20 phase
 PARAM.LTWO.FBAM  = 1.88;    % feedback amplitude at S20 (GV)
 
@@ -44,24 +44,24 @@ PARAM.ENRG.E0    = 1.19;    % Energy from ring (GeV)
 PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
 PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
-MDW_param;
+%MDW_param;
 
 PARAM.MACH.LTC   ='uniform'; PARAM.LONE.PHAS  = -21.2; % uniform chirp phase
 LINAC = des_amp_and_phase();
-[u_bl,u_es,u_eavg,u_efwhm,u_zfwhm,u_zavg,u_eavgcut,u_numpart] = LiTrack('FACETDSECT');
+%[u_bl,u_es,u_eavg,u_efwhm,u_zfwhm,u_zavg,u_eavgcut,u_numpart] = LiTrack('FACETDSECT');
 %LiTrack('FACETDSECT');
 
 
-PARAM.MACH.LTC   ='decker'; PARAM.LONE.PHAS  = -11.64; % decker's staged phase
+PARAM.MACH.LTC   ='decker'; PARAM.LONE.PHAS  = -11.2; % decker's staged phase
 LINAC = des_amp_and_phase();
-[d_bl,d_es,d_eavg,d_efwhm,d_zfwhm,d_zavg,d_eavgcut,d_numpart] = LiTrack('FACETDSECT');
+%[d_bl,d_es,d_eavg,d_efwhm,d_zfwhm,d_zavg,d_eavgcut,d_numpart] = LiTrack('FACETDSECT');
 %LiTrack('FACETDSECT');
 % overwrite parameters
 %MDW_param;
 %LINAC = get_amp_and_phase(1467,0,0,0);
 %[m_bl,m_es,m_eavg,m_efwhm,m_zfwhm,m_zavg,m_eavgcut,m_numpart] = LiTrack('FACETDSECT');
 %LiTrack('FACETDSECT');
-
+if 0
 Z_NAME     = cell(25,1);
 Z_NAME{1}  = 'Initial Beam from NDR';
 Z_NAME{2}  = 'After RTL Compressor';
@@ -156,4 +156,5 @@ for i=1:25
     
     pause;
     
+end
 end
