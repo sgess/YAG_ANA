@@ -35,3 +35,25 @@ Ultimately decided to plot machine profiles for
 
 5. Go back to original Litrack deck and investigate effect of sectoring and changing final energy
 	-reoptimize parameters for different energies?
+
+10/4 02:15
+
+Comments on LEM and chirp:
+
+-My attempts to LEM have thus far only considered the energy at S10 and not the total chirp. attempts to LEM need to respect both
+-In reality, do we always replace klystrons in one sector with another in the same sector?
+-Do we make BLMs after S10?
+
+The chirp for Hogan's original file is -3.0536 GeV for -21.2 phase and a 2-10 gain of 8.444 GeV. 
+Before S10, the peak current is 0.339 kA, the sigma is 1449 and the fwhm is 3.232.
+After S10, the peak current is 6.253 kA, the sigma is 58.000 and the fwhm is 123.000.
+At S20, the peak current is 22.857 kA, the sigma is 14.163 and the fwhm is 26.319 for a final energy of 23 GeV.
+At S20, the peak current is 21.410 kA, the sigma is 15.377 and the fwhm is 30.939 for a final energy of 20.35 GeV.
+
+If you let LiTrack set the 2-10 gain, the chirp is -3.0293.
+Before S10, the peak current is 0.339 kA, the sigma is 1449 and the fwhm is 3.232.
+After S10, the peak current is 6.958 kA, the sigma is 51.654 and the fwhm is 114.304.
+At S20, the peak current is 21.716 kA, the sigma is 15.052 and the fwhm is 29.827 for a final energy of 23 GeV.
+At S20, the peak current is 19.039 kA, the sigma is 19.723 and the fwhm is 39.723 for a final energy of 20.35 GeV.
+
+Take home: going from design values of -3.0536 chirp and 23 GeV final energy to -3.0293 chirp and 20.35 GeV, I_p goes from 22.857 to 19.039 and sigma goes from 14.163 to 19.723.
