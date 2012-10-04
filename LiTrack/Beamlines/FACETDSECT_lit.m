@@ -118,71 +118,71 @@
 beamline=[
       
     % RTL: The energy cut is a little tighter than in the file MJH gave me.
-     -1     0		   0          0           0        0         % initial particles
-    -11     NRTL_ampl  NRTL_phas  lambdaS     1        NRTL_leff % NRTL compressor
+     1     0		   0          0           0        0         % initial particles
+    11     NRTL_ampl  NRTL_phas  lambdaS     1        NRTL_leff % NRTL compressor
      26     NRTL_ELO   NRTL_EHI   0           0        0         % energy spread cut
-     -6     NRTL_R56   NRTL_T566  E0          0        0         % NRTL R56, T566
+     6     NRTL_R56   NRTL_T566  E0          0        0         % NRTL R56, T566
      
     % LI02: SBST PDES ~ 0
-    -11     ampl(1)    phas(1)    lambdaS     1        leff(1)   % LI02:KLYS
+    11     ampl(1)    phas(1)    lambdaS     1        leff(1)   % LI02:KLYS
       
     % LI03: SBST PDES ~ 11
-    -11     ampl(2)    phas(2)    lambdaS     1        leff(2)   % LI03:KLYS
+    11     ampl(2)    phas(2)    lambdaS     1        leff(2)   % LI03:KLYS
      
     % LI04: SBST PDES ~ 22
-    -11     ampl(3)    phas(3)    lambdaS     1        leff(3)   % LI04:KLYS
+    11     ampl(3)    phas(3)    lambdaS     1        leff(3)   % LI04:KLYS
      
     % LI05: SBST PDES ~ 33
-    -11     ampl(4)    phas(4)    lambdaS     1        leff(4)   % LI05:KLYS
+    11     ampl(4)    phas(4)    lambdaS     1        leff(4)   % LI05:KLYS
      
     % LI06: SBST PDES ~ 44
-    -11     ampl(5)    phas(5)    lambdaS     1        leff(5)   % LI06:KLYS
+    11     ampl(5)    phas(5)    lambdaS     1        leff(5)   % LI06:KLYS
      
     % LI07: SECTOR OFF
-    -11     ampl(6)    phas(6)    lambdaS     1        leff(6)   % LI07:KLYS
+    11     ampl(6)    phas(6)    lambdaS     1        leff(6)   % LI07:KLYS
      
     % LI08: SECTOR OFF
-    -11     ampl(7)    phas(7)    lambdaS     1        leff(7)   % LI08:KLYS
+    11     ampl(7)    phas(7)    lambdaS     1        leff(7)   % LI08:KLYS
     
     % LI09: SBST PDES ~ 0
-    -11     ampl(8)    phas(8)    lambdaS     1        leff(8)   % LI09:KLYS
+    11     ampl(8)    phas(8)    lambdaS     1        leff(8)   % LI09:KLYS
      
     % LI10: SBST PDES ~ 55
-    -11     ampl(9)    phas(9)    lambdaS     1        leff(9)   % LI10:KLYS
-    -13     E1         LONE_ampl  -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
+    11     ampl(9)    phas(9)    lambdaS     1        leff(9)   % LI10:KLYS
+    13     E1         LONE_ampl  -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
      
     % S10 CHCKN: MJH file has S10 chicken in two sections but only need one
 	  7	    LI10_R56   E1	      0           0        0         % LBCC chicane
      22     LI10_ISR   0          0           0        0         % LBCC ISR energy spread
-    -37     0.01       1          0           0        0         % Z-cut
+    37     0.01       1          0           0        0         % Z-cut
     
     % LI11: SBST PDES ~ 0
-    -11     ampl(10)   phas(10)   lambdaS     1        leff(10)  % LI11:KLYS
+    11     ampl(10)   phas(10)   lambdaS     1        leff(10)  % LI11:KLYS
      
     % LI12: SBST PDES ~ 0
-    -11     ampl(11)   phas(11)   lambdaS     1        leff(11)  % LI12:KLYS
+    11     ampl(11)   phas(11)   lambdaS     1        leff(11)  % LI12:KLYS
         
     % LI13: SBST PDES ~ 0
-    -11     ampl(12)   phas(12)   lambdaS     1        leff(12)  % LI13:KLYS
+    11     ampl(12)   phas(12)   lambdaS     1        leff(12)  % LI13:KLYS
         
     % LI14: SBST PDES ~ 0
-    -11     ampl(13)   phas(13)   lambdaS     1        leff(13)  % LI14:KLYS
+    11     ampl(13)   phas(13)   lambdaS     1        leff(13)  % LI14:KLYS
         
     % LI15: SBST PDES ~ 0
-    -11     ampl(14)   phas(14)   lambdaS     1        leff(14)  % LI15:KLYS
+    11     ampl(14)   phas(14)   lambdaS     1        leff(14)  % LI15:KLYS
         
     % LI16: SBST PDES ~ 0
-    -11     ampl(15)   phas(15)   lambdaS     1        leff(15)  % LI16:KLYS
+    11     ampl(15)   phas(15)   lambdaS     1        leff(15)  % LI16:KLYS
         
     % LI17: SBST PDES ~ 0
-    -11     ampl(16)   phas(16)   lambdaS     1        leff(16)  % LI17:KLYS
+    11     ampl(16)   phas(16)   lambdaS     1        leff(16)  % LI17:KLYS
         
     % LI18: SBST PDES ~ 0
-    -11     ampl(17)   phas(17)   lambdaS     1        leff(17)  % LI18:KLYS
+    11     ampl(17)   phas(17)   lambdaS     1        leff(17)  % LI18:KLYS
         
     % LI19: SBST PDES ~ 0
-    -11     ampl(18)   phas(18)   lambdaS     1        leff(18)  % LI19:KLYS
-    -13		E2	       LTWO_ampl  -90.0	      90.0     lambdaS   % SCAV energy feedback
+    11     ampl(18)   phas(18)   lambdaS     1        leff(18)  % LI19:KLYS
+    13		E2	       LTWO_ampl  -90.0	      90.0     lambdaS   % SCAV energy feedback
     
     % LI20: FACET CHICANE
       6     LI20_R56   LI20_T566  E2          0        0         % LI20 R56, T566

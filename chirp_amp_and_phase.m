@@ -120,6 +120,8 @@ if strcmp(lattice,'decker')
     
     % add up energy in 2-10                                               
     NOLEM = sum(MACH.SECT.ENLD(1:9).*cosd(MACH.SECT.PHAS(1:9)));
+    NOCHP = sum(MACH.SECT.ENLD(1:9).*sind(MACH.SECT.PHAS(1:9)));
+    Egain = E1 - E0;
     % fractional contribution of sectors to total energy
     FRAC  = MACH.SECT.ENLD(1:9).*cosd(MACH.SECT.PHAS(1:9))/NOLEM;
     % NOLEM is greater than E1 - E0 because "all" klystrons are on
