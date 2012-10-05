@@ -4,6 +4,7 @@ global LINAC;
 
 
 PARAM.MACH.RAMP  = 0;       % phase ramp
+PARAM.MACH.CHRP  = 3.0536;  % machine chirp
 
 PARAM.INIT.SIGZ0 = 5.6E-3;  % RMS bunch length (m)
 PARAM.INIT.SIGD0 = 7.40E-4; % RMS energy spread
@@ -55,13 +56,24 @@ PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
 PARAM.MACH.LTC   ='decker'; PARAM.LONE.PHAS  = -11.2; % decker's staged phase
 LINAC = des_amp_and_phase();
-sectarrow(LINAC);
+sectarrow();
+LINAC.SECT.PHAS(6:7) = 0;
+bar_h = bar(LINAC.SECT.Z(1:18),LINAC.SECT.PHAS,'barwidth',1);
+bar_child=get(bar_h,'Children');
+set(bar_child, 'CData',1:18);
+axis([0 2000 -60 10]);
+xlabel('Z (meters)','fontsize',16);
+ylabel('Phase (degrees)','fontsize',16);
+%title('Sector Phase','fontsize',16);
+saveas(gca,'~/Desktop/sect plots/phase_bar.pdf');
+%saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sect_phase.pdf']);
 %[d_bl,d_es,d_eavg,d_efwhm,d_zfwhm,d_zavg,d_eavgcut,d_numpart] = LiTrack('FACETDSECT');
 %LiTrack('FACETDSECT');
 % overwrite parameters
 %MDW_param;
 %LINAC = get_amp_and_phase(1467,0,0,0);
-%[m_bl,m_es,m_eavg,m_efwhm,m_zfwhm,m_zavg,m_eavgcut,m_numpart] = LiTrack('FACETDSECT');
+%[m_bl,m_es,m_eavg,m_efwhm,m_zfwhm,m_zavg,m_eavgcut,m_numpart] =
+%LiTrack('FACETDSECT');
 %LiTrack('FACETDSECT');
 if 0
 Z_NAME     = cell(25,1);

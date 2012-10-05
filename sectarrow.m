@@ -1,4 +1,4 @@
-function sectarrow(LINAC)
+function sectarrow()
 
 % MAG(1:5) = LINAC.SECT.AMPL(1:5);
 % MAG(6:7) = LINAC.SECT.AMPL(8:9);
@@ -8,6 +8,17 @@ function sectarrow(LINAC)
 
 %MAG(1:9) = LINAC.SECT.AMPL(1:9);
 %DIR(1:9) = -LINAC.SECT.PHAS(1:9);
+global LINAC;
+global PARAM;
+
+CHIRP = PARAM.MACH.CHRP;
+
+E2 = PARAM.ENRG.E2;
+E1 = PARAM.ENRG.E1;
+E0 = PARAM.ENRG.E0;
+
+E0210 = E1 - E0;
+E1120 = E2 - E1; 
 
 MAG = LINAC.SECT.AMPL';
 DIR = -LINAC.SECT.PHAS';
@@ -18,10 +29,12 @@ Y = MAG.*sind(DIR);
 px = [0,cumsum(X)];
 py = [0,cumsum(Y)];
 
+meas_chrp = py(10);
+
 cmap = colormap;
 
 hold on;
-for i = 1:18
+for i = 1:length(X)
           x0 = px(i);
           y0 = py(i);
           x1 = px(i+1);
@@ -38,15 +51,18 @@ for i = 1:18
           
           
           %plot(hu(:),hv(:),'linewidth',2,'color',color(i))  % Plot arrow head
-          plot(hu(:),hv(:),'linewidth',2,'color',cmap(3*i,:))  % Plot arrow head
+          plot(hu(:),hv(:),'linewidth',2,'color',cmap(3*i,:));  % Plot arrow head
 
-          grid on
-          xlabel('Energy Gain')
-          ylabel('Chirp')
+          grid on;
+          xlabel('Energy Gain');
+          ylabel('Chirp');
           
 end
-line([7.81 7.81],[-0.5 3.5],'color','k','linestyle','--');
-line([0 8],[3.0536 3.0536],'color','k','linestyle','--');
-text(0.2,2.9,['Chirp = ' num2str(3.0536)],'Fontsize',16);
-text(6.0,0.5,['E gain = ' num2str(7.81)],'Fontsize',16);
+line([E0210 E0210],[-0.5 3.5],'color','k','linestyle','--');
+line([0 20],[meas_chrp meas_chrp],'color','k','linestyle','--');
+line([E0210+E1120 E0210+E1120],[-0.5 3.5],'color','k','linestyle','--');
+
+text(0.2,2.9,['Chirp = ' num2str(meas_chrp)],'Fontsize',16);
+text(E0210+0.2,0.5,['E gain 2-10 = ' num2str(E0210)],'Fontsize',16);
+text(E0210+E1120-7,0.0,['E gain 11-20 = ' num2str(E1120)],'Fontsize',16);
 hold off
