@@ -101,7 +101,7 @@ if strcmp(lattice,'uniform')
     L1120 = sum(MACH.SECT.LEFF(10:18));
     MACH.SECT.PHAS(10:18) = LTWO_phas+TOTL_phas;
     % Allocate egain by length
-    MACH.SECT.AMPL(10:18) = Eampl*MACH.SECT.LEFF(10:18)/L1120; 
+    MACH.SECT.AMPL(10:18) = Eampl*MACH.SECT.LEFF(10:18)/L1120;
     
 end
 
@@ -141,4 +141,13 @@ if strcmp(lattice,'decker')
     % Allocate egain by length
     MACH.SECT.AMPL(10:18) = Eampl*MACH.SECT.LEFF(10:18)/L1120;
     
-end              
+end
+
+% Sum up the machine
+MACH.LONE.GAIN = sum(MACH.SECT.AMPL(1:9).*cosd(MACH.SECT.PHAS(1:9)));
+MACH.LONE.CHRP = -sum(MACH.SECT.AMPL(1:9).*sind(MACH.SECT.PHAS(1:9)));
+MACH.LONE.PHI  = atand(MACH.LONE.CHRP/MACH.LONE.GAIN);
+MACH.LTWO.GAIN = sum(MACH.SECT.AMPL(10:18).*cosd(MACH.SECT.PHAS(10:18)));
+MACH.LTWO.CHRP = -sum(MACH.SECT.AMPL(10:18).*sind(MACH.SECT.PHAS(10:18)));
+MACH.LTWO.PHI  = atand(MACH.LTWO.CHRP/MACH.LTWO.GAIN);
+

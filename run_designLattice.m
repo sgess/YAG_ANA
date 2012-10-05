@@ -4,7 +4,6 @@ global LINAC;
 
 
 PARAM.MACH.RAMP  = 0;       % phase ramp
-PARAM.MACH.CHRP  = 3.0536;  % machine chirp
 
 PARAM.INIT.SIGZ0 = 5.6E-3;  % RMS bunch length (m)
 PARAM.INIT.SIGD0 = 7.40E-4; % RMS energy spread
@@ -24,7 +23,8 @@ PARAM.NRTL.EHI   = 0.025;   % RTL upper momentum cut (GeV)
 PARAM.LONE.LEFF  = 809.5;   % Length of LI02-LI10 (m)
 %PARAM.LONE.PHAS  = -21.2;   % 2-10 phase for 'uniform' lattice
 %PARAM.LONE.PHAS  = -11.5275;% 2-10 phase for 'decker' lattice
-PARAM.LONE.GAIN  = 0;       % egain in 2-10, automatically set if 0 (GeV)
+PARAM.LONE.GAIN  = 7.81;       % egain in 2-10, automatically set if 0 (GeV)
+PARAM.LONE.CHRP  = 3.0536;  % chirp in 2-10 (GeV)
 PARAM.LONE.FBAM  = 0.235;   % feedback amplitude at S10 (GV)
 
 PARAM.LI10.R56   = -0.076;  % Sector 10 chicane R56 (m)
@@ -56,16 +56,16 @@ PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
 PARAM.MACH.LTC   ='decker'; PARAM.LONE.PHAS  = -11.2; % decker's staged phase
 LINAC = des_amp_and_phase();
-sectarrow();
-LINAC.SECT.PHAS(6:7) = 0;
-bar_h = bar(LINAC.SECT.Z(1:18),LINAC.SECT.PHAS,'barwidth',1);
-bar_child=get(bar_h,'Children');
-set(bar_child, 'CData',1:18);
-axis([0 2000 -60 10]);
-xlabel('Z (meters)','fontsize',16);
-ylabel('Phase (degrees)','fontsize',16);
+%sectarrow();
+%LINAC.SECT.PHAS(6:7) = 0;
+%bar_h = bar(LINAC.SECT.Z(1:18),LINAC.SECT.PHAS,'barwidth',1);
+%bar_child=get(bar_h,'Children');
+%set(bar_child, 'CData',1:18);
+%axis([0 2000 -60 10]);
+%xlabel('Z (meters)','fontsize',16);
+%ylabel('Phase (degrees)','fontsize',16);
 %title('Sector Phase','fontsize',16);
-saveas(gca,'~/Desktop/sect plots/phase_bar.pdf');
+%saveas(gca,'~/Desktop/sect plots/phase_bar.pdf');
 %saveas(gca,['/Users/sgess/Desktop/plots/E200/E200_' num2str(num) '/sect_phase.pdf']);
 %[d_bl,d_es,d_eavg,d_efwhm,d_zfwhm,d_zavg,d_eavgcut,d_numpart] = LiTrack('FACETDSECT');
 %LiTrack('FACETDSECT');
