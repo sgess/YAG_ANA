@@ -1,6 +1,6 @@
 load('scan64.mat');
 
-savE = 1;
+savE = 0;
 
 figure(f1);
 contourf(phas(:,1),1000*NAMPL,1000*bl_sig(:,:,2),[0 30 40 50 60 70 80 90 100 120 140 160]);
