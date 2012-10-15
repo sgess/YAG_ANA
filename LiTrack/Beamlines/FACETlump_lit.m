@@ -120,7 +120,7 @@ beamline=[
       
     % RTL: The energy cut is a little tighter than in the file MJH gave me.
       1     0		   0          0           0        0         % initial particles
-     11     NRTL_ampl  NRTL_phas  lambdaS     1        NRTL_leff % NRTL compressor
+    -11     NRTL_ampl  NRTL_phas  lambdaS     1        NRTL_leff % NRTL compressor
      26     NRTL_ELO   NRTL_EHI   0           0        0         % energy spread cut
      -6     NRTL_R56   NRTL_T566  E0          0        0         % NRTL R56, T566
      
@@ -150,7 +150,7 @@ beamline=[
      
     % LI10: SBST PDES ~ 55
      11     ampl(9)    phas(9)    lambdaS     1        leff(9)   % LI10:KLYS
-     13     E1         LONE_ampl  -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
+    -13     E1         LONE_ampl  -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
      
     % S10 CHCKN: MJH file has S10 chicken in two sections but only need one
 	  7	    LI10_R56   E1	      0           0        0         % LBCC chicane
@@ -159,7 +159,7 @@ beamline=[
         
     % LI19: SBST PDES ~ 0
      11     gain       LTWO_phas  lambdaS     1        sum(leff(10:18))  % LI19:KLYS
-     13		E2	       LTWO_ampl  -90.0	      90.0     lambdaS   % SCAV energy feedback
+    -13		E2	       LTWO_ampl  -90.0	      90.0     lambdaS   % SCAV energy feedback
     
     % LI20: FACET CHICANE
       6     LI20_R56   LI20_T566  E2          0        0         % LI20 R56, T566

@@ -23,7 +23,7 @@ PARAM.NRTL.EHI   = 0.021;   % RTL upper momentum cut (GeV)
 PARAM.LONE.LEFF  = 809.5;   % Length of LI02-LI10 (m)
 PARAM.LONE.GAIN  = 7.81;    % egain in 2-10, automatically set if 0 (GeV)
 PARAM.LONE.CHRP  = 3.0536;  % chirp in 2-10 (GeV)
-PARAM.LONE.PHAS  = -11.05;   % decker's staged phase
+PARAM.LONE.PHAS  = -11.2;   % decker's staged phase
 PARAM.LONE.FBAM  = 0.235;   % feedback amplitude at S10 (GV)
 
 PARAM.LI10.R56   = -0.075786;% Sector 10 chicane R56 (m)
@@ -48,8 +48,10 @@ PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
 PARAM.MACH.LTC   ='decker';
 
-%LINAC = des_amp_and_phase();
-%LiTrack('FACETlump');
+LINAC = des_amp_and_phase();
+LiTrack('FACETlump');
+
+if 0
 p_lo = -10.;
 p_hi = -11.6;
 n_lo = 0.0400;
@@ -122,3 +124,4 @@ end
 
 %plot(phase,chrp);
 %plot(phase,atand(chrp/7.81));
+end
