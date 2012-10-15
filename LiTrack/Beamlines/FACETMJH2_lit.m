@@ -65,6 +65,7 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 % 2.2E10, 40.8, -20.6 gave 22.6kA, 15.4µm with as built LBCCR56 -0.076
 
 Efinal = 20.35; %23
+%Efinal = 23; %23
 T566 = 0.10;
 % contf = 1;
 
@@ -90,6 +91,7 @@ subphase = -21.2;
 ramp = 0;
 RTLR56 = 0.603;
 LBCCR56 = -0.0760;
+%FACETR56 = 0.0036;
 FACETR56 = 0.0040;
 RTLupper = 0.025;
 RTLlower = -0.025;
@@ -144,22 +146,22 @@ thewake = 1;
 z0_bar = z0in_deg*mperdeg;
 
 beamline = [
-      -11		0              0                    0.104969  0		  0        % S-band
+       11		0              0                    0.104969  0		  0        % S-band
        11		compressor     90.                  0.104969  1		  2.13     % Compressor cavity AMPL DR13 13 VDES
-      -26	    RTLlower       RTLupper             0		  0       0        % Approximate energy acceptance of NRTL
+       26	    RTLlower       RTLupper             0		  0       0        % Approximate energy acceptance of NRTL
       -6		RTLR56         1.0535               E0        0		  0        % Design NRTL ~0.603, BDES to KMOD for E-164 gives 0.588
        11		8.444          phase                0.104969  thewake 809.5    % 2-6, nominal 9GeV, no feedback
       -13       9              0.235*3             -90        90      0.104969 % Energy feedback to set 9GeV in chicane
        7	    LBCCR56/2      9.000                0         0       0        % 1st half of the chicane. Design was -0.0745, as built -0.076
-      -7	    LBCCR56/2      9.000                0         0       0        % 2nd half of the chicane. Design was -0.0745, as built -0.076
-       22       5.9E-5         0                    0         0       0        % Approximate SR growth in E-spread from chicane
+       7	    LBCCR56/2      9.000                0         0       0        % 2nd half of the chicane. Design was -0.0745, as built -0.076
+      -22       5.9E-5         0                    0         0       0        % Approximate SR growth in E-spread from chicane
        37		0.01           1                    0		  0		  0        % Clip any rediculously long tails
       -10       Efinal         ramp                 0.104969  thewake 868      % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
-      -6		FACETR56       T566                 Efinal    0		  0        % FACET 'dogleg' like chicane
+       6		FACETR56       T566                 Efinal    0		  0        % FACET 'dogleg' like chicane
        22       0.8E-5         0                    0         0       0        % Approximate SR growth in E-spread from dogleg
        37       0.01           1                    0		  0		  0        % Clip any rediculously long tails
        26       SouthMS        NorthMS              0         0       0        % Momentum Slits in FACET
-      -99	    0              0                    0		  0		  0        % End
+       99	    0              0                    0		  0		  0        % End
        ];
    
 
