@@ -1,7 +1,8 @@
 load('simp_scan.mat');
-save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
+%save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
 
-savE = 0;
+savE = 1;
 phas = -phas;
 figure(f1);
 contourf(1000*NAMPL,phas(:),1000*bl_sig(:,:,2),[0 30 40 50 60 70 80 90 100 120 140 160]);
@@ -80,6 +81,7 @@ title('Gaussian Peak Current at S20 in kA');
 if savE; saveas(gca,[save_dir 'i_sig_S20.pdf']); end;
 
 
+if 0
 
 % Sigma Z
 
@@ -240,3 +242,4 @@ text(0.7*v(2),0.70*v(4),['I sigma = ' num2str(I_sig(n(p),p,3),'%.3f') ' kA']);
 text(0.7*v(2),0.65*v(4),['E FWHM = ' num2str(e_fwhm(n(p),p,3),'%.3f') ' %']);
 if savE; saveas(gca,[save_dir 'maxSigIES_profS20.pdf']); end;
 
+end

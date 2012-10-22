@@ -1,5 +1,6 @@
 load('scan64.mat');
-save_dir = '/Users/sgess/Desktop/plots/LiTrack/scan64/';
+%save_dir = '/Users/sgess/Desktop/plots/LiTrack/scan64/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/scans/';
 
 savE = 1;
 
