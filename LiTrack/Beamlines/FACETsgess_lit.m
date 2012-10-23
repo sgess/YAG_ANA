@@ -4,103 +4,75 @@
   phas = MACH.KLYS.PHAS;
   leff = MACH.KLYS.LEFF;
 
+  global PARAM; % Initial beam and machine parameters  
+  
   % FACET energy set points. We are pretty sure about these, I think. . .
-  E0=1.19;                    % GeV ... initial energy
-  E1=9.0;                     % GeV ... energy at LBCC
-  E2=20.35;                   % GeV ... energy at FACET
-  lambdaS=2.99792458e8/2856e6;% S-band wavelength
+  E0        = PARAM.ENRG.E0;    % GeV ... initial energy
+  E1        = PARAM.ENRG.E1;    % GeV ... energy at LBCC
+  E2        = PARAM.ENRG.E2;    % GeV ... energy at FACET
   
-  %%%%%%%%%%%%
-  % MDW vals %
-  %%%%%%%%%%%%
   % NRTL compressor klystron and R56 #s
-  %NRTL_ampl=1e-3*(43.0);      % AMPL DR13 11 VDES
-  %NRTL_phas=90;               % on the zero-crossing
-  %NRTL_R56=0.602601;          % This is design val
-  %NRTL_T566=1.07572;          % Design val?
-  % S10 chcn #s
-  %LBCC_R56=-0.075786;         % Measured val?
-  %LBCC_T566=0.114020;         % Measured val?
-  % S20 chcn R56 #s
-  %LI20_R56=0.003996;          % Measured val?
-  %LI20_T566=0.803843E-01;     % Measured val?
-
-  %%%%%%%%%%%%
-  % MJH vals %
-  %%%%%%%%%%%%
-  % NRTL compressor klystron and R56 #s
-  %NRTL_ampl=1e-3*(42.0);      % AMPL DR13 11 VDES
-  %NRTL_phas=90;               % on the zero-crossing
-  %NRTL_R56=0.590;             % E164 val
-  %NRTL_T566=1.0535;           % E164 val
-  % S10 chcn #s
-  %LBCC_R56=-0.0760;           % "as built"
-  %LBCC_T566=0.114020;         % copied from MDW
-  % S20 chcn R56 #s
-  %LI20_R56=0.0040;            % design
-  %LI20_T566=0.10;             % design?
-
-  %%%%%%%%%%%%%%%%%%%%
-  % FACET paper vals %
-  %%%%%%%%%%%%%%%%%%%%
-  % NRTL compressor klystron and R56 #s
-  NRTL_ampl=0.0408;           % AMPL DR13 11 VDES
-  NRTL_phas=90;               % on the zero-crossing
-  NRTL_R56=0.603;             % E164 val
-  NRTL_T566=1.0535;           % E164 val
-  % S10 chcn #s
-  LBCC_R56=-0.0760;           % "as built"
-  LBCC_T566=0.114020;         % copied from MDW
-  % S20 chcn R56 #s
-  LI20_R56=0.0040;            % design
-  LI20_T566=0.10;             % design?
+  NRTL_ampl = PARAM.NRTL.AMPL;  % AMPL DR13 11 VDES
+  NRTL_phas = PARAM.NRTL.PHAS;  % on the zero-crossing
+  NRTL_leff = PARAM.NRTL.LEFF;  % cavity length
+  NRTL_R56  = PARAM.NRTL.R56;   % This is design val
+  NRTL_T566 = PARAM.NRTL.T566;  % Design val?
+  NRTL_ELO  = PARAM.NRTL.ELO;   % NRTL low energy cut
+  NRTL_EHI  = PARAM.NRTL.EHI;   % NRTL high energy cut
   
-  % The bunch is gaussian? Insert not-so-witty comment here. . .
-  inp = 'G';		          % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
-
-  %%%%%%%%%%%%
-  % MDW vals %
-  %%%%%%%%%%%%
+  % Phase and length of 02-10
+  LONE_leff = PARAM.LONE.LEFF;  % Length of LI02-LI10 (m)
+  LONE_phas = PARAM.LONE.PHAS;  % Chirp phase
+  LONE_gain = PARAM.LONE.GAIN;  % energy gain in LI02-LI10 (GeV)
+  LONE_ampl = PARAM.LONE.FBAM;  % feedback amplitude (GV)
+  
+  % S10 chcn #s
+  LI10_R56  = PARAM.LI10.R56;   % Measured val?
+  LI10_T566 = PARAM.LI10.T566;  % Measured val?
+  LI10_ISR  = PARAM.LI10.ISR;   %
+  
+  % Energy gain and length of 02-10
+  LTWO_leff = PARAM.LTWO.LEFF;  % Length of LI02-LI10 (m)
+  LTWO_phas = PARAM.LTWO.PHAS;  % Chirp phase
+  LTWO_ampl = PARAM.LTWO.FBAM;  % feedback amplitude (GV)
+  
+  % S20 chcn R56 #s
+  LI20_R56  = PARAM.LI20.R56;   % Measured val?
+  LI20_T566 = PARAM.LI20.T566;  % Measured val?
+  LI20_ISR  = PARAM.LI20.ISR;   %
+  LI20_ELO  = PARAM.LI20.ELO;   % S20 low energy cut
+  LI20_EHI  = PARAM.LI20.EHI;   % S20 high energy cut
+  
+  % Initial beam parameters
+  inp       = 'G';		        % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
+  
   % 6mm bunches coming out of the ring teensy energy spread.
-  %sigz0=6.0E-3;	              % rms bunch length used when inp=G or U above [m]
-  %sigd0=0.080E-2;	          % rms relative energy spread used when inp=G or U above [ ]
-  
-  %%%%%%%%%%%%%%%%%%%%
-  % FACET paper vals %
-  %%%%%%%%%%%%%%%%%%%%
-  % 6mm bunches coming out of the ring teensy energy spread.
-  sigz0=5.6E-3;	              % rms bunch length used when inp=G or U above [m]
-  sigd0=7.39E-4;	          % rms relative energy spread used when inp=G or U above [ ]
+  sigz0     = PARAM.INIT.SIGZ0;	% rms bunch length used when inp=G or U above [m]
+  sigd0     = PARAM.INIT.SIGD0;	% rms relative energy spread used when inp=G or U above [ ]
+  z0_bar    = PARAM.INIT.Z0BAR; % axial offset of bunch [m] (used also with file input - mean of file removed first)
+  d0_bar    = PARAM.INIT.D0BAR; % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
   
   % 200K sim particles = 100K electrons per sim particle
-  Nesim=200000;		          % number of particles to generate for simulation when inp=G or U (reasonable: ~1000 to ~100000)
+  Nesim     = PARAM.INIT.NESIM;	% number of particles to generate for simulation when inp=G or U (reasonable: ~1000 to ~100000)
+  Ne        = PARAM.INIT.NPART; % number of particles initially in bunch
   
-  %%%%%%%%%%%%
-  % MDW vals %
-  %%%%%%%%%%%%
   % The Holtzapple skew. Someday they'll name a skew after me. . .
-  %asym=-0.28;		          % for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
-  
-  %%%%%%%%%%%%%%%%%%%%
-  % FACET paper vals %
-  %%%%%%%%%%%%%%%%%%%%
-  % The Holtzapple skew. Someday they'll name a skew after me. . .
-  asym=-0.245;		          % for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
+  asym      = PARAM.INIT.ASYM;	% for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
   
   % Our beam has no tail? That's a tall tale! Jesus I hope no one reads this. . .
-  tail=0;		              % for inp='M' or 'G': sets rise/fall time width (0<=tail<1)
-  cut=6;		              % for inp='G': sets rise/fall time width (0.5<=cut<inf)
-
+  tail      = PARAM.INIT.TAIL;  % for inp='M' or 'G': sets rise/fall time width (0<=tail<1)
+  cut       = PARAM.INIT.CUT;   % for inp='G': sets rise/fall time width (0.5<=cut<inf)
+   
   % Other stuff
-  splots=0;	     % if =1, use small plots and show no wakes (for publish size plots)
-  plot_frac=0.1; % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
-  Ne=2.2e10;	 % number of particles initially in bunch
-  z0_bar=0;	     % axial offset of bunch [m] (used also with file input - mean of file removed first)
-  d0_bar=0;	     % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
-  Nbin=200;		 % number of bins for z-coordinate (and dE/E for plots)
-  gzfit=0;		 % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
-  gdfit=0;		 % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
-  contf=1;		 % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+  splots    = PARAM.SIMU.PLOT;	% if =1, use small plots and show no wakes (for publish size plots)
+  plot_frac = PARAM.SIMU.FRAC;  % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
+  Nbin      = PARAM.SIMU.BIN;   % number of bins for z-coordinate (and dE/E for plots)
+  gzfit     = PARAM.SIMU.ZFIT;  % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+  gdfit     = PARAM.SIMU.DFIT;  % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
+  contf     = PARAM.SIMU.CONT;  % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+  
+  % S-band wavelength
+  lambdaS   = 2.99792458e8/2856e6;
 
   
   
@@ -150,8 +122,8 @@
       
     % RTL: The energy cut is a little tighter than in the file MJH gave me.
      -1     0		   0          0           0        0         % initial particles
-    -11     NRTL_ampl  NRTL_phas  lambdaS     1        2.1694    % NRTL compressor
-     26     -0.021	   0.021      0           0        0         % energy spread cut
+    -11     NRTL_ampl  NRTL_phas  lambdaS     1        NRTL_leff % NRTL compressor
+     26     NRTL_ELO   NRTL_EHI   0           0        0         % energy spread cut
      -6     NRTL_R56   NRTL_T566  E0          0        0         % NRTL R56, T566
      
     % LI02: SBST PDES ~ 0
@@ -244,11 +216,11 @@
      11     ampl( 69)  phas( 69)  lambdaS     1        leff( 69) % LI10:KLYS:51
      11     ampl( 70)  phas( 70)  lambdaS     1        leff( 70) % LI10:KLYS:61
     -11     ampl( 71)  phas( 71)  lambdaS     1        leff( 71) % LI10:KLYS:71
-    -13     E1         0.235      -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
+    -13     E1         LONE_ampl  -90         90       lambdaS   % Energy feedback to set 9GeV in chicane
      
     % S10 CHCKN: MJH file has S10 chicken in two sections but only need one
-	  7	    LBCC_R56   E1	      0           0        0         % LBCC chicane
-     22     5.9E-5     0          0           0        0         % LBCC ISR energy spread
+	  7	    LI10_R56   E1	      0           0        0         % LBCC chicane
+     22     LI10_ISR   0          0           0        0         % LBCC ISR energy spread
     -37     0.01       1          0           0        0         % Z-cut
     
     % LI11: SBST PDES ~ 0, LI11:KLYS:31 does not show up in Nate's list so
@@ -340,11 +312,11 @@
      11     ampl(139)  phas(139)  lambdaS     1        leff(139) % LI19:KLYS:51
      11     ampl(140)  phas(140)  lambdaS     1        leff(140) % LI19:KLYS:61
     -11     ampl(141)  phas(141)  lambdaS     1        leff(141) % LI19:KLYS:81
-    -13		E2	       1.88       -90.0	      90.0     lambdaS   % SCAV energy feedback
+    -13		E2	       LTWO_ampl  -90.0	      90.0     lambdaS   % SCAV energy feedback
 
     % LI20: FACET CHICANE
       6     LI20_R56   LI20_T566  E2          0        0         % LI20 R56, T566
-     22     0.8E-5     0          0           0        0         % FFTB ISR energy spread
+     22     LI20_ISR   0          0           0        0         % FFTB ISR energy spread
      37     0.01       1          0           0        0         % Z-cut
     -99		0          0          0           0        0         % end
   ];

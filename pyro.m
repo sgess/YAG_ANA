@@ -11,7 +11,7 @@ if nargin > 1
     cdf3(:) = (erf((f-cut)/1.00)+erf((-f+FS-cut)/1.00))/2;
 end
 
-plot(cdf3);
+%plot(cdf3);
 y = fft(PROF);
 filt = y.*cdf3;
 sig = sum(abs(filt).^2);
