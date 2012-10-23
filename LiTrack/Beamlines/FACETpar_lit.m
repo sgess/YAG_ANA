@@ -22,7 +22,7 @@
   
   % S10 chcn #s
   LI10_R56  = PARAM.LI10.R56;   % Measured val?
-  %LI10_T566 = PARAM.LI10.T566;  % Measured val?
+  LI10_T566 = PARAM.LI10.T566;  % Measured val?
   LI10_ISR  = PARAM.LI10.ISR;   %
   
   % Energy gain and length of 02-10
@@ -43,9 +43,12 @@
   % 6mm bunches coming out of the ring teensy energy spread.
   sigz0     = PARAM.INIT.SIGZ0;	% rms bunch length used when inp=G or U above [m]
   sigd0     = PARAM.INIT.SIGD0;	% rms relative energy spread used when inp=G or U above [ ]
+  z0_bar    = PARAM.INIT.Z0BAR; % axial offset of bunch [m] (used also with file input - mean of file removed first)
+  d0_bar    = PARAM.INIT.D0BAR; % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
   
   % 200K sim particles = 100K electrons per sim particle
   Nesim     = PARAM.INIT.NESIM;	% number of particles to generate for simulation when inp=G or U (reasonable: ~1000 to ~100000)
+  Ne        = PARAM.INIT.NPART; % number of particles initially in bunch
   
   % The Holtzapple skew. Someday they'll name a skew after me. . .
   asym      = PARAM.INIT.ASYM;	% for inp='M' or 'G': sets rise/fall time width (-1<asym<1)
@@ -53,21 +56,17 @@
   % Our beam has no tail? That's a tall tale! Jesus I hope no one reads this. . .
   tail      = PARAM.INIT.TAIL;  % for inp='M' or 'G': sets rise/fall time width (0<=tail<1)
   cut       = PARAM.INIT.CUT;   % for inp='G': sets rise/fall time width (0.5<=cut<inf)
-
+   
   % Other stuff
-  splots    = 0;	     % if =1, use small plots and show no wakes (for publish size plots)
-  plot_frac = 0.05;      % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
-  Ne        = 2.2e10;	 % number of particles initially in bunch
-  z0_bar    = 0;	     % axial offset of bunch [m] (used also with file input - mean of file removed first)
-  d0_bar    = 0;	     % relative energy offset of bunch [ ]  (used also with file input - mean of file removed first)
-  Nbin      = 200;		 % number of bins for z-coordinate (and dE/E for plots)
-  gzfit     = 1;		 % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
-  gdfit     = 1;		 % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
-  contf     = 0;		 % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
+  splots    = PARAM.SIMU.PLOT;	% if =1, use small plots and show no wakes (for publish size plots)
+  plot_frac = PARAM.SIMU.FRAC;  % fraction of particles to plot in the delta-z scatter-plots (0 < plot_frac <= 1)
+  Nbin      = PARAM.SIMU.BIN;   % number of bins for z-coordinate (and dE/E for plots)
+  gzfit     = PARAM.SIMU.ZFIT;  % if ==1: fit Z-distribution to gaussian (defaults to no-fit if 'gzfit' not provided)
+  gdfit     = PARAM.SIMU.DFIT;  % if ==1: fit dE/E-distribution to gaussian (defaults to no-fit if 'gdfit' not provided)
+  contf     = PARAM.SIMU.CONT;  % if ==1: get color contour image of z-d space (defaults to scatter plot if not provided)
   
   % S-band wavelength
   lambdaS   = 2.99792458e8/2856e6;
-
 
 % The follwing array of file names, "wake_fn", is the point-charge wakefield filename(s) to be used.  The pointer
 % to the used filename appears in the 5th column (wake ON/OFF) of the 'beamline' array below.  A "zero" (i.e. 0)
@@ -105,19 +104,19 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 
 beamline = [
        11		0              0                    lambdaS   0		  0             % S-band
-       11		NRTL_ampl      NRTL_phas            lambdaS   1		  NRTL_leff     % Compressor cavity AMPL DR13 13 VDES
+      -11		NRTL_ampl      NRTL_phas            lambdaS   1		  NRTL_leff     % Compressor cavity AMPL DR13 13 VDES
        26	    NRTL_ELO       NRTL_EHI             0		  0       0             % Approximate energy acceptance of NRTL
       -6		NRTL_R56       NRTL_T566            E0        0		  0             % Design NRTL ~0.603, BDES to KMOD for E-164 gives 0.588
        11		LONE_gain      LONE_phas            lambdaS   1       LONE_leff     % 2-6, nominal 9GeV, no feedback
-       13       E1             LONE_ampl            -90       90      lambdaS       % Energy feedback to set 9GeV in chicane
+      -13       E1             LONE_ampl            -90       90      lambdaS       % Energy feedback to set 9GeV in chicane
        7	    LI10_R56       E1                   0         0       0             % 2nd half of the chicane. Design was -0.0745, as built -0.076
-      -22       LI10_ISR       0                    0         0       0             % Approximate SR growth in E-spread from chicane
-       37		0.01           1                    0		  0		  0             % Clip any rediculously long tails
-       10       E2             LTWO_phas            lambdaS   1       LTWO_leff     % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
+       22       LI10_ISR       0                    0         0       0             % Approximate SR growth in E-spread from chicane
+      -37		0.01           1                    0		  0		  0             % Clip any rediculously long tails
+      -10       E2             LTWO_phas            lambdaS   1       LTWO_leff     % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
        6		LI20_R56       LI20_T566            E2        0		  0             % FACET 'dogleg' like chicane
        22       LI20_ISR       0                    0         0       0             % Approximate SR growth in E-spread from dogleg
        37       0.01           1                    0		  0		  0             % Clip any rediculously long tails
-       26       LI20_ELO       LI20_EHI             0         0       0             % Momentum Slits in FACET
+       %26       LI20_ELO       LI20_EHI             0         0       0             % Momentum Slits in FACET
        99	    0              0                    0		  0		  0             % End
        ];
    

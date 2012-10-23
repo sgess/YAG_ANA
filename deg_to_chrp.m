@@ -3,11 +3,23 @@ global PARAM;
 global LINAC;
 
 
+
 PARAM.MACH.RAMP  = 0;       % phase ramp
+PARAM.MACH.LTC   ='decker'; % lattice phasing
+
+PARAM.SIMU.PLOT  = 0;       % Small plots?
+PARAM.SIMU.FRAC  = 0.05;    % Fraction of sim particles to plot
+PARAM.SIMU.BIN   = 256;     % Number of historgram bins
+PARAM.SIMU.ZFIT  = 1;       % Longitudinal gauss fit
+PARAM.SIMU.DFIT  = 1;       % Energy gauss fit
+PARAM.SIMU.CONT  = 0;       % Contour plot
 
 PARAM.INIT.SIGZ0 = 6.0E-3;  % RMS bunch length (m)
 PARAM.INIT.SIGD0 = 8.00E-4; % RMS energy spread
+PARAM.INIT.Z0BAR = 0;       % Z offset
+PARAM.INIT.D0BAR = 0;       % Energy offset
 PARAM.INIT.NESIM = 2E5;     % Number of simulated macro particles
+PARAM.INIT.NPART = 2.2E10;  % Number of electrons per bunch
 PARAM.INIT.ASYM  = -0.280;  % The Holtzapple skew
 PARAM.INIT.TAIL  = 0;       % Not sure what this is
 PARAM.INIT.CUT   = 6;       % Not sure what this is
@@ -36,7 +48,7 @@ PARAM.LTWO.CHRP  = 0;       % chirp in 2-10 (GeV)
 PARAM.LTWO.PHAS  = 0;       % 11-20 phase
 PARAM.LTWO.FBAM  = 1.88;    % feedback amplitude at S20 (GV)
 
-PARAM.LI20.R56   = 0.010;   % Sector 20 chicane R56 (m)
+PARAM.LI20.R56   = 0.0040;   % Sector 20 chicane R56 (m)
 PARAM.LI20.T566  = 0.0803843;% Sector 20 chicane T566 (m)
 PARAM.LI20.ISR   = 0.8E-5;  % ISR energy spread from bends
 PARAM.LI20.ELO   = -0.03;   % RTL lower momentum cut (GeV)
@@ -46,16 +58,24 @@ PARAM.ENRG.E0    = 1.19;    % Energy from ring (GeV)
 PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
 PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
-PARAM.MACH.LTC   ='decker';
+
 
 scan = 0;
 
 if scan == 0
     
+    PARAM.MACH.LTC   ='decker'; % lattice phasing
+    PARAM.LONE.PHAS  = -11.28;
+    PARAM.NRTL.AMPL  = 0.04051;
+    PARAM.LI20.R56   = 0.0050;
     LINAC = des_amp_and_phase();
-    %LT_OUTPUT = LiTrack('FACETlump');
-    LiTrack('FACETlump');
-    %LiTrack('FACETNCOL');
+    %LiTrack('FACETlump');
+    lump_OUTPUT = LiTrack('FACETlump');
+        
+    PARAM.LONE.PHAS  = -21.76;
+    PARAM.LONE.GAIN  = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
+    %LiTrack('FACETpar');
+    par_OUTPUT = LiTrack('FACETpar');
     
 elseif scan == 1
     
@@ -85,8 +105,8 @@ elseif scan == 1
     
     N       = zeros(p_el,n_el,3);
     
-    bl      = zeros(200,p_el,n_el,3);
-    es      = zeros(200,p_el,n_el,3);
+    bl      = zeros(PARAM.SIMU.BIN,p_el,n_el,3);
+    es      = zeros(PARAM.SIMU.BIN,p_el,n_el,3);
     
     tot = p_el*n_el;
     for i = 1:p_el
@@ -118,13 +138,13 @@ elseif scan == 1
             
             N(i,j,:) = num_part;
             
-            bl(:,i,j,1) = hist(bunch_length(1:num_part(1),1),200);
-            bl(:,i,j,2) = hist(bunch_length(1:num_part(2),2),200);
-            bl(:,i,j,3) = hist(bunch_length(1:num_part(3),3),200);
+            bl(:,i,j,1) = hist(bunch_length(1:num_part(1),1),PARAM.SIMU.BIN);
+            bl(:,i,j,2) = hist(bunch_length(1:num_part(2),2),PARAM.SIMU.BIN);
+            bl(:,i,j,3) = hist(bunch_length(1:num_part(3),3),PARAM.SIMU.BIN);
             
-            es(:,i,j,1) = hist(energy_spread(1:num_part(1),1),200);
-            es(:,i,j,2) = hist(energy_spread(1:num_part(2),2),200);
-            es(:,i,j,3) = hist(energy_spread(1:num_part(3),3),200);
+            es(:,i,j,1) = hist(energy_spread(1:num_part(1),1),PARAM.SIMU.BIN);
+            es(:,i,j,2) = hist(energy_spread(1:num_part(2),2),PARAM.SIMU.BIN);
+            es(:,i,j,3) = hist(energy_spread(1:num_part(3),3),PARAM.SIMU.BIN);
             
         end
     end

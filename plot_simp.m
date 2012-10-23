@@ -1,11 +1,29 @@
-load('simp_scan.mat');
+%load('simp_scan.mat');
+%load('fine_scan.mat');
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
+save_dir = '/Users/sgess/Desktop/plots/LiTrack/fine_scan/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
 
-savE = 1;
-phas = -phas;
+savE = 0;
+
+s10 = 4;
+s20 = 6;
+
+% Compute pyro
+HIPY3 = zeros(64,64);
+HIPY4 = zeros(64,64);
+for i=1:64
+   for j=1:64
+       HIPY3(i,j) = pyro(bl(:,i,j,s20),4);
+       HIPY4(i,j) = pyro(bl(:,i,j,s20),2);
+   end
+end
+
+
+%phas = -phas;
+
 figure(f1);
-contourf(1000*NAMPL,phas(:),1000*bl_sig(:,:,2),[0 30 40 50 60 70 80 90 100 120 140 160]);
+contourf(1000*NAMPL,phas(:),1000*bl_sig(:,:,s10),[0 30 40 50 60 70 80 90 100 120 140 160]);
 colormap(flipud(colormap));
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
@@ -15,7 +33,7 @@ if savE; saveas(gca,[save_dir 'bl_sig_S10.pdf']); end;
 
 
 figure(f2);
-contourf(1000*NAMPL,phas(:),1000*bl_fwhm(:,:,2),[0 30 40 50 60 70 80 90 100 120 140 160]);
+contourf(1000*NAMPL,phas(:),1000*bl_fwhm(:,:,s10),[0 30 40 50 60 70 80 90 100 120 140 160]);
 colormap(flipud(colormap));
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
@@ -25,7 +43,7 @@ if savE; saveas(gca,[save_dir 'bl_fwhm_S10.pdf']); end;
 
 
 figure(f3);
-contourf(1000*NAMPL,phas(:),I_max(:,:,2));
+contourf(1000*NAMPL,phas(:),I_max(:,:,s10));
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
@@ -34,7 +52,7 @@ if savE; saveas(gca,[save_dir 'i_max_S10.pdf']); end;
 
 
 figure(f4);
-contourf(1000*NAMPL,phas(:),I_sig(:,:,2));
+contourf(1000*NAMPL,phas(:),I_sig(:,:,s10));
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
@@ -44,7 +62,7 @@ if savE; saveas(gca,[save_dir 'i_sig_S10.pdf']); end;
 
 
 figure(f5);
-contourf(1000*NAMPL,phas(:),1000*bl_sig(:,:,3),[0 10 15 20 25 30 35 40 45 50 60 70 80 90 100]);
+contourf(1000*NAMPL,phas(:),1000*bl_sig(:,:,s20),[0 10 15 20 25 30 35 40 45 50 60 70 80 90 100]);
 colormap(flipud(colormap));
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
@@ -54,7 +72,7 @@ if savE; saveas(gca,[save_dir 'bl_sig_S20.pdf']); end;
 
 
 figure(f6);
-contourf(1000*NAMPL,phas(:),1000*bl_fwhm(:,:,3),[0 15 30 45 60 75 90 120 140 160 180 200]);
+contourf(1000*NAMPL,phas(:),1000*bl_fwhm(:,:,s20),[0 15 30 45 60 75 90 120 140 160 180 200]);
 colormap(flipud(colormap));
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
@@ -64,7 +82,7 @@ if savE; saveas(gca,[save_dir 'bl_fwhm_S20.pdf']); end;
 
 
 figure(f7);
-contourf(1000*NAMPL,phas(:),I_max(:,:,3),[0 5 10 11 12 13 14 15 16 17 18 19]);
+contourf(1000*NAMPL,phas(:),I_max(:,:,s20),[0 5 10 11 12 13 14 15 16 17 18 19]);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
@@ -73,13 +91,54 @@ if savE; saveas(gca,[save_dir 'i_max_S20.pdf']); end;
 
 
 figure(f8);
-contourf(1000*NAMPL,phas(:),I_sig(:,:,3),[0 5 10 11 12 13 14 15 16 17 18 19]);
+contourf(1000*NAMPL,phas(:),I_sig(:,:,s20),[0 5 10 11 12 13 14 15 16 17 18 19]);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
 title('Gaussian Peak Current at S20 in kA');
 if savE; saveas(gca,[save_dir 'i_sig_S20.pdf']); end;
 
+figure(f9);
+contourf(1000*NAMPL,phas(:),PYRO);
+colorbar;
+ylabel('Equivalent Chirp Phase (Degrees)');
+xlabel('Compressor Amplitude (MV)');
+title('Pyrometer, No Filter');
+
+figure(f10);
+contourf(1000*NAMPL,phas(:),DCPY);
+colorbar;
+ylabel('Equivalent Chirp Phase (Degrees)');
+xlabel('Compressor Amplitude (MV)');
+title('Pyrometer, DC Removed');
+
+figure(f11);
+contourf(1000*NAMPL,phas(:),HIPY);
+colorbar;
+ylabel('Equivalent Chirp Phase (Degrees)');
+xlabel('Compressor Amplitude (MV)');
+title('Pyrometer, High Pass filter (5 THz)');
+
+figure(f12);
+contourf(1000*NAMPL,phas(:),HIPY2);
+colorbar;
+ylabel('Equivalent Chirp Phase (Degrees)');
+xlabel('Compressor Amplitude (MV)');
+title('Pyrometer, High Pass filter (3 THz)');
+
+figure(f13);
+contourf(1000*NAMPL,phas(:),HIPY3);
+colorbar;
+ylabel('Equivalent Chirp Phase (Degrees)');
+xlabel('Compressor Amplitude (MV)');
+title('Pyrometer, High Pass filter (2 THz)');
+
+figure(f14);
+contourf(1000*NAMPL,phas(:),HIPY4);
+colorbar;
+ylabel('Equivalent Chirp Phase (Degrees)');
+xlabel('Compressor Amplitude (MV)');
+title('Pyrometer, High Pass filter (1 THz)');
 
 if 0
 
