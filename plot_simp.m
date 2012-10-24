@@ -1,6 +1,6 @@
 %load('simp_scan.mat');
 %load('fine_scan.mat');
-%load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
+load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/fine_scan/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
@@ -11,23 +11,23 @@ savE = 1;
 s10 = 4;
 s20 = 6;
 
-% Compute pyro
-% PYRO  = zeros(64,64);
-% DCPY  = zeros(64,64);
-% HIPY  = zeros(64,64);
-% HIPY2 = zeros(64,64);
-% HIPY3 = zeros(64,64);
-% HIPY4 = zeros(64,64);
-% for i=1:64
-%    for j=1:64
-%        PYRO(i,j)  = pyro(bl(:,i,j,s20));
-%        DCPY(i,j)  = pyro(bl(:,i,j,s20),1);
-%        HIPY(i,j)  = pyro(bl(:,i,j,s20),10);
-%        HIPY2(i,j) = pyro(bl(:,i,j,s20),6);
-%        HIPY3(i,j) = pyro(bl(:,i,j,s20),4);
-%        HIPY4(i,j) = pyro(bl(:,i,j,s20),2);
-%    end
-% end
+%Compute pyro
+PYRO  = zeros(64,64);
+DCPY  = zeros(64,64);
+HIPY  = zeros(64,64);
+HIPY2 = zeros(64,64);
+HIPY3 = zeros(64,64);
+HIPY4 = zeros(64,64);
+for i=1:64
+   for j=1:64
+       PYRO(i,j)  = pyro(bl(:,i,j,s10));
+       DCPY(i,j)  = pyro(bl(:,i,j,s10),1);
+       HIPY(i,j)  = pyro(bl(:,i,j,s10),10);
+       HIPY2(i,j) = pyro(bl(:,i,j,s10),6);
+       HIPY3(i,j) = pyro(bl(:,i,j,s10),4);
+       HIPY4(i,j) = pyro(bl(:,i,j,s10),2);
+   end
+end
 
 
 %phas = -phas;
@@ -112,59 +112,71 @@ if savE; saveas(gca,[save_dir 'i_sig_S20.pdf']); end;
 
 end
 
-if 0
+if 1
 
 figure(f9);
 contourf(1000*NAMPL,phas(:),PYRO);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
-title('Pyrometer, No Filter');
-if savE; saveas(gca,[save_dir 'pyro_nofilt.pdf']); end;
+%title('Pyrometer, No Filter');
+%if savE; saveas(gca,[save_dir 'pyro_nofilt.pdf']); end;
+title('S18 Pyrometer, No Filter');
+if savE; saveas(gca,[save_dir 'S18pyro_nofilt.pdf']); end;
 
 figure(f10);
 contourf(1000*NAMPL,phas(:),DCPY);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
-title('Pyrometer, DC Removed');
-if savE; saveas(gca,[save_dir 'pyro_dcfilt.pdf']); end;
+%title('Pyrometer, DC Removed');
+%if savE; saveas(gca,[save_dir 'pyro_dcfilt.pdf']); end;
+title('S18 Pyrometer, DC Removed');
+if savE; saveas(gca,[save_dir 'S18pyro_dcfilt.pdf']); end;
 
 figure(f11);
 contourf(1000*NAMPL,phas(:),HIPY);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
-title('Pyrometer, High Pass filter (5 THz)');
-if savE; saveas(gca,[save_dir 'pyro_T5filt.pdf']); end;
+%title('Pyrometer, High Pass filter (5 THz)');
+%if savE; saveas(gca,[save_dir 'pyro_T5filt.pdf']); end;
+title('S18 Pyrometer, High Pass filter (5 THz)');
+if savE; saveas(gca,[save_dir 'S18pyro_T5filt.pdf']); end;
 
 figure(f12);
 contourf(1000*NAMPL,phas(:),HIPY2);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
-title('Pyrometer, High Pass filter (3 THz)');
-if savE; saveas(gca,[save_dir 'pyro_T3filt.pdf']); end;
+%title('Pyrometer, High Pass filter (3 THz)');
+%if savE; saveas(gca,[save_dir 'pyro_T3filt.pdf']); end;
+title('S18 Pyrometer, High Pass filter (3 THz)');
+if savE; saveas(gca,[save_dir 'S18pyro_T3filt.pdf']); end;
 
 figure(f13);
 contourf(1000*NAMPL,phas(:),HIPY3);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
-title('Pyrometer, High Pass filter (2 THz)');
-if savE; saveas(gca,[save_dir 'pyro_T2filt.pdf']); end;
+%title('Pyrometer, High Pass filter (2 THz)');
+%if savE; saveas(gca,[save_dir 'pyro_T2filt.pdf']); end;
+title('S18 Pyrometer, High Pass filter (2 THz)');
+if savE; saveas(gca,[save_dir 'S18pyro_T2filt.pdf']); end;
 
 figure(f14);
 contourf(1000*NAMPL,phas(:),HIPY4);
 colorbar;
 ylabel('Equivalent Chirp Phase (Degrees)');
 xlabel('Compressor Amplitude (MV)');
-title('Pyrometer, High Pass filter (1 THz)');
-if savE; saveas(gca,[save_dir 'pyro_T1filt.pdf']); end;
+%title('Pyrometer, High Pass filter (1 THz)');
+%if savE; saveas(gca,[save_dir 'pyro_T1filt.pdf']); end;
+title('S18 Pyrometer, High Pass filter (1 THz)');
+if savE; saveas(gca,[save_dir 'S18 pyro_T1filt.pdf']); end;
 
 end
 
-if 1
+if 0
 
 [a,b] = max(PYRO);
 [c,d] = max(max(PYRO));
