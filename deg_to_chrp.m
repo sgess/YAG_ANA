@@ -70,12 +70,13 @@ if scan == 0
     PARAM.LI20.R56   = 0.0050;
     LINAC = des_amp_and_phase();
     %LiTrack('FACETlump');
-    lump_OUTPUT = LiTrack('FACETlump');
-        
-    PARAM.LONE.PHAS  = -21.76;
-    PARAM.LONE.GAIN  = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
+    %lump_OUTPUT = LiTrack('FACETlump');
+    LiTrack('FACETDSECT');
+    
+    %PARAM.LONE.PHAS  = -21.76;
+    %PARAM.LONE.GAIN  = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
     %LiTrack('FACETpar');
-    par_OUTPUT = LiTrack('FACETpar');
+    %par_OUTPUT = LiTrack('FACETpar');
     
 elseif scan == 1
     
