@@ -1,28 +1,16 @@
-function sectarrow()
+function klysarrow(num)
 
-% MAG(1:5) = LINAC.SECT.AMPL(1:5);
-% MAG(6:7) = LINAC.SECT.AMPL(8:9);
+MACH = get_amp_and_phase(num,0,0,0);
 
-% DIR(1:5) = -LINAC.SECT.PHAS(1:5);
-% DIR(6:7) = -LINAC.SECT.PHAS(8:9);
+%E2 = PARAM.ENRG.E2;
+%E1 = PARAM.ENRG.E1;
+%E0 = PARAM.ENRG.E0;
 
-%MAG(1:9) = LINAC.SECT.AMPL(1:9);
-%DIR(1:9) = -LINAC.SECT.PHAS(1:9);
-global LINAC;
-global PARAM;
+E0210 = 9.0 - 1.19;
+%E1120 = E2 - E1; 
 
-%CHIRP = PARAM.MACH.CHRP;
-CHIRP = LINAC.LONE.CHRP;
-
-E2 = PARAM.ENRG.E2;
-E1 = PARAM.ENRG.E1;
-E0 = PARAM.ENRG.E0;
-
-E0210 = E1 - E0;
-E1120 = E2 - E1; 
-
-MAG = LINAC.SECT.AMPL(1:9)';
-DIR = -LINAC.SECT.PHAS(1:9)';
+MAG = MACH.KLYS.AMPL(1:71)';
+DIR = -MACH.KLYS.PHAS(1:71)';
 
 X = MAG.*cosd(DIR);
 Y = MAG.*sind(DIR);
@@ -30,8 +18,8 @@ Y = MAG.*sind(DIR);
 px = [0,cumsum(X)];
 py = [0,cumsum(Y)];
 
-meas_chrp = py(10);
-meas_phas = atand(py(10)/px(10));
+meas_chrp = py(72);
+meas_phas = atand(py(72)/px(72));
 meas_mag  = E0210/cosd(meas_phas);
 
 cmap = colormap;
@@ -43,7 +31,7 @@ for i = 1:length(X)
           x1 = px(i+1);
           y1 = py(i+1);
           %plot([x0;x1],[y0;y1],'linewidth',2,'color',color(i));   % Draw a line between p0 and p1
-          plot([x0;x1],[y0;y1],'linewidth',2,'color',cmap(3*i,:));   % Draw a line between p0 and p1
+          plot([x0;x1],[y0;y1],'linewidth',2,'color',cmap(floor(i/2.5)+1,:));   % Draw a line between p0 and p1
           
           p = [X(i),Y(i)];
           alpha = 0.2;  % Size of arrow head relative to the length of the vector
@@ -54,12 +42,12 @@ for i = 1:length(X)
           
           
           %plot(hu(:),hv(:),'linewidth',2,'color',color(i))  % Plot arrow head
-          plot(hu(:),hv(:),'linewidth',2,'color',cmap(3*i,:));  % Plot arrow head
+          plot(hu(:),hv(:),'linewidth',2,'color',cmap(floor(i/2.5)+1,:));  % Plot arrow head
 
           grid on;
           xlabel('Energy Gain','Fontsize',16);
           ylabel('Chirp','Fontsize',16);
-          title(['Decker Phase = ' num2str(PARAM.LONE.PHAS) ' Degrees'],'Fontsize',16);
+          title(['Decker Phase = ' num2str(MACH.SECT.PHAS(2)) ' Degrees'],'Fontsize',16);
           
 end
 
@@ -80,4 +68,4 @@ text(E0210-3.3,0.5,['E gain 2-10 = ' num2str(E0210) ' [GeV]'],'Fontsize',16);
 text(0.2,-0.3,['Equivalent Phase = ' num2str(meas_phas) ' Degrees'],'Fontsize',16);
 %text(E0210+E1120-7,0.0,['E gain 11-20 = ' num2str(E1120)],'Fontsize',16);
 hold off
-saveas(gca,'/Users/sgess/Desktop/FACET/PLOTS/Phase_arrow.pdf');
+saveas(gca,'/Users/sgess/Desktop/FACET/PLOTS/klys_arrow.pdf');

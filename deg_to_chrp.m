@@ -69,10 +69,15 @@ if scan == 0
     PARAM.NRTL.AMPL  = 0.04051;
     PARAM.LI20.R56   = 0.0050;
     LINAC = des_amp_and_phase();
+    sectarrow();
     %LiTrack('FACETlump');
     %lump_OUTPUT = LiTrack('FACETlump');
+<<<<<<< HEAD
     LiTrack('FACETDSECT');
     
+=======
+        
+>>>>>>> 6ff1d9b31341e2ee8bfe12ce4dedb6be3a386583
     %PARAM.LONE.PHAS  = -21.76;
     %PARAM.LONE.GAIN  = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
     %LiTrack('FACETpar');
