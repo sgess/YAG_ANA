@@ -1,15 +1,19 @@
 %load('simp_scan.mat');
 %load('fine_scan.mat');
-load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
+%load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
+clear all;
+load('/Users/sgess/Desktop/data/LiTrack_scans/fine_scan.mat');
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/fine_scan/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/fine_scan/';
+save_dir = '/Users/sgess/Desktop/plots/fine_scan/';
 
-savE = 1;
+savE = 0;
 
 s10 = 4;
 s20 = 6;
+
+if 0
 
 %Compute pyro
 PYRO  = zeros(64,64);
@@ -29,6 +33,7 @@ for i=1:64
    end
 end
 
+end
 
 %phas = -phas;
 
@@ -112,7 +117,7 @@ if savE; saveas(gca,[save_dir 'i_sig_S20.pdf']); end;
 
 end
 
-if 1
+if 0
 
 figure(f9);
 contourf(1000*NAMPL,phas(:),PYRO);
@@ -331,8 +336,17 @@ if savE; saveas(gca,[save_dir 'fft_maxPy.pdf']); end;
 
 end
 
-if 0
+if 1
 
+    f9 = 184;
+    f10 = 185;
+    f11 = 186;
+    f12 = 187;
+    f13 = 188;
+    f14 = 189;
+    f15 = 190;
+    f16 = 191;
+    
 % Sigma Z
 
 [a,b] = min(bl_sig(:,:,s20)); % b is amplitude
@@ -357,7 +371,8 @@ if savE; saveas(gca,[save_dir 'minSigBL_profS20.pdf']); end;
 
 
 figure(f10);
-plot(es(:,b(d),d,s20));
+plot(-ee(:,b(d),d,s20),es(:,b(d),d,s20));
+set(gca,'xdir','rev');
 xlabel('Energy Spread (Unit)');
 ylabel('Number of particles');
 title('Energy Spectrum in S20 for minimum simulated sigma');
@@ -478,18 +493,19 @@ if savE; saveas(gca,[save_dir 'maxSigIBL_profS20.pdf']); end;
 
 
 figure(f16);
-plot(es(:,n(p),p,s20));
-xlabel('Energy Spread (Unit)');
-ylabel('Number of particles');
-title('Energy Spectrum in S20 for maximum simulated Gaussian Peak Current');
+plot(-ee(:,n(p),p,s20)/100,es(:,n(p),p,s20));
+set(gca,'xdir','rev');
+xlabel('Energy Spread \delta','fontsize',16);
+ylabel('Number of particles','fontsize',16);
+%title('Energy Spectrum in S20 for maximum simulated Gaussian Peak Current','fontsize',16);
 v = axis;
-text(0.7*v(2),0.95*v(4),['Eq Phase = ' num2str(phas(n(p)),'%.2f') ' degrees']);
-text(0.7*v(2),0.90*v(4),['Comp Amp = ' num2str(1000*NAMPL(p),'%.2f') ' MV']);
-text(0.7*v(2),0.85*v(4),['Sigma = ' num2str(1000*bl_sig(n(p),p,s20),'%.3f') ' \mum']);
-text(0.7*v(2),0.80*v(4),['FWHM = ' num2str(1000*bl_fwhm(n(p),p,s20),'%.3f') ' \mum']);
-text(0.7*v(2),0.75*v(4),['I peak = ' num2str(I_max(n(p),p,s20),'%.3f') ' kA']);
-text(0.7*v(2),0.70*v(4),['I sigma = ' num2str(I_sig(n(p),p,s20),'%.3f') ' kA']);
-text(0.7*v(2),0.65*v(4),['E FWHM = ' num2str(e_fwhm(n(p),p,s20),'%.3f') ' %']);
+text(-0.4*v(2),0.95*v(4),['Eq Phase = ' num2str(phas(n(p)),'%.2f') '^o'],'fontsize',14);
+text(-0.4*v(2),0.90*v(4),['Comp Amp = ' num2str(1000*NAMPL(p),'%.2f') ' MV'],'fontsize',14);
+text(-0.4*v(2),0.85*v(4),['Sigma = ' num2str(1000*bl_sig(n(p),p,s20),'%.3f') ' \mum'],'fontsize',14);
+text(-0.4*v(2),0.80*v(4),['FWHM = ' num2str(1000*bl_fwhm(n(p),p,s20),'%.3f') ' \mum'],'fontsize',14);
+text(-0.4*v(2),0.75*v(4),['I peak = ' num2str(I_max(n(p),p,s20),'%.3f') ' kA'],'fontsize',14);
+text(-0.4*v(2),0.70*v(4),['I sigma = ' num2str(I_sig(n(p),p,s20),'%.3f') ' kA'],'fontsize',14);
+text(-0.4*v(2),0.65*v(4),['E FWHM = ' num2str(e_fwhm(n(p),p,s20),'%.3f') ' %'],'fontsize',14);
 if savE; saveas(gca,[save_dir 'maxSigIES_profS20.pdf']); end;
 
 end

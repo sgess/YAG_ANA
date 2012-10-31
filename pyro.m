@@ -1,15 +1,15 @@
-function sig = pyro(PROF,cut)
+function sig = pyro(PROF,embed,cut)
 %function sig = pyro(AXIS,PROF)
 
-cdf3 = ones(256,1);
-
-if nargin > 1
-    L  = length(PROF);
-    FS = length(PROF);
-    df = FS/L;
-    f  = (FS-df)*linspace(0,1,L);
-    cdf3(:) = (erf((f-cut)/1.00)+erf((-f+FS-cut)/1.00))/2;
-end
+%cdf3 = ones(256,1);
+%
+%if nargin > 1
+%    L  = length(PROF);
+%    FS = length(PROF);
+%    df = FS/L;
+%    f  = (FS-df)*linspace(0,1,L);
+%    cdf3(:) = (erf((f-cut)/1.00)+erf((-f+FS-cut)/1.00))/2;
+%end
 
 %plot(cdf3);
 y = fft(PROF);
