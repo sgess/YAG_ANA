@@ -1,6 +1,6 @@
 clear all;
 
-scan = 0;
+scan = 1;
 
 global PARAM;
 
@@ -12,7 +12,9 @@ SJG_param;
 if scan == 0
     
     PARAM.NRTL.AMPL = 0.04058;
+    %PARAM.NRTL.AMPL = 0.04154;
     PARAM.LONE.PHAS = -21.46;
+    %PARAM.LONE.PHAS = -21.38;
     PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
     LiTrack('FACETpar');
     %LiTrack('FACETMJH2');
@@ -30,8 +32,8 @@ elseif scan == 1
     n_hi = 0.0421;
     
     % number of sample points
-    p_el = 64;
-    n_el = 64;
+    p_el = 8;
+    n_el = 8;
     
     % phase and ampl vec
     phase = linspace(p_lo,p_hi,p_el);
@@ -100,5 +102,5 @@ elseif scan == 1
             
         end
     end
-save('fine_scan.mat');
+save('rough_scan.mat');
 end

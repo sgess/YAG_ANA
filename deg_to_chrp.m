@@ -72,12 +72,11 @@ if scan == 0
     sectarrow();
     %LiTrack('FACETlump');
     %lump_OUTPUT = LiTrack('FACETlump');
-<<<<<<< HEAD
+
     LiTrack('FACETDSECT');
     
-=======
+
         
->>>>>>> 6ff1d9b31341e2ee8bfe12ce4dedb6be3a386583
     %PARAM.LONE.PHAS  = -21.76;
     %PARAM.LONE.GAIN  = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
     %LiTrack('FACETpar');

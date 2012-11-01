@@ -1,6 +1,6 @@
-function [sig, filt,LF,HF] = pyro(PROF,zz,squigs)
+function [sig,filt,LF,HF] = pyro(PROF,zz,squigs,cut)
 %function sig = pyro(AXIS,PROF)
-
+    
 % embed profile in longer window
 base = zeros(1024,1);
 base(385:640)=PROF;
@@ -12,10 +12,15 @@ LF = 1/ps;
 HF = 1/fs;
 
 % generate rosensweig filter
-cdf3 = LF*ones(1024,1);
-rosy = 1-exp(-cdf3.^2/squigs^2);
+cdf3 = LF*(0:1023)';
+rosy = 1-exp(-(cdf3/squigs).^2);
 
 % transform and filter
 y = fft(base);
 filt = y.*rosy;
-sig = sum(abs(filt(1:512)).^2);
+m = max(abs(filt(1:512)));
+i = find(abs(filt(2:512))/m < cut, 1);
+if isempty(i)
+    i = 512;
+end
+sig = sum(abs(filt(1:i)).^2);

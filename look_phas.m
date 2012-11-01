@@ -1,6 +1,5 @@
-%load('/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/E200_1443_slim.mat');
 clear all;
-
+%load('/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/E200_1443_slim.mat');
 load('/Users/sgess/Desktop/data/E200_DATA/E200_1443/E200_1443_slim.mat');
 load('/Users/sgess/Desktop/data/E200_DATA/E200_1443/E200_1443_State.mat');
 load('/Users/sgess/Desktop/data/E200_DATA/E200_1443/facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat');
