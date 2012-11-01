@@ -1,30 +1,21 @@
-function sig = pyro(PROF,embed,cut)
+function [sig, filt,LF,HF] = pyro(PROF,zz,squigs)
 %function sig = pyro(AXIS,PROF)
 
-%cdf3 = ones(256,1);
-%
-%if nargin > 1
-%    L  = length(PROF);
-%    FS = length(PROF);
-%    df = FS/L;
-%    f  = (FS-df)*linspace(0,1,L);
-%    cdf3(:) = (erf((f-cut)/1.00)+erf((-f+FS-cut)/1.00))/2;
-%end
+% embed profile in longer window
+base = zeros(1024,1);
+base(385:640)=PROF;
 
-%plot(cdf3);
-y = fft(PROF);
-filt = y.*cdf3;
-sig = sum(abs(filt).^2);
+% determine highest and lowest frequencies
+fs = zz(end)-zz(end-1);
+ps = 4*(zz(end)-zz(1));
+LF = 1/ps;
+HF = 1/fs;
 
+% generate rosensweig filter
+cdf3 = LF*ones(1024,1);
+rosy = 1-exp(-cdf3.^2/squigs^2);
 
-%s  = (max(AXIS)-min(AXIS))/1000/3e8;  % Length of sample in s
-%FS = 256/s;                    % Sampling frequency
-%T = L/FS;       % Sample time
-%df = FS/L;      % Sample fraction
-%lb = 21*df;        % Frequency cutoff
-%plot(f,cdf3);
-%hold all;
-%t = (0:L-1)*T;
-%filt = cdf3.*y';
-%plot(f(1:L/2),abs(filt(1:L/2)));
-%sig = sum(abs(filt).^2);
+% transform and filter
+y = fft(base);
+filt = y.*rosy;
+sig = sum(abs(filt(1:512)).^2);

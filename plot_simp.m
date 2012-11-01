@@ -1,35 +1,36 @@
+clear all;
 %load('simp_scan.mat');
 %load('fine_scan.mat');
-%load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
-clear all;
-load('/Users/sgess/Desktop/data/LiTrack_scans/fine_scan.mat');
+load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
+%load('/Users/sgess/Desktop/data/LiTrack_scans/fine_scan.mat');
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
 %save_dir = '/Users/sgess/Desktop/plots/LiTrack/fine_scan/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
-save_dir = '/Users/sgess/Desktop/plots/fine_scan/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/fine_scan/';
+%save_dir = '/Users/sgess/Desktop/plots/fine_scan/';
 
 savE = 0;
 
 s10 = 4;
 s20 = 6;
 
-if 0
+if 1
 
 %Compute pyro
 PYRO  = zeros(64,64);
-DCPY  = zeros(64,64);
-HIPY  = zeros(64,64);
-HIPY2 = zeros(64,64);
-HIPY3 = zeros(64,64);
-HIPY4 = zeros(64,64);
+%DCPY  = zeros(64,64);
+%HIPY  = zeros(64,64);
+%HIPY2 = zeros(64,64);
+%HIPY3 = zeros(64,64);
+%HIPY4 = zeros(64,64);
 for i=1:64
    for j=1:64
-       PYRO(i,j)  = pyro(bl(:,i,j,s10));
-       DCPY(i,j)  = pyro(bl(:,i,j,s10),1);
-       HIPY(i,j)  = pyro(bl(:,i,j,s10),10);
-       HIPY2(i,j) = pyro(bl(:,i,j,s10),6);
-       HIPY3(i,j) = pyro(bl(:,i,j,s10),4);
-       HIPY4(i,j) = pyro(bl(:,i,j,s10),2);
+       PYRO(i,j)  = pyro(bl(:,i,j,s20),zz(:,i,j,s20)/1000/3e8,0.3e12);
+       %DCPY(i,j)  = pyro(bl(:,i,j,s10),1);
+       %HIPY(i,j)  = pyro(bl(:,i,j,s10),10);
+       %HIPY2(i,j) = pyro(bl(:,i,j,s10),6);
+       %HIPY3(i,j) = pyro(bl(:,i,j,s10),4);
+       %HIPY4(i,j) = pyro(bl(:,i,j,s10),2);
    end
 end
 
@@ -336,9 +337,9 @@ if savE; saveas(gca,[save_dir 'fft_maxPy.pdf']); end;
 
 end
 
-if 1
+if 0
 
-    f9 = 184;
+    f9  = 184;
     f10 = 185;
     f11 = 186;
     f12 = 187;
