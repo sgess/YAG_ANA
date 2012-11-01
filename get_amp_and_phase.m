@@ -2,8 +2,8 @@ function MACH = get_amp_and_phase(num,plot_phase,plot_eProf,plot_sect)
 % [AMPL, PHAS] = get_amp_and_phase() retrieves kylstron amplitude and phase
 % information with calculated feedback phases and LEM fudge factors
 
-%state_file = ['/Users/sgess/Desktop/data/E200_DATA/E200_' num2str(num) '/E200_' num2str(num) '_State.mat'];
-state_file = ['/Users/sgess/Desktop/FACET/2012/DATA/E200_' num2str(num) '/E200_' num2str(num) '_State.mat'];
+state_file = ['/Users/sgess/Desktop/data/E200_DATA/E200_' num2str(num) '/E200_' num2str(num) '_State.mat'];
+%state_file = ['/Users/sgess/Desktop/FACET/2012/DATA/E200_' num2str(num) '/E200_' num2str(num) '_State.mat'];
 % Load machine state data
 load(state_file);
 
@@ -320,6 +320,8 @@ MACH.KLYS.AMPL = LINAC_LEM.*LINAC_ISON/1000.;
 MACH.KLYS.PHAS = LINAC_PTOT.*LINAC_ISON;
 MACH.KLYS.LEFF = LINAC_LEFF;
 MACH.KLYS.Z    = LINAC_KLYZ;
+MACH.KLYS.ENLD = LINAC_ENLD;
+MACH.SECT.ENLD = SECT_ENLD;
 MACH.SECT.AMPL = SECT_LEM/1000;
 MACH.SECT.PHAS = SECT_PHAS;
 MACH.SECT.LEFF = SECT_LEFF;

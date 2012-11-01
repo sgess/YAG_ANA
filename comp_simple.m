@@ -32,8 +32,8 @@ elseif scan == 1
     n_hi = 0.0421;
     
     % number of sample points
-    p_el = 8;
-    n_el = 8;
+    p_el = 64;
+    n_el = 64;
     
     % phase and ampl vec
     phase = linspace(p_lo,p_hi,p_el);
@@ -102,5 +102,5 @@ elseif scan == 1
             
         end
     end
-save('rough_scan.mat');
+save('5mm_scan.mat');
 end
