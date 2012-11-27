@@ -69,6 +69,24 @@ ENG_AX = YAG_AX/(0.112*1e6);
 
 % YAG Lineout
 LINE = uint16(zeros(838,90));
+cutLINE = uint16(zeros(838,90));
+
+% YAG FWHM
+fwhm = zeros(1,90);
+
+% YAG centroid
+cent = zeros(1,90);
+cutcent = zeros(1,90);
+indcent = zeros(1,90);
+
+% Windowing and indexing variables
+win_min = 10000*ones(1,90);
+win_max = 10000*ones(1,90);
+i_min = zeros(1,90);
+i_max = (length(LINE)+1)*ones(1,90);
+i_vec = 1:838;
+lo_win = zeros(1,5);
+hi_win = zeros(1,5);
 
 for j = 1:18
     
@@ -142,8 +160,105 @@ for j = 1:18
     LINE(:,j+54) = mean(IMG_4(175:200,:),1);
     LINE(:,j+72) = mean(IMG_5(175:200,:),1);
     
+    fwhm(j)    = FWHM(ENG_AX,LINE(:,j));
+    fwhm(j+18) = FWHM(ENG_AX,LINE(:,j+18));
+    fwhm(j+36) = FWHM(ENG_AX,LINE(:,j+36));
+    fwhm(j+54) = FWHM(ENG_AX,LINE(:,j+54));
+    fwhm(j+72) = FWHM(ENG_AX,LINE(:,j+72));
+    
+    cent(j)    = sum(ENG_AX.*double(LINE(:,j))')/sum(double(LINE(:,j)));
+    cent(j+18) = sum(ENG_AX.*double(LINE(:,j+18))')/sum(double(LINE(:,j)));
+    cent(j+36) = sum(ENG_AX.*double(LINE(:,j+36))')/sum(double(LINE(:,j)));
+    cent(j+54) = sum(ENG_AX.*double(LINE(:,j+54))')/sum(double(LINE(:,j)));
+    cent(j+72) = sum(ENG_AX.*double(LINE(:,j+72))')/sum(double(LINE(:,j)));
+    
+    lo_win(:) = 0;
+    hi_win(:) = 0;
+    for i=11:(length(LINE(:,j))/2)
+        
+        k = length(LINE(:,j)) - i + 1;
+        
+        lo_win(1) = sum(LINE((i-10):(i+10),j));
+        lo_win(2) = sum(LINE((i-10):(i+10),j+18));
+        lo_win(3) = sum(LINE((i-10):(i+10),j+36));
+        lo_win(4) = sum(LINE((i-10):(i+10),j+54));
+        lo_win(5) = sum(LINE((i-10):(i+10),j+72));
+        
+        hi_win(1) = sum(LINE((k-10):(k+10),j));
+        hi_win(2) = sum(LINE((k-10):(k+10),j+18));
+        hi_win(3) = sum(LINE((k-10):(k+10),j+36));
+        hi_win(4) = sum(LINE((k-10):(k+10),j+54));
+        hi_win(5) = sum(LINE((k-10):(k+10),j+72));
+        
+        for n=1:5
+            if lo_win(n) < win_min(j+(n-1)*18)
+                win_min(j+(n-1)*18) = lo_win(n);
+                i_min(j+(n-1)*18) = i;
+            end
+            if hi_win(n) < win_max(j+(n-1)*18)
+                win_max(j+(n-1)*18) = hi_win(n);
+                i_max(j+(n-1)*18) = k;
+            end
+        end
+    end
+
+    cutLINE(:,j) = LINE(:,j).*uint16((i_vec > i_min(j) & i_vec < i_max(j)))';
+    cutLINE(:,j+18) = LINE(:,j+18).*uint16((i_vec > i_min(j+18) & i_vec < i_max(j+18)))';
+    cutLINE(:,j+36) = LINE(:,j+36).*uint16((i_vec > i_min(j+36) & i_vec < i_max(j+36)))';
+    cutLINE(:,j+54) = LINE(:,j+54).*uint16((i_vec > i_min(j+54) & i_vec < i_max(j+54)))';
+    cutLINE(:,j+72) = LINE(:,j+72).*uint16((i_vec > i_min(j+72) & i_vec < i_max(j+72)))';
+    
+    cutcent(j)    = sum(ENG_AX.*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
+    cutcent(j+18) = sum(ENG_AX.*double(cutLINE(:,j+18))')/sum(double(cutLINE(:,j)));
+    cutcent(j+36) = sum(ENG_AX.*double(cutLINE(:,j+36))')/sum(double(cutLINE(:,j)));
+    cutcent(j+54) = sum(ENG_AX.*double(cutLINE(:,j+54))')/sum(double(cutLINE(:,j)));
+    cutcent(j+72) = sum(ENG_AX.*double(cutLINE(:,j+72))')/sum(double(cutLINE(:,j)));
+    
+    indcent(j)    = sum((1:838).*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
+    indcent(j+18) = sum((1:838).*double(cutLINE(:,j+18))')/sum(double(cutLINE(:,j)));
+    indcent(j+36) = sum((1:838).*double(cutLINE(:,j+36))')/sum(double(cutLINE(:,j)));
+    indcent(j+54) = sum((1:838).*double(cutLINE(:,j+54))')/sum(double(cutLINE(:,j)));
+    indcent(j+72) = sum((1:838).*double(cutLINE(:,j+72))')/sum(double(cutLINE(:,j)));
+    
 end
 
+
+
 off = 90 - median(NRTL_phas(:));
+
+%l = LINE(:,1);
+%for i = 1:838; plot(ENG_AX,l,ENG_AX(i),l(i),'r*',ENG_AX(839-i),l(839-i),'g*'); pause; end
+
+%for i = 1:90 
+%    plot(ENG_AX,cutLINE(:,i),ENG_AX(i_min(i)),cutLINE(i_min(i),i),'r*',ENG_AX(i_max(i)),cutLINE(i_max(i),i),'g*');
+%    pause;
+%end    
     
-    
+clear('d_1','d_2','d_3','d_4','d_5');
+
+load('/Users/sgess/Desktop/data/LiTrack_scans/fine_scan.mat');
+%for i =1:64
+    %for j=1:64
+    i=50;
+    j=50;
+        
+        e_max = ee(256,i,j,6)/100;
+        e_min = ee(1,i,j,6)/100;
+        
+        [~,iMax] = min(abs(e_max - ENG_AX));
+        [~,iMin] = min(abs(e_min - ENG_AX));
+        N = iMin - iMax + 1;
+        xx = linspace(1,256,N);
+        ES = interp1(es(:,i,j,6)/100,xx);
+        EE = linspace(e_min,e_max,N);
+        simcent(i,j) = sum((1:N).*ES)/sum(ES);
+        
+        %for k =1:90
+            
+            
+            
+            
+            
+        
+        
+        

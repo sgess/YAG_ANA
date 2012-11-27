@@ -49,10 +49,10 @@ PARAM.LTWO.CHRP  = 0;       % chirp in 2-10 (GeV)
 PARAM.LTWO.PHAS  = 0;       % 11-20 phase
 PARAM.LTWO.FBAM  = 1.88;    % feedback amplitude at S20 (GV)
 
-PARAM.LI20.R56   = 0.0040;   % Sector 20 chicane R56 (m)
-%PARAM.LI20.R56   = 0.0050;   % Sector 20 chicane R56 (m)
-PARAM.LI20.T566  = 0.0803843;% Sector 20 chicane T566 (m) % = 100 mm for R56 = 5mm from YS
-%PARAM.LI20.T566  = 0.100;% Sector 20 chicane T566 (m) % = 100 mm for R56 = 5mm from YS
+%PARAM.LI20.R56   = 0.0040;   % Sector 20 chicane R56 (m)
+PARAM.LI20.R56   = 0.0050;   % Sector 20 chicane R56 (m)
+%PARAM.LI20.T566  = 0.0803843;% Sector 20 chicane T566 (m) % = 100 mm for R56 = 5mm from YS
+PARAM.LI20.T566  = 0.100;% Sector 20 chicane T566 (m) % = 100 mm for R56 = 5mm from YS
 PARAM.LI20.ISR   = 0.8E-5;  % ISR energy spread from bends
 PARAM.LI20.ELO   = -0.03;   % RTL lower momentum cut (GeV)
 PARAM.LI20.EHI   = 0.03;    % RTL upper momentum cut (GeV)

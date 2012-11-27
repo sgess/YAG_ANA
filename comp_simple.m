@@ -1,6 +1,6 @@
 clear all;
 
-scan = 0;
+scan = 1;
 
 global PARAM;
 
