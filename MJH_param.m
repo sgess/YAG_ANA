@@ -21,8 +21,8 @@ PARAM.NRTL.ELO   = -0.025;  % RTL lower momentum cut (GeV)
 PARAM.NRTL.EHI   = 0.025;   % RTL upper momentum cut (GeV)
 
 PARAM.LONE.LEFF  = 809.5;   % Length of LI02-LI10 (m)
-PARAM.LONE.PHAS  = -21.2;   % 2-10 phase for 'uniform' lattice
-%PARAM.LONE.PHAS  = -11.5275;% 2-10 phase for 'decker' lattice
+%PARAM.LONE.PHAS  = -21.2;   % 2-10 phase for 'uniform' lattice
+PARAM.LONE.PHAS  = -11.5275;% 2-10 phase for 'decker' lattice
 %PARAM.LONE.GAIN  = 8.44;       % egain in 2-10, automatically set if 0 (GeV)
 PARAM.LONE.GAIN  = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
 PARAM.LONE.FBAM  = 0.235;   % feedback amplitude at S10 (GV)

@@ -1,10 +1,15 @@
 clear all;
 %load('/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/E200_1443_slim.mat');
-load('/Users/sgess/Desktop/data/E200_DATA/E200_1443/E200_1443_slim.mat');
-load('/Users/sgess/Desktop/data/E200_DATA/E200_1443/E200_1443_State.mat');
-load('/Users/sgess/Desktop/data/E200_DATA/E200_1443/facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat');
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
+load([data_dir 'E200_1443_slim.mat']);
+load([data_dir 'E200_1443_State.mat']);
+load([data_dir 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat']);
+
 
 plot_disp = 0;
+compare = 1;
+savE = 0;
 
 % Dispersion analysis
 x_2050=zeros(30,7);
@@ -37,9 +42,68 @@ fx_2445=polyval(px_2445,d(1,:));
 fy_2050=polyval(py_2050,d(1,:));
 fy_2445=polyval(py_2445,d(1,:));
 
-%if plot_disp
+
     
+% Optics stuff
+eta_yag = 1000*(1.118329e-01);  % (mm) from elegant R56 = 5mm lattice
+T166_yag= 1000*(-8.261055e-03); % (mm) from elegant R56 = 5mm lattice
+eta_bpm_2050 = 1000*(1.206816e-01);  % (mm) from elegant R56 = 5mm lattice
+T166_bpm_2050= 1000*(-1.207078e-01); % (mm) from elegant R56 = 5mm lattice
+eta_bpm_2445 = 1000*(1.200949e-01);  % (mm) from elegant R56 = 5mm lattice
+T166_bpm_2445= 1000*(1.606618e-02); % (mm) from elegant R56 = 5mm lattice
+
+beta_yag = 4.496536; % (m) from elegant R56 = 5mm lattice
+emit = 100e-6; % assumed
+gamma = 20.35/(0.510998928e-3);
+beam_size = 1000*sqrt(beta_yag*emit/gamma);
+
+if plot_disp
     
+    f1 = 1;
+    f2 = 2;
+    
+    e_ax = linspace(-0.05,0.05,100);
+    x_ax_2050 = eta_bpm_2050*e_ax+T166_bpm_2050*e_ax.*e_ax;
+    x_ax_2445 = eta_bpm_2445*e_ax+T166_bpm_2445*e_ax.*e_ax;
+    
+    figure(f1);
+    plot(d(:),x_2445(:),'b*');
+    hold on;
+    plot(e_ax(40:60),x_ax_2445(40:60)+px_2445(4),'g',d(1,:),fx_2445,'r','linewidth',2);
+    axis([-0.01 0.01 -1.75 0.6]); 
+    xlabel('\delta','fontsize',16);
+    ylabel('X (mm)','fontsize',16);
+    title('BPM 2445','fontsize',16);
+    l=legend('Data','Elegant','Fit');
+    set(l,'fontsize',16);
+    set(l,'location','northwest');
+    v = axis;
+    text(0.35*v(2),0.65*v(3),['Eta = ' num2str(eta_bpm_2445,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.35*v(2),0.70*v(3),['T166 = ' num2str(T166_bpm_2445,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.35*v(2),0.80*v(3),['Eta = ' num2str(px_2445(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    text(0.35*v(2),0.85*v(3),['T166 = ' num2str(px_2445(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    hold off;
+    if savE; saveas(gca,[save_dir 'bpm2445_disp.pdf']); end;
+    
+    figure(f2);
+    plot(d(:),x_2050(:),'b*');
+    hold on;
+    plot(e_ax(40:60),x_ax_2050(40:60)+px_2050(4),'g',d(1,:),fx_2050,'r','linewidth',2);
+    axis([-0.01 0.01 -1.35 1]); 
+    xlabel('\delta','fontsize',16);
+    ylabel('X (mm)','fontsize',16);
+    title('BPM 2050','fontsize',16);
+    l=legend('Data','Elegant','Fit');
+    set(l,'fontsize',16);
+    set(l,'location','northwest');
+    v = axis;
+    text(0.35*v(2),0.52*v(3),['Eta = ' num2str(eta_bpm_2050,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.35*v(2),0.60*v(3),['T166 = ' num2str(T166_bpm_2050,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.35*v(2),0.73*v(3),['Eta = ' num2str(px_2050(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    text(0.35*v(2),0.81*v(3),['T166 = ' num2str(px_2050(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    hold off;
+    if savE; saveas(gca,[save_dir 'bpm2050_disp.pdf']); end;
+end
 
 % NRTL stuff
 NRTL_phas = zeros(1,90);
@@ -65,9 +129,11 @@ PIX = d_1(1).YAGS_LI20_2432.prof_roiXN;
 
 % YAG Axis
 YAG_AX = RES*(PIX:-1:1) - RES*PIX/2;
-ENG_AX = YAG_AX/(0.112*1e6);
+ENG_AX = YAG_AX/(eta_yag*1e3);
 
 % YAG Lineout
+lo_line = 125;
+hi_line = 150;
 LINE = uint16(zeros(838,90));
 cutLINE = uint16(zeros(838,90));
 
@@ -78,6 +144,7 @@ fwhm = zeros(1,90);
 cent = zeros(1,90);
 cutcent = zeros(1,90);
 indcent = zeros(1,90);
+
 
 % Windowing and indexing variables
 win_min = 10000*ones(1,90);
@@ -154,11 +221,11 @@ for j = 1:18
     IMG_4 = rot90(d_4(j).YAGS_LI20_2432.img,2)';
     IMG_5 = rot90(d_5(j).YAGS_LI20_2432.img,2)';
     
-    LINE(:,j)    = mean(IMG_1(175:200,:),1);
-    LINE(:,j+18) = mean(IMG_2(175:200,:),1);
-    LINE(:,j+36) = mean(IMG_3(175:200,:),1);
-    LINE(:,j+54) = mean(IMG_4(175:200,:),1);
-    LINE(:,j+72) = mean(IMG_5(175:200,:),1);
+    LINE(:,j)    = mean(IMG_1(lo_line:hi_line,:),1);
+    LINE(:,j+18) = mean(IMG_2(lo_line:hi_line,:),1);
+    LINE(:,j+36) = mean(IMG_3(lo_line:hi_line,:),1);
+    LINE(:,j+54) = mean(IMG_4(lo_line:hi_line,:),1);
+    LINE(:,j+72) = mean(IMG_5(lo_line:hi_line,:),1);
     
     fwhm(j)    = FWHM(ENG_AX,LINE(:,j));
     fwhm(j+18) = FWHM(ENG_AX,LINE(:,j+18));
@@ -220,10 +287,12 @@ for j = 1:18
     indcent(j+54) = sum((1:838).*double(cutLINE(:,j+54))')/sum(double(cutLINE(:,j)));
     indcent(j+72) = sum((1:838).*double(cutLINE(:,j+72))')/sum(double(cutLINE(:,j)));
     
+    
+    
 end
 
 
-
+LINESUM = sum(cutLINE,1);
 off = 90 - median(NRTL_phas(:));
 
 %l = LINE(:,1);
@@ -236,29 +305,109 @@ off = 90 - median(NRTL_phas(:));
     
 clear('d_1','d_2','d_3','d_4','d_5');
 
-load('/Users/sgess/Desktop/data/LiTrack_scans/fine_scan.mat');
-%for i =1:64
-    %for j=1:64
-    i=50;
-    j=50;
+if compare
+
+    load('/Users/sgess/Desktop/data/LiTrack_scans/5mm_scan.mat');
+    
+    MAX = max(max(max(ee(:,:,:,6))))/100;
+    MIN = min(min(min(ee(:,:,:,6))))/100;
+    [~,iMAX] = min(abs(MAX - ENG_AX));
+    [~,iMIN] = min(abs(MIN - ENG_AX));
+    NMAX = iMIN - iMAX + 1;
+    
+    simcent = zeros(64,64);
+    concent = zeros(64,64);
+    simsum  = zeros(64,64);
+    consum  = zeros(64,64);
+    e_interp = zeros(NMAX,64,64);
+    conterp  = zeros(NMAX+150,64,64);
+    e_res = zeros(1,length(ENG_AX));
+    co_res = zeros(1,length(ENG_AX));
+    i_start = zeros(64,64,90);
+    con_start = zeros(64,64,90);
+    
+    RES = zeros(64,64,90);
+    CON = zeros(64,64,90);
+    % Gaussian blur
+    e_blur = beam_size/eta_yag;
+    c_ax = ENG_AX((length(ENG_AX)/2-75):(length(ENG_AX)/2+75));
+    g = exp(-(c_ax.^2)/(2*e_blur^2));
+    g = g/sum(g);
+    
+    for k=1:90
         
-        e_max = ee(256,i,j,6)/100;
-        e_min = ee(1,i,j,6)/100;
+        disp(k);
         
-        [~,iMax] = min(abs(e_max - ENG_AX));
-        [~,iMin] = min(abs(e_min - ENG_AX));
-        N = iMin - iMax + 1;
-        xx = linspace(1,256,N);
-        ES = interp1(es(:,i,j,6)/100,xx);
-        EE = linspace(e_min,e_max,N);
-        simcent(i,j) = sum((1:N).*ES)/sum(ES);
+        for i=1:64
+            for j=1:64
+                
+                
+                % Identify Max and Min of Simulated energy distribution
+                e_max = ee(256,i,j,6)/100;
+                e_min = ee(1,i,j,6)/100;
+                
+                % Find the Max and Min on the YAG energy axis
+                [~,iMax] = min(abs(e_max - ENG_AX));
+                [~,iMin] = min(abs(e_min - ENG_AX));
+                N = iMin - iMax + 1;
+                
+                % Interpolate the simulated distribution onto the YAG axis
+                xx = linspace(1,256,N);
+                ES = interp1(es(:,i,j,6)/100,xx);
+                %e_interp(1:length(ES),i,j) = ES;
+                
+                % convolve energy spread with gaussian
+                yy = conv(ES,g);
+                concent(i,j) = sum((1:length(yy)).*yy)/sum(yy);
+                consum(i,j) = sum(yy);
+                con_start(i,j,k)=round(indcent(k)-concent(i,j));
+                if con_start(i,j,k) < 1
+                    con_start(i,j,k) = 1;
+                end
+                conterp(1:length(yy),i,j) = yy/consum(i,j);
+                
+                % Calculate the centroid and integral of the distribution
+                simcent(i,j) = sum((1:N).*ES)/sum(ES);
+                simsum(i,j) = sum(ES);
+                
+                % Align simulated and measured dists
+                i_start(i,j,k)=round(indcent(k)-simcent(i,j));
+                if i_start(i,j,k) < 1
+                    i_start(i,j,k) = 1;
+                end
+                e_interp(1:length(ES),i,j) = ES/simsum(i,j);
+                
+                % embed
+                e_temp=zeros(1,838);
+                diff = 0;
+                if (i_start(i,j,k)+length(e_interp)-1) > 838
+                    diff = (i_start(i,j,k)+length(e_interp)-1) - 838;
+                end
+                e_temp((i_start(i,j,k)-diff):(i_start(i,j,k)+length(e_interp)-1-diff))=e_interp(:,i,j);
+                
+                con_temp=zeros(1,838);
+                diff = 0;
+                if (con_start(i,j,k)+length(conterp)-1) > 838
+                    diff = (con_start(i,j,k)+length(conterp)-1) - 838;
+                end
+                con_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
+                    
+           
+                %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+                %xlabel('\delta','fontsize',16);
+                %pause;
+                
+                % Calculate residue
+                e_res = e_temp - double(cutLINE(:,k)')/LINESUM(k);
+                co_res = con_temp - double(cutLINE(:,k)')/LINESUM(k);
+                RES(i,j,k) = sum(e_res.*e_res);
+                CON(i,j,k) = sum(co_res.*co_res);
+                
+            end
+        end
         
-        %for k =1:90
-            
-            
-            
-            
-            
-        
-        
-        
+    end
+    
+    if savE; save([data_dir 'RES_5mm_hi.mat'],'RES','CON','e_interp','conterp','i_start','con_start','ENG_AX','cutLINE','LINESUM'); end;
+
+end

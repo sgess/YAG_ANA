@@ -1,19 +1,21 @@
 clear all;
 
-%load('/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/fine_scan.mat');
-load('/Users/sgess/Desktop/data/LiTrack_scans/fine_scan.mat');
 
-%save_dir = '/Users/sgess/Desktop/plots/LiTrack/simp_scan/';
-save_dir = '/Users/sgess/Desktop/plots/LiTrack/fine_scan/';
 
-%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/simp_scan/';
-%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/fine_scan/';
+sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+save_dir = '/Users/sgess/Desktop/plots/LiTrack/5mm_scan/';
 
-savE = 1;
+load([sim_dir '5mm_scan.mat']);
+%load([data_dir 'RES_5mm.mat']);
+load([data_dir 'RES_5mm_hi.mat']);
+
+savE = 0;
 comp_py  = 1;
 plot_s10 = 0;
-plot_s20 = 1;
-plot_dists = 1;
+plot_s20 = 0;
+plot_dists = 0;
+plot_data = 1;
 
 s10 = 4;
 s20 = 6;
@@ -34,7 +36,45 @@ if comp_py
     end   
 end
 
-
+if plot_data
+    
+    d1 = 123;
+    d2 = 234;
+    d3 = 345;
+    d4 = 456;
+    
+    rMIN = zeros(1,90);
+    cMIN = zeros(1,90);
+    for k=1:length(LINESUM)
+        
+        [a,b] = min(RES(:,:,k)); % b is amplitude
+        [c,d] = min(min(RES(:,:,k))); % d is phase
+        rMIN(k) = RES(b(d),d,k);
+        
+        e_temp=zeros(1,838);
+        e_temp(i_start(i,j,k):(i_start(i,j,k)+length(e_interp)-1))=e_interp(:,i,j);
+        
+        figure(d1);
+        plot(1000*zz(:,b(d),d,s20),bl(:,b(d),d,s20),'linewidth',3);
+        figure(d2);
+        plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+        
+        [e,f] = min(CON(:,:,k)); % b is amplitude
+        [g,h] = min(min(CON(:,:,k))); % d is phase
+        rMIN(k) = RES(f(h),h,k);
+        
+        c_temp=zeros(1,838);
+        c_temp(con_start(i,j,k):(con_start(i,j,k)+length(conterp)-1))=conterp(:,i,j);
+        
+        figure(d3);
+        plot(1000*zz(:,f(h),h,s20),bl(:,f(h),h,s20),'linewidth',3);
+        figure(d4);
+        plot(ENG_AX,c_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+        
+        pause;
+    end
+    
+end
 
 phas = -phas;
 
