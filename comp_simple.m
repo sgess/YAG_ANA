@@ -1,6 +1,6 @@
 clear all;
 
-scan = 1;
+scan = 0;
 
 global PARAM;
 
@@ -11,11 +11,17 @@ SJG_param;
 
 if scan == 0
     
-    %PARAM.NRTL.AMPL = 0.04058;
+    PARAM.NRTL.AMPL = 0.04058;
+    PARAM.LONE.PHAS = -21.46;
+    
     %PARAM.NRTL.AMPL = 0.04154;
-    %PARAM.LONE.PHAS = -21.46;
     %PARAM.LONE.PHAS = -21.38;
-    %PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
+    
+    
+    %PARAM.NRTL.AMPL = 0.04175;
+    %PARAM.LONE.PHAS = -22.25;
+    
+    PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
     LiTrack('FACETpar');
     %LiTrack('FACETMJH2');
     

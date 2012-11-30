@@ -1,7 +1,12 @@
 clear all;
 %load('/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/E200_1443_slim.mat');
-data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
-save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
+
+%data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+
+%save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
+
 load([data_dir 'E200_1443_slim.mat']);
 load([data_dir 'E200_1443_State.mat']);
 load([data_dir 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat']);
@@ -304,10 +309,10 @@ off = 90 - median(NRTL_phas(:));
 %end    
     
 clear('d_1','d_2','d_3','d_4','d_5');
-
+sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 if compare
 
-    load('/Users/sgess/Desktop/data/LiTrack_scans/5mm_scan.mat');
+    load([sim_dir '5mm_scan.mat']);
     
     MAX = max(max(max(ee(:,:,:,6))))/100;
     MIN = min(min(min(ee(:,:,:,6))))/100;
@@ -338,8 +343,8 @@ if compare
         
         disp(k);
         
-        for i=1:64
-            for j=1:64
+        for i=30:64
+            for j=30:64
                 
                 
                 % Identify Max and Min of Simulated energy distribution
@@ -392,10 +397,11 @@ if compare
                 end
                 con_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
                     
-           
                 %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-                %xlabel('\delta','fontsize',16);
-                %pause;
+                plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+                xlabel('\delta','fontsize',16);
+                axis([-0.05 0.05 0 3.5e-3]);
+                pause;
                 
                 % Calculate residue
                 e_res = e_temp - double(cutLINE(:,k)')/LINESUM(k);
