@@ -1,11 +1,15 @@
 clear all;
-%load('/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/E200_1443_slim.mat');
 
-%data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
 
-%save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
+save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
+save_name = 'ABS_5mm_hi.mat';
+
+sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
+%sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
+sim_name = '5mm_scan.mat';
 
 load([data_dir 'E200_1443_slim.mat']);
 load([data_dir 'E200_1443_State.mat']);
@@ -13,8 +17,9 @@ load([data_dir 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat']);
 
 
 plot_disp = 0;
+do_plot = 0;
 compare = 1;
-savE = 0;
+savE = 1;
 
 % Dispersion analysis
 x_2050=zeros(30,7);
@@ -296,23 +301,17 @@ for j = 1:18
     
 end
 
-
+% area under spectrum
 LINESUM = sum(cutLINE,1);
-off = 90 - median(NRTL_phas(:));
 
-%l = LINE(:,1);
-%for i = 1:838; plot(ENG_AX,l,ENG_AX(i),l(i),'r*',ENG_AX(839-i),l(839-i),'g*'); pause; end
-
-%for i = 1:90 
-%    plot(ENG_AX,cutLINE(:,i),ENG_AX(i_min(i)),cutLINE(i_min(i),i),'r*',ENG_AX(i_max(i)),cutLINE(i_max(i),i),'g*');
-%    pause;
-%end    
+%nrtl compressor phase offset
+off = 90 - median(NRTL_phas(:)); 
     
 clear('d_1','d_2','d_3','d_4','d_5');
-sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
+
 if compare
 
-    load([sim_dir '5mm_scan.mat']);
+    load([sim_dir sim_name]);
     
     MAX = max(max(max(ee(:,:,:,6))))/100;
     MIN = min(min(min(ee(:,:,:,6))))/100;
@@ -332,7 +331,10 @@ if compare
     con_start = zeros(64,64,90);
     
     RES = zeros(64,64,90);
+    ABS = zeros(64,64,90);
     CON = zeros(64,64,90);
+    CBS = zeros(64,64,90);
+    
     % Gaussian blur
     e_blur = beam_size/eta_yag;
     c_ax = ENG_AX((length(ENG_AX)/2-75):(length(ENG_AX)/2+75));
@@ -343,8 +345,8 @@ if compare
         
         disp(k);
         
-        for i=30:64
-            for j=30:64
+        for i=1:64
+            for j=1:64
                 
                 
                 % Identify Max and Min of Simulated energy distribution
@@ -397,23 +399,28 @@ if compare
                 end
                 con_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
                     
-                %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-                plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-                xlabel('\delta','fontsize',16);
-                axis([-0.05 0.05 0 3.5e-3]);
-                pause;
+                
+                if do_plot
+                    %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+                    plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+                    xlabel('\delta','fontsize',16);
+                    axis([-0.05 0.05 0 3.5e-3]);
+                    pause;
+                end
                 
                 % Calculate residue
                 e_res = e_temp - double(cutLINE(:,k)')/LINESUM(k);
                 co_res = con_temp - double(cutLINE(:,k)')/LINESUM(k);
                 RES(i,j,k) = sum(e_res.*e_res);
+                ABS(i,j,k) = sum(abs(e_res));
                 CON(i,j,k) = sum(co_res.*co_res);
+                CBS(i,j,k) = sum(abs(co_res));
                 
             end
         end
         
     end
     
-    if savE; save([data_dir 'RES_5mm_hi.mat'],'RES','CON','e_interp','conterp','i_start','con_start','ENG_AX','cutLINE','LINESUM'); end;
+    if savE; save([data_dir save_name],'RES','ABS','CON','CBS','e_interp','conterp','i_start','con_start','ENG_AX','cutLINE','LINESUM'); end;
 
 end

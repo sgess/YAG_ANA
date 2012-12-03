@@ -2,26 +2,31 @@ clear all;
 
 
 
-%sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
-sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
+sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
+%sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 
-%data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
 
-%save_dir = '/Users/sgess/Desktop/plots/LiTrack/5mm_scan/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/5mm_scan/';
+save_dir = '/Users/sgess/Desktop/plots/LiTrack/5mm_scan/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/5mm_scan/';
 
-movie_dir = '/Users/sgess/Desktop/FACET/PLOTS/MOVIES/E200_1443/';
+movie_dir = '/Users/sgess/Desktop/plots/MOVIES/E200_1443/';
+%movie_dir = '/Users/sgess/Desktop/FACET/PLOTS/MOVIES/E200_1443/';
+
 load([sim_dir '5mm_scan.mat']);
 %load([data_dir 'RES_5mm.mat']);
-load([data_dir 'RES_5mm_hi.mat']);
+%load([data_dir 'RES_5mm_hi.mat']);
+load([data_dir 'ABS_5mm_hi.mat']);
 
-savE = 1;
+savE = 0;
 comp_py  = 0;
 plot_s10 = 0;
 plot_s20 = 0;
 plot_dists = 0;
 plot_data = 1;
+do_movie = 0;
+do_res = 1;
 
 s10 = 4;
 s20 = 6;
@@ -34,7 +39,7 @@ pyv = .9e10*[3 6 8 10 12 14 16 18 20 22 24 26 28 30 31 31.6];
 
 if comp_py
     %Compute pyro
-    PYRO  = zeros(64,64);    
+    PYRO = zeros(64,64);    
     for i=1:64
         for j=1:64
             PYRO(i,j)  = pyro(bl(:,i,j,s20),zz(:,i,j,s20)/1000/3e8,0.3e12,0.001);
@@ -44,104 +49,155 @@ end
 
 if plot_data
     
-    d1 = 123;
-    d2 = 234;
-    d3 = 345;
-    d4 = 456;
+    
     
     s1 = 1;
     
     rMIN = zeros(1,90);
     cMIN = zeros(1,90);
+    aMIN = zeros(1,90);
+    bMIN = zeros(1,90);
+    
     for k=1:length(LINESUM)
-        
-        [a,b] = min(RES(:,:,k)); % b is amplitude
-        [c,d] = min(min(RES(:,:,k))); % d is phase
-        rMIN(k) = RES(b(d),d,k);
-        
-        e_temp=zeros(1,838);
-        diff = 0;
-        if (i_start(b(d),d,k)+length(e_interp)-1) > 838
-            diff = (i_start(b(d),d,k)+length(e_interp)-1) - 838;
+         
+        if do_movie
+            s=1;
+            for i = 2:2:64
+                for j = 2:2:64
+                    
+                    e_temp=zeros(1,838);
+                    diff = 0;
+                    if (i_start(i,j,k)+length(e_interp)-1) > 838
+                        diff = (i_start(i,j,k)+length(e_interp)-1) - 838;
+                    end
+                    e_temp(i_start(i,j,k):(i_start(i,j,k)+length(e_interp)-1))=e_interp(:,i,j);
+                    
+                    figure(s1);
+                    subplot(2,2,1);
+                    contourf(1000*NAMPL,-phas,I_sig(:,:,s20),isv);
+                    %colorbar;
+                    xlabel('Amplitude','fontsize',14);
+                    ylabel('Phase','fontsize',14);
+                    title('Peak Current','fontsize',14);
+                    hold on;
+                    %text(NAMPL(i),-phas(j),'\otimes','fontsize',20,'color','w');
+                    plot(1000*NAMPL(i),-phas(j),'marker','p','color','w','markersize',20,'markerfacecolor','w');
+                    hold off;
+                    subplot(2,2,2);
+                    plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k),'linewidth',2);
+                    axis([-0.05 0.05 0 3.5e-3]);
+                    xlabel('\delta','fontsize',14);
+                    title('Energy Spectra','fontsize',14);
+                    l = legend('Simulated','Measured');
+                    set(l,'fontsize',11);
+                    set(l,'box','off');
+                    set(l,'location','northwest');
+                    subplot(2,2,3);
+                    %imagesc(1000*NAMPL,flipud(-phas),RES(:,:,k));
+                    imagesc(1000*NAMPL,flipud(-phas),CBS(:,:,k));
+                    %colorbar;
+                    set(gca,'YDir','normal')
+                    xlabel('Amplitude','fontsize',14);
+                    ylabel('Phase','fontsize',14);
+                    title('Residue','fontsize',14);
+                    hold on;
+                    %text(NAMPL(i),-phas(j),'\otimes','fontsize',20,'color','w');
+                    plot(1000*NAMPL(i),-phas(j),'marker','p','color','w','markersize',20,'markerfacecolor','w');
+                    hold off;
+                    subplot(2,2,4);
+                    plot(1000*zz(:,i,j,s20),bl(:,i,j,s20),'linewidth',2);
+                    xlabel('Z (\mum)','fontsize',14);
+                    title('Bunch Profile','fontsize',14);
+                    
+                    if savE; saveas(gca,[movie_dir 'k1_' num2str(s,'%04d') '.png']); end;
+                    if ~savE; pause(0.1); end;
+                    s=s+1;
+                end
+            end
         end
-        e_temp(i_start(b(d),d,k):(i_start(b(d),d,k)+length(e_interp)-1))=e_interp(:,i,j);
-        
-        figure(d1);
-        plot(1000*zz(:,b(d),d,s20),bl(:,b(d),d,s20),'linewidth',3);
-        figure(d2);
-        plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-                
-%         s=1;
-%         for i = 2:2:64
-%             for j = 2:2:64
-%                 
-%                 e_temp=zeros(1,838);
-%                 diff = 0;
-%                 if (i_start(i,j,k)+length(e_interp)-1) > 838
-%                     diff = (i_start(i,j,k)+length(e_interp)-1) - 838;
-%                 end
-%                 e_temp(i_start(i,j,k):(i_start(i,j,k)+length(e_interp)-1))=e_interp(:,i,j);
-%                 
-%                 figure(s1);
-%                 subplot(2,2,1);
-%                 contourf(1000*NAMPL,-phas,I_sig(:,:,s20),isv);
-%                 %colorbar;
-%                 xlabel('Amplitude','fontsize',14);
-%                 ylabel('Phase','fontsize',14);
-%                 title('Peak Current','fontsize',14);
-%                 hold on;
-%                 %text(NAMPL(i),-phas(j),'\otimes','fontsize',20,'color','w');
-%                 plot(1000*NAMPL(i),-phas(j),'marker','p','color','w','markersize',20,'markerfacecolor','w');
-%                 hold off;
-%                 subplot(2,2,2);
-%                 plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k),'linewidth',2);
-%                 axis([-0.05 0.05 0 3.5e-3]);
-%                 xlabel('\delta','fontsize',14);
-%                 title('Energy Spectra','fontsize',14);
-%                 l = legend('Simulated','Measured');
-%                 set(l,'fontsize',11);
-%                 set(l,'box','off');
-%                 set(l,'location','northwest');
-%                 subplot(2,2,3);
-%                 imagesc(1000*NAMPL,flipud(-phas),RES(:,:,k));
-%                 %colorbar;
-%                 set(gca,'YDir','normal')
-%                 xlabel('Amplitude','fontsize',14);
-%                 ylabel('Phase','fontsize',14);
-%                 title('Residue','fontsize',14);
-%                 hold on;
-%                 %text(NAMPL(i),-phas(j),'\otimes','fontsize',20,'color','w');
-%                 plot(1000*NAMPL(i),-phas(j),'marker','p','color','w','markersize',20,'markerfacecolor','w');
-%                 hold off;
-%                 subplot(2,2,4);
-%                 plot(1000*zz(:,i,j,s20),bl(:,i,j,s20),'linewidth',2);
-%                 xlabel('Z (\mum)','fontsize',14);
-%                 title('Bunch Profile','fontsize',14);
-%                 
-%                 if savE; saveas(gca,[movie_dir 'k1_' num2str(s,'%04d') '.png']); end;
-%                 if ~savE; pause(0.1); end;
-%                 s=s+1;
-%             end
-%         end
 
+        if do_res
+            
+            d1 = 123;
+            d2 = 234;
+            d3 = 345;
+            d4 = 456;
+            d5 = 567;
+            d6 = 678;
+            d7 = 789;
+            d8 = 890;
+            
+            % diff squared
+            [a,b] = min(RES(:,:,k)); % b is amplitude
+            [c,d] = min(min(RES(:,:,k))); % d is phase
+            rMIN(k) = RES(b(d),d,k);
+            
+            e_temp=zeros(1,838);
+            diff = 0;
+            if (i_start(b(d),d,k)+length(e_interp)-1) > 838
+                diff = (i_start(b(d),d,k)+length(e_interp)-1) - 838;
+            end
+            e_temp(i_start(b(d),d,k):(i_start(b(d),d,k)+length(e_interp)-1))=e_interp(:,i,j);
+            
+            figure(d1);
+            plot(1000*zz(:,b(d),d,s20),bl(:,b(d),d,s20),'linewidth',3);
+            figure(d2);
+            plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+            
+            % gauss blur diff squared
+            [e,f] = min(CON(:,:,k)); % b is amplitude
+            [g,h] = min(min(CON(:,:,k))); % d is phase
+            rMIN(k) = CON(f(h),h,k);
+            
+            c_temp=zeros(1,838);
+            diff = 0;
+            if (con_start(i,j,k)+length(conterp)-1) > 838
+                diff = (con_start(i,j,k)+length(conterp)-1) - 838;
+            end
+            c_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
+            
+            figure(d3);
+            plot(1000*zz(:,f(h),h,s20),bl(:,f(h),h,s20),'linewidth',3);
+            figure(d4);
+            plot(ENG_AX,c_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+            
+            % abs diff
+            [l,m] = min(ABS(:,:,k)); % b is amplitude
+            [n,o] = min(min(ABS(:,:,k))); % d is phase
+            aMIN(k) = ABS(m(o),o,k);
+            
+            a_temp=zeros(1,838);
+            diff = 0;
+            if (i_start(i,j,k)+length(e_interp)-1) > 838
+                diff = (i_start(i,j,k)+length(e_interp)-1) - 838;
+            end
+            a_temp((i_start(i,j,k)-diff):(i_start(i,j,k)+length(e_interp)-1-diff))=e_interp(:,i,j);
+            
+            figure(d5);
+            plot(1000*zz(:,m(o),o,s20),bl(:,m(o),o,s20),'linewidth',3);
+            figure(d6);
+            plot(ENG_AX,a_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+            
+            % gauss blur abs diff
+            [p,q] = min(CBS(:,:,k)); % b is amplitude
+            [r,s] = min(min(CBS(:,:,k))); % d is phase
+            bMIN(k) = CBS(q(s),s,k);
+            
+            b_temp=zeros(1,838);
+            diff = 0;
+            if (con_start(i,j,k)+length(conterp)-1) > 838
+                diff = (con_start(i,j,k)+length(conterp)-1) - 838;
+            end
+            b_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
+            
+            figure(d7);
+            plot(1000*zz(:,q(s),s,s20),bl(:,q(s),s,s20),'linewidth',3);
+            figure(d8);
+            plot(ENG_AX,b_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+            
+            pause;
         
-        [e,f] = min(CON(:,:,k)); % b is amplitude
-        [g,h] = min(min(CON(:,:,k))); % d is phase
-        rMIN(k) = RES(f(h),h,k);
-        
-        c_temp=zeros(1,838);
-        diff = 0;
-        if (con_start(i,j,k)+length(conterp)-1) > 838
-            diff = (con_start(i,j,k)+length(conterp)-1) - 838;
         end
-        c_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
-        
-        figure(d3);
-        plot(1000*zz(:,f(h),h,s20),bl(:,f(h),h,s20),'linewidth',3);
-        figure(d4);
-        plot(ENG_AX,c_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-        
-        pause;
     end
     
 end
