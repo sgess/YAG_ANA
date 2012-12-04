@@ -13,6 +13,19 @@ end
 %Top level field names
 names = fieldnames(data);
 
+%Find number of samples
+samp = strncmp(fieldnames(data),'Sample_',7);
+samples = names(samp);
+
+%Check that we get the right number of samples
+nSamp = length(samples);
+Num = num2str(nSamp,'%02d');
+if strcmp(samples(end),['Sample_' Num])
+    disp(['There are ' Num ' samples.']);
+else
+    error('Sample indexing does not match number of samples.');
+end
+
 %Find 'Raw Sample'
 raw = strncmp(fieldnames(data),'Raw_Sample',10);
 
@@ -25,6 +38,8 @@ names = fieldnames(data.Sample_01);
 %Find profile monitors
 prof = strncmp(fieldnames(data.Sample_01),'PROF',4);
 otrs = strncmp(fieldnames(data.Sample_01),'OTRS',4);
+
+
 
 %dump profile monitors
 d1 = rmfield(data.Sample_01,names(prof));
