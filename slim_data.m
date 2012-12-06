@@ -86,4 +86,4 @@ if sum(sum(check)) ~= 0; error('Stuff don"t line up.'); end;
 good_data = d(good_yag & good_aida);
     
 
-if savE; save([data_dir data_thin]); end;
+if savE; save([data_dir data_thin],'good_data'); end;
