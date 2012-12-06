@@ -1,19 +1,22 @@
 clear all;
 
+%arg
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
-data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
-
-%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+%data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
 
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
-save_dir = '/Users/sgess/Desktop/plots/E200/E200_1138/';
+%save_dir = '/Users/sgess/Desktop/plots/E200/E200_1138/';
+
+%sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
+
+%mac69
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
 
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
 
-
-sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
-
-%sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
+sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 
 %1443
 % save_name  = 'ABS_5mm_hi.mat';
@@ -71,7 +74,7 @@ RES = good_data(1).YAGS_LI20_2432.prof_RES;
 PIX = good_data(1).YAGS_LI20_2432.prof_roiXN;
 
 % YAG Axis
-%YAG_AX = RES*(PIX:-1:1) - RES*PIX/2;``
+%YAG_AX = RES*(PIX:-1:1) - RES*PIX/2;
 YAG_AX = RES*(1:PIX) - RES*PIX/2;
 ENG_AX = YAG_AX/(eta_yag*1e3);
 
@@ -80,6 +83,7 @@ lo_line = 150;
 hi_line = 175;
 LINE = uint16(zeros(PIX,nShots));
 cutLINE = uint16(zeros(PIX,nShots));
+center = zeros(PIX,nShots);
 
 % YAG FWHM
 fwhm = zeros(1,nShots);
@@ -152,6 +156,11 @@ for j = 1:nShots
     cutLINE(:,j) = LINE(:,j).*uint16((i_vec > i_min(j) & i_vec < i_max(j)))';
     cutcent(j)   = sum(ENG_AX.*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
     indcent(j)   = round(sum((1:PIX).*double(cutLINE(:,j))')/sum(double(cutLINE(:,j))));
+    if indcent(j) < round(PIX/2)
+        center(round(PIX/2-indcent(j)):PIX,j) = cutLINE(1:round(PIX/2+indcent(j)+1),j);
+    else
+        center(1:round(PIX/2+indcent(j)+1),j) = cutLINE(round(PIX/2-indcent(j)):PIX,j);
+    end
  
     if view_yag
         s1 = 10; 
@@ -173,48 +182,47 @@ end
 LINESUM = sum(cutLINE,1);
 
 %nrtl compressor phase offset
-off = 90 - median(NRTL_phas(:)); 
+off = 90 - median(NRTL_phas); 
 
 if compare
 
     load([sim_dir sim_name]);
     
-    MAX = max(max(max(ee(:,:,:,6))))/100;
-    MIN = min(min(min(ee(:,:,:,6))))/100;
-    [~,iMAX] = min(abs(MAX - ENG_AX));
-    [~,iMIN] = min(abs(MIN - ENG_AX));
-    NMAX = iMIN - iMAX + 1;
+    %interpolated energy spectrum
+    e_interp = zeros(PIX,64,64);
     
-    simcent = zeros(64,64);
-    concent = zeros(64,64);
-    simsum  = zeros(64,64);
-    consum  = zeros(64,64);
-    e_interp = zeros(NMAX,64,64);
-    conterp  = zeros(NMAX+150,64,64);
+    %convolved energy spectrum
+    conterp = zeros(PIX,64,64);
+    
+    % derivative of convolved spectrum
+    DCON = zeros(PIX,64,64);
+    
+    %residual
     e_res = zeros(1,length(ENG_AX));
-    co_res = zeros(1,length(ENG_AX));
-    i_start = zeros(64,64,90);
-    con_start = zeros(64,64,90);
     
+    %convolution residual
+    co_res = zeros(1,length(ENG_AX));
+    
+    %various residual measures
     RES = zeros(64,64,90);
     ABS = zeros(64,64,90);
     CON = zeros(64,64,90);
     CBS = zeros(64,64,90);
+    DES = zeros(64,64,90);
+    DBS = zeros(64,64,90);
     
-    % Gaussian blur
+    %gaussian blurring
     e_blur = beam_size/eta_yag;
-    c_ax = ENG_AX((length(ENG_AX)/2-75):(length(ENG_AX)/2+75));
-    g = exp(-(c_ax.^2)/(2*e_blur^2));
+    g = exp(-(ENG_AX.^2)/(2*e_blur^2));    
     g = g/sum(g);
     
-    for k=1:90
+    for k=1:nShots
         
         disp(k);
         
         for i=1:64
             for j=1:64
-                
-                
+                         
                 % Identify Max and Min of Simulated energy distribution
                 e_max = ee(256,i,j,6)/100;
                 e_min = ee(1,i,j,6)/100;
@@ -222,71 +230,59 @@ if compare
                 % Find the Max and Min on the YAG energy axis
                 [~,iMax] = min(abs(e_max - ENG_AX));
                 [~,iMin] = min(abs(e_min - ENG_AX));
-                N = iMin - iMax + 1;
+                N = iMax - iMin + 1;
                 
                 % Interpolate the simulated distribution onto the YAG axis
                 xx = linspace(1,256,N);
                 ES = interp1(es(:,i,j,6)/100,xx);
-                %e_interp(1:length(ES),i,j) = ES;
+                
+                % Calculate the centroid and integral of the distribution
+                simsum = sum(ES);
+                simcent = round(sum((1:N).*ES)/simsum);
+                
+                % embed interpolated distribution onto energy axis, with
+                % centroid of distribution at delta = 0
+                e_interp(round(PIX/2-simcent):round(PIX/2-simcent+N-1),i,j) = ES/simsum;
                 
                 % convolve energy spread with gaussian
                 yy = conv(ES,g);
-                concent(i,j) = sum((1:length(yy)).*yy)/sum(yy);
-                consum(i,j) = sum(yy);
-                con_start(i,j,k)=round(indcent(k)-concent(i,j));
-                if con_start(i,j,k) < 1
-                    con_start(i,j,k) = 1;
-                end
-                conterp(1:length(yy),i,j) = yy/consum(i,j);
                 
-                % Calculate the centroid and integral of the distribution
-                simcent(i,j) = sum((1:N).*ES)/sum(ES);
-                simsum(i,j) = sum(ES);
+                % find centroid of convolution, convolution is a vector
+                % that is N + PIX - 1 long
+                consum = sum(yy);
+                concent = round(sum((1:length(yy)).*yy)/consum);
                 
-                % Align simulated and measured dists
-                i_start(i,j,k)=round(indcent(k)-simcent(i,j));
-                if i_start(i,j,k) < 1
-                    i_start(i,j,k) = 1;
-                end
-                e_interp(1:length(ES),i,j) = ES/simsum(i,j);
-                
-                % embed
-                e_temp=zeros(1,838);
-                diff = 0;
-                if (i_start(i,j,k)+length(e_interp)-1) > 838
-                    diff = (i_start(i,j,k)+length(e_interp)-1) - 838;
-                end
-                e_temp((i_start(i,j,k)-diff):(i_start(i,j,k)+length(e_interp)-1-diff))=e_interp(:,i,j);
-                
-                con_temp=zeros(1,838);
-                diff = 0;
-                if (con_start(i,j,k)+length(conterp)-1) > 838
-                    diff = (con_start(i,j,k)+length(conterp)-1) - 838;
-                end
-                con_temp((con_start(i,j,k)-diff):(con_start(i,j,k)+length(conterp)-1-diff))=conterp(:,i,j);
-                    
+                % project convolved distribution onto energy axis, with
+                % centroid of distribution at delta = 0
+                conterp(:,i,j) = yy((concent-round(PIX/2)):(concent+round(PIX/2)-1))/consum;
+                DCON(1:(PIX-1),i,j) = diff(conterp(:,i,j))/(ENG_AX(2)-ENG_AX(1));
+                meanD = mean(DCON(:,i,j));
+                DCON(:,i,j) = DCON(:,i,j) + (DCON(:,i,j) < meanD/100)*meanD/100;
                 
                 if do_plot
                     %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-                    plot(ENG_AX,e_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+                    plot(ENG_AX,conterp(:,i,j),ENG_AX,center(:,k)/LINESUM(k));
                     xlabel('\delta','fontsize',16);
                     axis([-0.05 0.05 0 3.5e-3]);
                     pause;
                 end
                 
                 % Calculate residue
-                e_res = e_temp - double(cutLINE(:,k)')/LINESUM(k);
-                co_res = con_temp - double(cutLINE(:,k)')/LINESUM(k);
+                e_res = e_interp(:,i,j) - center(:,k)/LINESUM(k);
+                co_res = conterp(:,i,j) - center(:,k)/LINESUM(k);
+                d_res = (conterp(:,i,j) - center(:,k)/LINESUM(k))./DCON(:,i,j);
                 RES(i,j,k) = sum(e_res.*e_res);
                 ABS(i,j,k) = sum(abs(e_res));
                 CON(i,j,k) = sum(co_res.*co_res);
                 CBS(i,j,k) = sum(abs(co_res));
+                DES(i,j,k) = sum(d_res.*d_res);
+                DBS(i,j,k) = sum(abs(d_res));
                 
             end
         end
         
     end
     
-    if savE; save([data_dir save_name],'RES','ABS','CON','CBS','e_interp','conterp','i_start','con_start','ENG_AX','cutLINE','LINESUM'); end;
+    if savE; save([data_dir save_name],'RES','ABS','CON','CBS','DES','DBS','e_interp','conterp','DCON','ENG_AX','LINESUM'); end;
 
 end
