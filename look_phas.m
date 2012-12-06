@@ -18,8 +18,8 @@ load([data_dir 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat']);
 
 plot_disp = 0;
 do_plot = 0;
-compare = 1;
-savE = 1;
+compare = 0;
+savE = 0;
 
 % Dispersion analysis
 x_2050=zeros(30,7);

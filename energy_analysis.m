@@ -35,18 +35,18 @@ load([data_dir disp_name]);
 
 do_disp = 1;
 do_y = 1;
-plot_disp = 1;
+plot_disp = 0;
 view_yag = 0;
 do_plot = 0;
 compare = 0;
-savE = 1;
+savE = 0;
 
 if do_disp
     [eta_yag, beam_size] = DISP_ANA(data,plot_disp,do_y,savE,save_dir);
 end
 
+%number of shots
 nShots = length(good_data);
-
 
 % NRTL stuff
 NRTL_phas = zeros(1,nShots);
@@ -71,7 +71,8 @@ RES = good_data(1).YAGS_LI20_2432.prof_RES;
 PIX = good_data(1).YAGS_LI20_2432.prof_roiXN;
 
 % YAG Axis
-YAG_AX = RES*(PIX:-1:1) - RES*PIX/2;
+%YAG_AX = RES*(PIX:-1:1) - RES*PIX/2;``
+YAG_AX = RES*(1:PIX) - RES*PIX/2;
 ENG_AX = YAG_AX/(eta_yag*1e3);
 
 % YAG Lineout
@@ -82,6 +83,8 @@ cutLINE = uint16(zeros(PIX,nShots));
 
 % YAG FWHM
 fwhm = zeros(1,nShots);
+lo = zeros(1,nShots);
+hi = zeros(1,nShots);
 
 % YAG centroid
 P_cent = zeros(1,nShots);
@@ -96,8 +99,8 @@ win_max = 10000*ones(1,nShots);
 i_min = zeros(1,nShots);
 i_max = (length(LINE)+1)*ones(1,nShots);
 i_vec = 1:PIX;
-%lo_win = zeros(1,5);
-%hi_win = zeros(1,5);
+lo_win = 0;
+hi_win = 0;
 
 for j = 1:nShots
     
@@ -122,43 +125,48 @@ for j = 1:nShots
     % YAG image alignment, centering, fwhm
     IMG_1     = rot90(good_data(j).YAGS_LI20_2432.img,2)';
     LINE(:,j) = mean(IMG_1(lo_line:hi_line,:),1);
-    fwhm(j)   = FWHM(ENG_AX,LINE(:,j));
     P_cent(j) = sum(YAG_AX.*double(LINE(:,j))')/sum(double(LINE(:,j)));
     E_cent(j) = sum(ENG_AX.*double(LINE(:,j))')/sum(double(LINE(:,j)));
+    [fwhm(j),lo(j),hi(j)] = FWHM(ENG_AX,double(LINE(:,j)));
     
-    if view_yag
-        s1 = 10; figure(s1); subplot(2,1,1); imagesc(IMG_1); subplot(2,1,2); plot(LINE(:,j)); pause;
-    end
+    %window the spectrum to cut off noise tails
+    lo_win = 0;
+    hi_win = 0;
+    for i=11:(length(LINE(:,j))/2)
+        k = length(LINE(:,j)) - i + 1;
         
-    
-%     lo_win(:) = 0;
-%     hi_win(:) = 0;
-%     for i=11:(length(LINE(:,j))/2)
-%         
-%         k = length(LINE(:,j)) - i + 1;
-%         
-%         lo_win(1) = sum(LINE((i-10):(i+10),j));
-%         
-%         
-%         hi_win(1) = sum(LINE((k-10):(k+10),j));
-%         
-%         
-%         for n=1:5
-%             if lo_win(n) < win_min(j+(n-1)*18)
-%                 win_min(j+(n-1)*18) = lo_win(n);
-%                 i_min(j+(n-1)*18) = i;
-%             end
-%             if hi_win(n) < win_max(j+(n-1)*18)
-%                 win_max(j+(n-1)*18) = hi_win(n);
-%                 i_max(j+(n-1)*18) = k;
-%             end
-%         end
-%     end
+        lo_win = sum(LINE((i-10):(i+10),j));
+        hi_win = sum(LINE((k-10):(k+10),j)); 
+        if lo_win < win_min(j)
+            win_min(j) = lo_win;
+            i_min(j) = i;
+        end
+        if hi_win < win_max(j)
+            win_max(j) = hi_win;
+            i_max(j) = k;
+        end
+        
+    end
 
+    %linout minus the BG
     cutLINE(:,j) = LINE(:,j).*uint16((i_vec > i_min(j) & i_vec < i_max(j)))';
     cutcent(j)   = sum(ENG_AX.*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
-    indcent(j)   = sum((1:PIX).*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
+    indcent(j)   = round(sum((1:PIX).*double(cutLINE(:,j))')/sum(double(cutLINE(:,j))));
  
+    if view_yag
+        s1 = 10; 
+        figure(s1); 
+        subplot(2,1,1); 
+        imagesc(IMG_1); 
+        subplot(2,1,2); 
+        plot(ENG_AX,cutLINE(:,j),ENG_AX(i_min(j)),...
+            cutLINE(i_min(j),j),'r*',...
+            ENG_AX(i_max(j)),cutLINE(i_max(j),j),'g*',...
+            ENG_AX(indcent(j)),cutLINE(indcent(j),j),'m*',...
+            ENG_AX(lo(j)),cutLINE(lo(j),j),'c*',...
+            ENG_AX(hi(j)),cutLINE(hi(j),j),'k*'); 
+        pause;
+    end
 end
 
 % area under spectrum
