@@ -1,8 +1,12 @@
 clear all;
 
-data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
-data_fat = 'E200_1138_Step_1.mat';
-data_thin = 'E200_1138_Slim.mat';
+% data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
+% data_fat = 'E200_1138_Step_1.mat';
+% data_thin = 'E200_1138_Slim.mat';
+
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+data_fat = 'E200_1443_Step_1.mat';
+data_thin = 'E200_1443_Slim.mat';
 
 savE = 1;
 

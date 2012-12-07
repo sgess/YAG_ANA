@@ -1,4 +1,4 @@
-clear all;
+%clear all;
 
 scan = 0;
 
@@ -6,14 +6,15 @@ global PARAM;
 
 %MJH_param;
 %MDW_param;
-SJG_param;
+%SJG_param;
+temp_param
 
 
 if scan == 0
     
-    PARAM.NRTL.AMPL = 0.04058;
-    PARAM.LONE.PHAS = -21.46;
-    
+    PARAM.NRTL.AMPL = 0.0406;
+    PARAM.LONE.PHAS = -21.86;
+    PARAM.NRTL.PHAS = 88.86;
     %PARAM.NRTL.AMPL = 0.04154;
     %PARAM.LONE.PHAS = -21.38;
     
@@ -22,8 +23,9 @@ if scan == 0
     %PARAM.LONE.PHAS = -22.25;
     
     PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
-    LiTrack('FACETpar');
+    OUT = LiTrack('FACETpar');
     %LiTrack('FACETMJH2');
+    plot(OUT.E.HIST(:,6));
     
 elseif scan == 1
     
