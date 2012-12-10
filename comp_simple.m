@@ -7,14 +7,14 @@ global PARAM;
 %MJH_param;
 %MDW_param;
 %SJG_param;
-temp_param
+temp_param;
 
 
 if scan == 0
     
     PARAM.NRTL.AMPL = 0.0406;
     PARAM.LONE.PHAS = -21.86;
-    PARAM.NRTL.PHAS = 88.86;
+    PARAM.NRTL.PHAS = 90.;
     %PARAM.NRTL.AMPL = 0.04154;
     %PARAM.LONE.PHAS = -21.38;
     
