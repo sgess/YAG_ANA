@@ -22,8 +22,10 @@
   
   % S10 chcn #s
   LI10_R56  = PARAM.LI10.R56;   % Measured val?
-  LI10_T566 = PARAM.LI10.T566;  % Measured val?
+  %LI10_T566 = PARAM.LI10.T566;  % Measured val?
   LI10_ISR  = PARAM.LI10.ISR;   %
+  LI10_ELO  = PARAM.LI10.ELO;   % S20 low energy cut
+  LI10_EHI  = PARAM.LI10.EHI;   % S20 high energy cut
   
   % Energy gain and length of 02-10
   LTWO_leff = PARAM.LTWO.LEFF;  % Length of LI02-LI10 (m)
@@ -111,12 +113,13 @@ beamline = [
       -13       E1             LONE_ampl            -90       90      lambdaS       % Energy feedback to set 9GeV in chicane
        7	    LI10_R56       E1                   0         0       0             % 2nd half of the chicane. Design was -0.0745, as built -0.076
        22       LI10_ISR       0                    0         0       0             % Approximate SR growth in E-spread from chicane
+       26       LI10_ELO       LI10_EHI             0         0       0             % Momentum Slits in FACET
       -37		0.01           1                    0		  0		  0             % Clip any rediculously long tails
       -10       E2             LTWO_phas            lambdaS   1       LTWO_leff     % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
        6		LI20_R56       LI20_T566            E2        0		  0             % FACET 'dogleg' like chicane
        22       LI20_ISR       0                    0         0       0             % Approximate SR growth in E-spread from dogleg
        37       0.01           1                    0		  0		  0             % Clip any rediculously long tails
-       %26       LI20_ELO       LI20_EHI             0         0       0             % Momentum Slits in FACET
+       26       LI20_ELO       LI20_EHI             0         0       0             % Momentum Slits in FACET
        99	    0              0                    0		  0		  0             % End
        ];
    

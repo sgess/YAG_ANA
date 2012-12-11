@@ -1,22 +1,22 @@
 clear all;
 
 %arg
-%data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
 
-%save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
+save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1138/';
 
-%sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
+sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
 %mac69
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
 
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
 
-sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
+%sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 
 %1443
 save_name  = 'deriv.mat';
@@ -37,9 +37,9 @@ load([data_dir state_name]);
 load([data_dir disp_name]);
 
 do_disp = 1;
-do_y = 1;
+do_y = 0;
 plot_disp = 0;
-view_yag = 1;
+view_yag = 0;
 do_plot = 0;
 compare = 0;
 savE = 0;
