@@ -1,0 +1,134 @@
+function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,nShots,view_yag)
+% Extract data from slimmed directory
+
+% NRTL stuff
+DATA.NRTL.PHAS = zeros(1,nShots);
+DATA.NRTL.AMPL = zeros(1,nShots);
+
+% Pulse ID stuff
+DATA.PID.BSA = zeros(1,nShots);
+DATA.PID.AIDA = zeros(1,nShots);
+DATA.PID.PROF = zeros(1,nShots);
+
+% BPM stuff
+DATA.BPM_2445.X = zeros(1,nShots);
+DATA.BPM_2050.X = zeros(1,nShots);
+
+DATA.BPM_2445.Y = zeros(1,nShots);
+DATA.BPM_2050.Y = zeros(1,nShots);
+
+% YAG Resolution
+DATA.YAG.RES = good_data(1).YAGS_LI20_2432.prof_RES;
+
+% YAG pixels
+DATA.YAG.PIX = good_data(1).YAGS_LI20_2432.prof_roiXN;
+
+% YAG Axis
+DATA.BEAM.ETA = eta_yag;
+DATA.BEAM.SIZE = beam_size;
+DATA.AXIS.XX = DATA.YAG.RES*(1:DATA.YAG.PIX) - DATA.YAG.RES*DATA.YAG.PIX/2;
+DATA.AXIS.ENG = DATA.AXIS.XX/(DATA.BEAM.ETA*1e3);
+
+% YAG Lineout
+LINE = uint16(zeros(DATA.YAG.PIX,nShots));
+cutLINE = uint16(zeros(DATA.YAG.PIX,nShots));
+DATA.YAG.SPECTRUM = zeros(DATA.YAG.PIX,nShots);
+
+% YAG FWHM
+fwhm = zeros(1,nShots);
+lo = zeros(1,nShots);
+hi = zeros(1,nShots);
+DATA.YAG.FWHM = zeros(1,nShots);
+DATA.YAG.LO = zeros(1,nShots);
+DATA.YAG.HI = zeros(1,nShots);
+
+% YAG centroid
+P_cent = zeros(1,nShots);
+E_cent = zeros(1,nShots);
+DATA.YAG.ECENT = zeros(1,nShots);
+indcent = zeros(1,nShots);
+
+
+% Windowing and indexing variables
+win_min = 10000*ones(1,nShots);
+win_max = 10000*ones(1,nShots);
+i_min = zeros(1,nShots);
+i_max = (length(LINE)+1)*ones(1,nShots);
+i_vec = 1:DATA.YAG.PIX;
+
+for j = 1:nShots
+    
+    % Pulse ID stuff
+    DATA.PID.BSA(j) = good_data(j).PulseID;
+    DATA.PID.AIDA(j) = good_data(j).aida.pulse_id;
+    DATA.PID.PROF(j) = good_data(j).YAGS_LI20_2432.prof_pid;
+    
+    
+    % NRTL stuff
+    DATA.NRTL.PHAS(j) = good_data(j).aida.klys.phase;
+    if ~isempty(good_data(j).DR13_AMPL_11_VACT.val)
+        DATA.NRTL.AMPL(j) = good_data(j).DR13_AMPL_11_VACT.val;
+    end
+    
+    
+    % BPM stuff
+    DATA.BPM_2445.X(j) = good_data(j).aida.bpms(1).x;
+    DATA.BPM_2050.X(j) = good_data(j).aida.bpms(16).x;
+    DATA.BPM_2445.Y(j) = good_data(j).aida.bpms(1).y;
+    DATA.BPM_2050.Y(j) = good_data(j).aida.bpms(16).y;
+    
+    
+    % YAG image alignment, centering, fwhm
+    IMG_1     = rot90(good_data(j).YAGS_LI20_2432.img,2)';
+    LINE(:,j) = mean(IMG_1(lo_line:hi_line,:),1);
+    P_cent(j) = sum(DATA.AXIS.XX.*double(LINE(:,j))')/sum(double(LINE(:,j)));
+    E_cent(j) = sum(DATA.AXIS.ENG.*double(LINE(:,j))')/sum(double(LINE(:,j)));
+    [fwhm(j),lo(j),hi(j)] = FWHM(DATA.AXIS.ENG,double(LINE(:,j)));
+    
+    %window the spectrum to cut off noise tails
+    lo_win = 0;
+    hi_win = 0;
+    for i=11:(length(LINE(:,j))/2)
+        k = length(LINE(:,j)) - i + 1;
+        
+        lo_win = sum(LINE((i-10):(i+10),j));
+        hi_win = sum(LINE((k-10):(k+10),j)); 
+        if lo_win < win_min(j)
+            win_min(j) = lo_win;
+            i_min(j) = i;
+        end
+        if hi_win < win_max(j)
+            win_max(j) = hi_win;
+            i_max(j) = k;
+        end
+        
+    end
+
+    %linout minus the BG
+    cutLINE(:,j) = LINE(:,j).*uint16((i_vec > i_min(j) & i_vec < i_max(j)))';
+    DATA.YAG.ECENT(j) = sum(DATA.AXIS.ENG.*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
+    indcent(j) = round(sum((1:DATA.YAG.PIX).*double(cutLINE(:,j))')/sum(double(cutLINE(:,j))));
+    if indcent(j) < round(DATA.YAG.PIX/2)
+        DATA.YAG.SPECTRUM(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j) = cutLINE(1:round(DATA.YAG.PIX/2+indcent(j)+1),j);
+    else
+        DATA.YAG.SPECTRUM(1:round(DATA.YAG.PIX/2+indcent(j)+1),j) = cutLINE(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j);
+    end
+    [DATA.YAG.FWHM(j),DATA.YAG.LO(j),DATA.YAG.HI(j)] = FWHM(DATA.AXIS.ENG,DATA.YAG.SPECTRUM(:,j));
+    
+    DATA.YAG.LINESUM = sum(DATA.YAG.SPECTRUM,1);
+    
+    if view_yag
+        s1 = 10; 
+        figure(s1); 
+        subplot(2,1,1); 
+        imagesc(IMG_1); 
+        subplot(2,1,2); 
+        plot(DATA.AXIS.ENG,cutLINE(:,j),...
+            DATA.AXIS.ENG(i_min(j)),cutLINE(i_min(j),j),'r*',...
+            DATA.AXIS.ENG(i_max(j)),cutLINE(i_max(j),j),'g*',...
+            DATA.AXIS.ENG(indcent(j)),cutLINE(indcent(j),j),'m*',...
+            DATA.AXIS.ENG(lo(j)),cutLINE(lo(j),j),'c*',...
+            DATA.AXIS.ENG(hi(j)),cutLINE(hi(j),j),'k*'); 
+        pause;
+    end
+end

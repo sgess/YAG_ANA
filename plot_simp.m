@@ -14,13 +14,13 @@ save_dir = '/Users/sgess/Desktop/plots/LiTrack/5mm_scan/';
 movie_dir = '/Users/sgess/Desktop/plots/MOVIES/E200_1443/';
 %movie_dir = '/Users/sgess/Desktop/FACET/PLOTS/MOVIES/E200_1443/';
 
-load([sim_dir '5mm_scan.mat']);
+load([sim_dir 'NRTL_scan.mat']);
 %load([data_dir 'RES_5mm.mat']);
 %load([data_dir 'RES_5mm_hi.mat']);
-load([data_dir 'ABS_5mm_hi.mat']);
+load([data_dir 'NRTL_1.mat']);
 
 savE = 0;
-comp_py  = 0;
+comp_py  = 1;
 plot_s10 = 0;
 plot_s20 = 0;
 plot_dists = 0;
