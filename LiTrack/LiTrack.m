@@ -441,20 +441,22 @@ for j  = 1:nb					% loop over all beamline sections of BL-file
     d1 = beamline(j,2);				% minimum dE/E for notch-collimator edge [ ]
     d2 = beamline(j,3);				% maximum dE/E for notch-collimator edge [ ]
     if d1 >= d2					    % bomb out if max<min (BT-file error)
-      error(['Notch-collimator (28) must have dE/E_min (col 2) < dE/E_max (col3) in ' fnfm])
+        disp('No notch cut');
+        %error(['Notch-collimator (28) must have dE/E_min (col 2) < dE/E_max (col3) in ' fnfm])
+    else
+        i = find(d<d1 | d>d2);			% bomb out if notch too wide
+        if length(i) < 1
+            error(sprintf('Notch-collimator (28) Emin=%7.4f %% and Emax=%7.4f %% threw out all particles',d1*100,d2*100))
+        end
+        Ni = length(i);				    % count particles left after cuts
+        Ne1 = Ne1*Ni/Nesim;				% rescale N-particles to reflect cuts
+        d = d(i);					    % reduce dE/E array inpose cuts
+        z = z(i);					    % reduce Z array inpose cuts
+        E = E(i);					    % reduce energy array inpose cuts
+        Ebarcuts = mean(E);				% mean energy after cuts [GeV]
+        disp([sprintf('Notch-collimator (28) cut: %6.3e',100*(1-Ni/Nesim)) '% of bunch'])  
+        Nesim = Ni;					    % reduce number of simulation particles
     end
-    i = find(d<d1 | d>d2);			% bomb out if notch too wide
-    if length(i) < 1
-      error(sprintf('Notch-collimator (28) Emin=%7.4f %% and Emax=%7.4f %% threw out all particles',d1*100,d2*100))
-    end
-    Ni = length(i);				    % count particles left after cuts
-    Ne1 = Ne1*Ni/Nesim;				% rescale N-particles to reflect cuts
-    d = d(i);					    % reduce dE/E array inpose cuts
-    z = z(i);					    % reduce Z array inpose cuts
-    E = E(i);					    % reduce energy array inpose cuts
-    Ebarcuts = mean(E);				% mean energy after cuts [GeV]
-    disp([sprintf('Notch-collimator (28) cut: %6.3e',100*(1-Ni/Nesim)) '% of bunch'])  
-    Nesim = Ni;					    % reduce number of simulation particles
   end
   if abs(cod) == 29                	% USER'S ABSOLUTE ENERGY CUTS (29)
     ecuts = 1;					    % show dE/E cuts on plots

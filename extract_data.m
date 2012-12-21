@@ -17,6 +17,9 @@ DATA.BPM_2050.X = zeros(1,nShots);
 DATA.BPM_2445.Y = zeros(1,nShots);
 DATA.BPM_2050.Y = zeros(1,nShots);
 
+%PYRO
+DATA.PYRO.VAL = zeros(1,nShots);
+
 % YAG Resolution
 DATA.YAG.RES = good_data(1).YAGS_LI20_2432.prof_RES;
 
@@ -33,6 +36,7 @@ DATA.AXIS.ENG = DATA.AXIS.XX/(DATA.BEAM.ETA*1e3);
 LINE = uint16(zeros(DATA.YAG.PIX,nShots));
 cutLINE = uint16(zeros(DATA.YAG.PIX,nShots));
 DATA.YAG.SPECTRUM = zeros(DATA.YAG.PIX,nShots);
+DATA.YAG.SUM = zeros(1,nShots);
 
 % YAG FWHM
 fwhm = zeros(1,nShots);
@@ -77,6 +81,8 @@ for j = 1:nShots
     DATA.BPM_2445.Y(j) = good_data(j).aida.bpms(1).y;
     DATA.BPM_2050.Y(j) = good_data(j).aida.bpms(16).y;
     
+    % PYRO Stuff
+    DATA.PYRO.VAL(j) = good_data(j).BLEN_LI20_3158_BRAW.val;
     
     % YAG image alignment, centering, fwhm
     IMG_1     = rot90(good_data(j).YAGS_LI20_2432.img,2)';
@@ -106,17 +112,25 @@ for j = 1:nShots
 
     %linout minus the BG
     cutLINE(:,j) = LINE(:,j).*uint16((i_vec > i_min(j) & i_vec < i_max(j)))';
+    
+    %find the center
     DATA.YAG.ECENT(j) = sum(DATA.AXIS.ENG.*double(cutLINE(:,j))')/sum(double(cutLINE(:,j)));
     indcent(j) = round(sum((1:DATA.YAG.PIX).*double(cutLINE(:,j))')/sum(double(cutLINE(:,j))));
+    
+    %embed at center
     if indcent(j) < round(DATA.YAG.PIX/2)
         DATA.YAG.SPECTRUM(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j) = cutLINE(1:round(DATA.YAG.PIX/2+indcent(j)+1),j);
     else
         DATA.YAG.SPECTRUM(1:round(DATA.YAG.PIX/2+indcent(j)+1),j) = cutLINE(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j);
     end
+    
+    % FWHM of tailored spectrum
     [DATA.YAG.FWHM(j),DATA.YAG.LO(j),DATA.YAG.HI(j)] = FWHM(DATA.AXIS.ENG,DATA.YAG.SPECTRUM(:,j));
     
-    DATA.YAG.LINESUM = sum(DATA.YAG.SPECTRUM,1);
+    % Integral of tailored spectrum
+    DATA.YAG.SUM(j) = sum(DATA.YAG.SPECTRUM(:,j));
     
+    % check out your work
     if view_yag
         s1 = 10; 
         figure(s1); 

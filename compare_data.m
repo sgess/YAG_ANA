@@ -1,162 +1,101 @@
-function RES = compare_data(DATA)
+function RES = compare_data(DATA,INTERP,nShots,do_plot)
 
-%interpolated energy spectrum
-    e_interp = zeros(PIX,64,64);
+%axis length
+PIX = DATA.YAG.PIX;
+
+%axis
+E_AX = DATA.AXIS.ENG;
+
+%various residual measures
+RES.SIMP.SQ   = zeros(64,64,nShots);
+RES.SIMP.AB   = zeros(64,64,nShots);
+RES.SIMP.FWSQ = zeros(64,64,nShots);
+RES.SIMP.FWAB = zeros(64,64,nShots);
+
+RES.CON.SQ   = zeros(64,64,nShots);
+RES.CON.AB   = zeros(64,64,nShots);
+RES.CON.FWSQ = zeros(64,64,nShots);
+RES.CON.FWAB = zeros(64,64,nShots);
+
+RES.DER.SQ   = zeros(64,64,nShots);
+RES.DER.AB   = zeros(64,64,nShots);
+RES.DER.FWSQ = zeros(64,64,nShots);
+RES.DER.FWAB = zeros(64,64,nShots);
+
+%residual axes
+e_res = zeros(1,PIX);
+ef_res = zeros(1,PIX);
+
+%convolution residual axes
+co_res = zeros(1,PIX);
+cf_res = zeros(1,PIX);
+
+%derivative residual axes
+d_res = zeros(1,PIX);
+df_res = zeros(1,PIX);
+
+%loop over yag spectra
+for k=1:nShots
     
-    %convolved energy spectrum
-    conterp = zeros(PIX,64,64);
-    
-    %fwhm vals
-    e_fwhm = zeros(64,64);
-    e_lo   = zeros(64,64);
-    e_hi   = zeros(64,64);
-    c_fwhm = zeros(64,64);
-    c_lo   = zeros(64,64);
-    c_hi   = zeros(64,64);
-    
-    % derivative of convolved spectrum
-    DCON = ones(PIX,64,64);
-    
-    %residual
-    e_res = zeros(1,length(ENG_AX));
-    ef_res = zeros(1,length(ENG_AX));
-    
-    %convolution residual
-    co_res = zeros(1,length(ENG_AX));
-    cf_res = zeros(1,length(ENG_AX));
-    
-    %derivative residual
-    d_res = zeros(1,length(ENG_AX));
-    df_res = zeros(1,length(ENG_AX));
-    
-    %various residual measures
-    RES = zeros(64,64,nShots);
-    ABS = zeros(64,64,nShots);
-    RFN = zeros(64,64,nShots);
-    RFS = zeros(64,64,nShots);
-    
-    CON = zeros(64,64,nShots);
-    CBS = zeros(64,64,nShots);
-    CFN = zeros(64,64,nShots);
-    CFS = zeros(64,64,nShots);
-    
-    DES = zeros(64,64,nShots);
-    DBS = zeros(64,64,nShots);
-    DFN = zeros(64,64,nShots);
-    DFS = zeros(64,64,nShots);
-    
-    %gaussian blurring
-    e_blur = beam_size/eta_yag;
-    g = exp(-(ENG_AX.^2)/(2*e_blur^2));    
-    g = g/sum(g);
-    
-    % Blur and interp
+    disp(['Progress = ' num2str(k*100/nShots,'%0.2f') '%']);
+        
+    %loop over simulated spectra
     for i=1:64
         for j=1:64
             
-            % Identify Max and Min of Simulated energy distribution
-            e_max = ee(256,i,j,6)/100;
-            e_min = ee(1,i,j,6)/100;
-            
-            % Find the Max and Min on the YAG energy axis
-            [~,iMax] = min(abs(e_max - ENG_AX));
-            [~,iMin] = min(abs(e_min - ENG_AX));
-            N = iMax - iMin + 1;
-            
-            % Interpolate the simulated distribution onto the YAG axis
-            xx = linspace(1,256,N);
-            ES = interp1(es(:,i,j,6)/100,xx);
-            
-            % Calculate the centroid and integral of the distribution
-            simsum = sum(ES);
-            simcent = round(sum((1:N).*ES)/simsum);
-            
-            % embed interpolated distribution onto energy axis, with
-            % centroid of distribution at delta = 0
-            e_interp(round(PIX/2-simcent):round(PIX/2-simcent+N-1),i,j) = ES/simsum;
-            
-            % convolve energy spread with gaussian
-            yy = conv(ES,g);
-            
-            % find centroid of convolution, convolution is a vector
-            % that is N + PIX - 1 long
-            consum = sum(yy);
-            concent = round(sum((1:length(yy)).*yy)/consum);
-            
-            % project convolved distribution onto energy axis, with
-            % centroid of distribution at delta = 0
-            conterp(:,i,j) = yy((concent-round(PIX/2)):(concent+round(PIX/2)-1))/consum;
-            
-            %derivative of convolution
-            DCON(1:(PIX-1),i,j) = 1 + abs(diff(conterp(:,i,j))/(ENG_AX(2)-ENG_AX(1)));
-            
-            %fwhm of energy and convolution
-            [e_fwhm(i,j),e_lo(i,j),e_hi(i,j)] = FWHM(ENG_AX,e_interp(:,i,j));
-            [c_fwhm(i,j),c_lo(i,j),c_hi(i,j)] = FWHM(ENG_AX,conterp(:,i,j));
-        end
-    end
-    
-    
-    
-    for k=1:nShots
-        
-        %disp(k);
-        
-        for i=1:64
-            for j=1:64
-                
-                s_temp = zeros(PIX,1);
-                d_temp = ones(PIX,1);
-                off = c_lo(i,j) - m_lo(k);
-                if off > 0
-                    s_temp(1:(PIX-off)) = conterp(off:(PIX-1),i,j);
-                    d_temp(1:(PIX-off)) = DCON(off:(PIX-1),i,j);
-                else
-                    s_temp((-off + 1):PIX) = conterp(1:(PIX+off),i,j);
-                    d_temp((-off + 1):PIX) = DCON(1:(PIX+off),i,j);
-                end
-                
-                e_temp = zeros(PIX,1);
-                offe = e_lo(i,j) - m_lo(k);
-                if offe > 0
-                    e_temp(1:(PIX-offe)) = e_interp(offe:(PIX-1),i,j);
-                else
-                    e_temp((-offe + 1):PIX) = conterp(1:(PIX+offe),i,j);
-                end
-               
-                
-                if do_plot
-                    %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
-                    %plot(ENG_AX,conterp(:,i,j),ENG_AX,center(:,k)/LINESUM(k));
-                    plot(ENG_AX,s_temp,ENG_AX,center(:,k)/LINESUM(k));
-                    xlabel('\delta','fontsize',16);
-                    axis([-0.05 0.05 0 3.5e-3]);
-                    pause;
-                end
-                
-                % Calculate residue
-                e_res = e_interp(:,i,j) - center(:,k)/LINESUM(k);
-                ef_res = e_temp - center(:,k)/LINESUM(k);
-                co_res = conterp(:,i,j) - center(:,k)/LINESUM(k);
-                cf_res = s_temp - center(:,k)/LINESUM(k);
-                d_res = (conterp(:,i,j) - center(:,k)/LINESUM(k))./DCON(:,i,j);
-                df_res = (s_temp - center(:,k)/LINESUM(k))./d_temp;
-                
-                RES(i,j,k) = sum(e_res.*e_res);
-                ABS(i,j,k) = sum(abs(e_res));
-                RFN(i,j,k) = sum(ef_res.*ef_res);
-                RFS(i,j,k) = sum(abs(ef_res));
-                
-                CON(i,j,k) = sum(co_res.*co_res);
-                CBS(i,j,k) = sum(abs(co_res));
-                CFN(i,j,k) = sum(cf_res.*cf_res);
-                CFS(i,j,k) = sum(abs(cf_res));
-                
-                DES(i,j,k) = sum(d_res.*d_res);
-                DBS(i,j,k) = sum(abs(d_res));
-                DFN(i,j,k) = sum(df_res.*df_res);
-                DFS(i,j,k) = sum(abs(df_res));
-                
+            %create temporary projection axes
+            s_temp = zeros(PIX,1);
+            d_temp = ones(PIX,1);
+            off = INTERP.C.LO(i,j) - DATA.YAG.LO(k);
+            if off > 0
+                s_temp(1:(PIX-off)) = INTERP.C.CC(off:(PIX-1),i,j);
+                d_temp(1:(PIX-off)) = INTERP.D.DD(off:(PIX-1),i,j);
+            else
+                s_temp((-off + 1):PIX) = INTERP.C.CC(1:(PIX+off),i,j);
+                d_temp((-off + 1):PIX) = INTERP.D.DD(1:(PIX+off),i,j);
             end
+            
+            e_temp = zeros(PIX,1);
+            offe = INTERP.E.LO(i,j) - DATA.YAG.LO(k);
+            if offe > 0
+                e_temp(1:(PIX-offe)) = INTERP.E.EE(offe:(PIX-1),i,j);
+            else
+                e_temp((-offe + 1):PIX) = INTERP.C.CC(1:(PIX+offe),i,j);
+            end
+            
+            
+            if do_plot
+                %plot(ENG_AX,e_temp,ENG_AX,con_temp,ENG_AX,double(cutLINE(:,k))/LINESUM(k));
+                %plot(ENG_AX,conterp(:,i,j),ENG_AX,center(:,k)/LINESUM(k));
+                plot(E_AX,s_temp,E_AX,DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k));
+                xlabel('\delta','fontsize',16);
+                axis([-0.05 0.05 0 3.5e-3]);
+                pause;
+            end
+            
+            % Calculate residue
+            e_res = INTERP.E.EE(:,i,j) - DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k);
+            ef_res = e_temp - DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k);
+            co_res = INTERP.C.CC(:,i,j) - DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k);
+            cf_res = s_temp - DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k);
+            d_res = (INTERP.C.CC(:,i,j) - DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k))./INTERP.D.DD(:,i,j);
+            df_res = (s_temp - DATA.YAG.SPECTRUM(:,k)/DATA.YAG.SUM(k))./d_temp;
+            
+            RES.SIMP.SQ(i,j,k) = sum(e_res.*e_res);
+            RES.SIMP.AB(i,j,k) = sum(abs(e_res));
+            RES.SIMP.FWSQ(i,j,k) = sum(ef_res.*ef_res);
+            RES.SIMP.FWAB(i,j,k) = sum(abs(ef_res));
+            
+            RES.CON.SQ(i,j,k) = sum(co_res.*co_res);
+            RES.CON.AB(i,j,k) = sum(abs(co_res));
+            RES.CON.FWSQ(i,j,k) = sum(cf_res.*cf_res);
+            RES.CON.FWAB(i,j,k) = sum(abs(cf_res));
+            
+            RES.DER.SQ(i,j,k) = sum(d_res.*d_res);
+            RES.DER.AB(i,j,k) = sum(abs(d_res));
+            RES.DER.FWSQ(i,j,k) = sum(df_res.*df_res);
+            RES.DER.FWAB(i,j,k) = sum(abs(df_res));
+            
         end
     end
+end

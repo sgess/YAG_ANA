@@ -1,6 +1,6 @@
 %clear all;
 
-scan = 1;
+scan = 0;
 
 global PARAM;
 
@@ -84,8 +84,11 @@ if scan == 0
     PARAM.LI20.EHI = LI20_ECUT_i;
     
     PARAM.LONE.PHAS = decker+ramp;
-    
+    PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
+
+    LiTrack('FACETpar');
     dither = 0;
+    conv = 0;
     
     if dither
         
@@ -150,7 +153,7 @@ if scan == 0
                         
         end
         
-    else
+    elseif conv
         %PARAM.NRTL.R56 = 0*NRTL_R56_i/200 + NRTL_R56_i;
         PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
         OUT = LiTrack('FACETpar');

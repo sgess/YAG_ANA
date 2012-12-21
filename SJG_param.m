@@ -42,6 +42,8 @@ PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
 PARAM.LI10.R56   = -0.075786;% Sector 10 chicane R56 (m)
 PARAM.LI10.T566  = 0.114020;% Sector 10 chicane T566 (m)
 PARAM.LI10.ISR   = 5.9E-5;  % ISR energy spread from bends
+PARAM.LI10.ELO   = -0.05;  % low energy cut
+PARAM.LI10.EHI   = 0.05;   % high energy cut
 
 PARAM.LTWO.LEFF  = 848;     % Length of LI02-LI10 (m)
 PARAM.LTWO.GAIN  = 11.35;   % egain in 2-10, automatically set if 0 (GeV)
@@ -49,11 +51,14 @@ PARAM.LTWO.CHRP  = 0;       % chirp in 2-10 (GeV)
 PARAM.LTWO.PHAS  = 0;       % 11-20 phase
 PARAM.LTWO.FBAM  = 1.88;    % feedback amplitude at S20 (GV)
 
+
+PARAM.LI20.NLO   = 0;
+PARAM.LI20.NHI   = 0;
 %PARAM.LI20.R56   = 0.0040;   % Sector 20 chicane R56 (m)
 PARAM.LI20.R56   = 0.0050;   % Sector 20 chicane R56 (m)
 %PARAM.LI20.T566  = 0.0803843;% Sector 20 chicane T566 (m) % = 100 mm for R56 = 5mm from YS
 PARAM.LI20.T566  = 0.100;% Sector 20 chicane T566 (m) % = 100 mm for R56 = 5mm from YS
 PARAM.LI20.ISR   = 0.8E-5;  % ISR energy spread from bends
-PARAM.LI20.ELO   = -0.03;   % RTL lower momentum cut (GeV)
-PARAM.LI20.EHI   = 0.03;    % RTL upper momentum cut (GeV)
+PARAM.LI20.ELO   = -0.05;   % RTL lower momentum cut (GeV)
+PARAM.LI20.EHI   = 0.05;    % RTL upper momentum cut (GeV)
 
