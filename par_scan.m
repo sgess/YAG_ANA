@@ -1,9 +1,10 @@
 clear all;
 
-save_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/MEGASCAN/';
+save_dir = '/Users/sgess/Desktop/data/LiTrack_scans/MEGASCAN/';
+%save_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/MEGASCAN/';
 savE = 1;
 
-test = 1;
+test = 0;
 
 %global PARAM;
 SJG_param;
