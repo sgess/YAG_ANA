@@ -10,41 +10,41 @@ clear all;
 %sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
 %mac69
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
-%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
 
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
-%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
 
 sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 
 %1443
-save_name  = 'NRTL_struct.mat';
-sim_name   = 'NRTL_scan.mat';
-slim_name  = 'E200_1443_slim.mat';
-state_name = 'E200_1443_State.mat';
-disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat';
+% save_name  = 'NRTL_struct.mat';
+% sim_name   = 'NRTL_scan.mat';
+% slim_name  = 'E200_1443_slim.mat';
+% state_name = 'E200_1443_State.mat';
+% disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat';
 
 %1138
-% save_name  = '1138_test.mat';
-% sim_name   = '5mm_scan.mat';
-% slim_name  = 'E200_1138_Slim.mat';
-% state_name = 'E200_1138_State.mat';
-% disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
+save_name  = '1138_test.mat';
+sim_name   = '5mm_scan.mat';
+slim_name  = 'E200_1138_Slim.mat';
+state_name = 'E200_1138_State.mat';
+disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
 
 load([data_dir slim_name]);
 load([data_dir state_name]);
 load([data_dir disp_name]);
 
-do_disp = 1;
+do_disp = 0;
 do_y = 0;
 plot_disp = 0;
-extract = 1;
+extract = 0;
 view_yag = 0;
-interp = 1;
-compare = 1;
+interp = 0;
+compare = 0;
 do_plot = 0;
-savE = 1;
+savE = 0;
 
 if do_disp
     [eta_yag, beam_size] = DISP_ANA(data,plot_disp,do_y,savE,save_dir);
