@@ -1,11 +1,11 @@
 clear all;
 
-save_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
+save_dir = '/Users/sgess/Desktop/E200_1103/';
 file_name = 'E200_1103_scan';
 savE = 1;
 
 scan = 1;
-test = 1;
+test = 0;
 global PARAM;
 
 
