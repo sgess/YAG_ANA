@@ -7,105 +7,85 @@ global PARAM;
 %MJH_param;
 %MDW_param;
 %SJG_param;
-temp_param;
+%temp_param;
+E200_1103_PARAM;
+
+S20 = 2;
+
+% Insert axis from data
+eta_yag = DATA.BEAM.ETA;
+eta_me = 0.95*eta_yag;
+ENG_AX = eta_me/eta_yag*DATA.AXIS.ENG;
+PIX = length(ENG_AX);
+beam_size = DATA.BEAM.SIZE;
+
+% create gaussian for convolution
+e_blur = beam_size/eta_me;
+g = exp(-(ENG_AX.^2)/(2*e_blur^2));
+g = g/sum(g);
+
+r = 7;
+
+ehappy = DATA.YAG.SPECTRUM(:,r)/sum(DATA.YAG.SPECTRUM(:,r));
+%ehappy = mean(DATA.YAG.SPECTRUM,2)/sum(mean(DATA.YAG.SPECTRUM,2));
 
 f1 = 1;
 f2 = 2;
+f3 = 3;
 if scan == 0
     
+    decker = -22.25;
+    ramp = -0.10;
     
+    PARAM.INIT.SIGZ0 = 6.80E-3;
+    PARAM.INIT.SIGD0 = 10.00E-4;
+    PARAM.INIT.NPART = 2.60E10;
+    PARAM.INIT.ASYM  = -0.300;
     
+    PARAM.NRTL.AMPL  = 0.0412;
+    PARAM.NRTL.PHAS  = 89.35;
     
+    PARAM.NRTL.ELO   = -0.0340;
+    PARAM.NRTL.EHI   = 0.0220;
     
+    PARAM.LI10.ELO   = -0.042;
+    PARAM.LI10.EHI   = 0.026;
     
-    PARAM.INIT.SIGZ0 = 6.7E-3; % 1 Part per 100 - checks
-    PARAM.INIT.SIGD0 = 9.8E-4; % 1 Part per 100, more like 2 Part per 1000, not yet stable
-    PARAM.INIT.ASYM  = -0.163; % 1 Part per 100, more like 4 Part per 100, not yet stable
-    PARAM.INIT.NPART = 2.72E10;% 1 Part per 100, more like 1 Part per 1000, stablish
+    PARAM.LI20.ELO   = -0.034;
+    PARAM.LI20.EHI   = 0.028;
     
-    PARAM.NRTL.AMPL = 41.1E-3; % 1 Part per 1000, more like 2 Part per 10000, stablish
-    PARAM.NRTL.PHAS = 89.71;   % 1 Part per 1000, more like 2 Part per 10000, stablish
-    PARAM.NRTL.ELO   = -0.0228;% 1 Part per 100, more like 2 Part per 1000, stablish  
-    PARAM.NRTL.EHI   = 0.0228; % 1 Part per 100, more like 2 Part per 1000, stablish   
-    PARAM.NRTL.R56   = 0.6026; % 1 Part per 1000, more like 2 Part per 10000, stablish
-    PARAM.NRTL.T566  = 0.9215; % 1 Part per 100 - checks
+    PARAM.NRTL.R56   = 0.6036;
+    PARAM.NRTL.T566  = 1.075;
+    PARAM.LI10.R56   = -0.0760;
     
-    ramp = -2.549;               % 1 Part per 100, more like 2 Part per 1000, not yet stable
-    decker = -18.7;              % 2 Part per 1000, 1 Part per 1000, stablish
     PARAM.LONE.PHAS = decker+ramp;
-    
-    PARAM.LI10.R56   = -0.076; % 2 Part per 1000? 1 Part per 1000, stablish
-    PARAM.LI10.ELO   = -0.04;  % 2 Part per 100?
-    PARAM.LI10.EHI   = 0.04;   % 2 Part per 100?
-    
-    
     PARAM.LTWO.PHAS = ramp;
     
-    PARAM.LI20.ELO   = -0.0286;   % RTL lower momentum cut (GeV)
-    PARAM.LI20.EHI   = 0.0286;    % RTL upper momentum cut (GeV)
+    PARAM.LI20.R56   = 0.0050;
+    PARAM.LI20.T566  = 0.100;
     
-    res_set = zeros(1,11);
-    
-    SIGZ0_i = 6.7E-3;
-    SIGZ0_m = SIGZ0_i;
-    PARAM.INIT.SIGZ0 = SIGZ0_i;
-    SIGD0_i = 9.8E-4;
-    SIGD0_m = -3*SIGD0_i/500 + SIGD0_i;
-    PARAM.INIT.SIGD0 = SIGD0_m;
-    ASYM_i  = -0.1728;
-    PARAM.INIT.ASYM = ASYM_i;
-    NPART_i = 2.72E10;
-    NPART_m = NPART_i/1000 + NPART_i;
-    PARAM.INIT.NPART = NPART_m;
-    AMPL_i  = 41.1E-3;
-    PARAM.NRTL.AMPL = AMPL_i;
-    PHAS_i  = 89.71;
-    PARAM.NRTL.PHAS = PHAS_i;
-    NRTL_ECUT_i  = 0.0228;
-    PARAM.NRTL.ELO = -NRTL_ECUT_i;
-    PARAM.NRTL.EHI = NRTL_ECUT_i;
-    NRTL_R56_i = 0.6027;
-    PARAM.NRTL.R56 = NRTL_R56_i;
-    NRTL_T566_i = 0.9123;
-    PARAM.NRTL.T566 = NRTL_T566_i;
-    ramp_i = -2.5286;
-    ramp = ramp_i;
-    decker_i = -18.7;
-    decker_m = decker_i/1000 + decker_i;
-    decker = decker_m;
-    LI10_R56_i = -0.076;
-    LI10_R56_m = -2*LI10_R56_i/1000 + LI10_R56_i;
-    PARAM.LI10.R56 = LI10_R56_m;
-    LI10_ECUT_i  = 0.040;
-    PARAM.LI10.ELO = -LI10_ECUT_i;
-    PARAM.LI10.EHI = LI10_ECUT_i;
-    LI20_ECUT_i  = 0.03;
-    PARAM.LI20.ELO = -LI20_ECUT_i;
-    PARAM.LI20.EHI = LI20_ECUT_i;
-    
-    PARAM.LONE.PHAS = decker+ramp;
-    PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
-
-    LiTrack('FACETpar');
     dither = 0;
-    conv = 0;
     
     if dither
         
+        res_set = zeros(1,11);
+        %ramp_i = -1.5;
+        %decker_i = -21.315;
+        %nrtl_ampl_i = 0.04045;
+        %nrtl_phas_i = 90.0;
+        %sigz0_i = 7.7E-3;
+        %sigd0_i = 7.5E-4;
+        %part_i  = 2.6e10;
+        
         for i=1:11
             
-            %decker = (i-6)*decker_i/1000 + decker_i;
-            %PARAM.LI10.R56 = (i-6)*LI10_R56_i/1000 + LI10_R56_i;
-            
-            
-            %PARAM.NRTL.ELO = -((i-6)*(NRTL_ECUT_i)/50+(NRTL_ECUT_i));
-            %PARAM.NRTL.EHI = (i-6)*NRTL_ECUT_i/50+NRTL_ECUT_i;
-            
-%             PARAM.LI10.ELO = -((i-6)*(LI10_ECUT_i)/25+(LI10_ECUT_i));
-%             PARAM.LI10.EHI = (i-6)*LI10_ECUT_i/25+LI10_ECUT_i;
-            
-            PARAM.LI20.ELO = -((i-6)*(LI20_ECUT_i)/25+(LI20_ECUT_i));
-            PARAM.LI20.EHI = (i-6)*LI20_ECUT_i/25+LI20_ECUT_i;
+            %ramp = (i-6)*ramp_i/10 + ramp_i;
+            %decker = (i-6)*decker_i/100 + decker_i;
+            %PARAM.NRTL.AMPL = (i-6)*nrtl_ampl_i/100 + nrtl_ampl_i;
+            %PARAM.NRTL.PHAS = (i-6)*nrtl_phas_i/1000 + nrtl_phas_i;
+            %PARAM.INIT.SIGD0 = (i-6)*sigd0_i/100 + sigd0_i;
+            %PARAM.INIT.SIGZ0 = (i-6)*sigz0_i/20 + sigz0_i;
+            %PARAM.INIT.NPART = (i-6)*part_i/20 + part_i;
             
             PARAM.LONE.PHAS = decker+ramp;
             
@@ -114,8 +94,8 @@ if scan == 0
             
             
             % Identify Max and Min of Simulated energy distribution
-            e_max = OUT.E.AXIS(256,6)/100;
-            e_min = OUT.E.AXIS(1,6)/100;
+            e_max = OUT.E.AXIS(256,S20)/100;
+            e_min = OUT.E.AXIS(1,S20)/100;
             
             % Find the Max and Min on the YAG energy axis
             [~,iMax] = min(abs(e_max - ENG_AX));
@@ -124,7 +104,7 @@ if scan == 0
             
             % Interpolate the simulated distribution onto the YAG axis
             xx = linspace(1,256,N);
-            ES = interp1(OUT.E.HIST(:,6)/100,xx);
+            ES = interp1(OUT.E.HIST(:,S20)/100,xx);
             
             % Calculate the centroid and integral of the distribution
             simsum = sum(ES);
@@ -150,18 +130,19 @@ if scan == 0
             res = sum(e_res.*e_res);
             
             res_set(i) = res;
+            figure(f3);
+            plot(res_set);
                         
         end
         
-    elseif conv
-        %PARAM.NRTL.R56 = 0*NRTL_R56_i/200 + NRTL_R56_i;
+    else
+        
         PARAM.LONE.GAIN = (PARAM.ENRG.E1 - PARAM.ENRG.E0)/cosd(PARAM.LONE.PHAS);
         OUT = LiTrack('FACETpar');
-        
-        
+                
         % Identify Max and Min of Simulated energy distribution
-        e_max = OUT.E.AXIS(256,6)/100;
-        e_min = OUT.E.AXIS(1,6)/100;
+        e_max = OUT.E.AXIS(256,S20)/100;
+        e_min = OUT.E.AXIS(1,S20)/100;
         
         % Find the Max and Min on the YAG energy axis
         [~,iMax] = min(abs(e_max - ENG_AX));
@@ -170,14 +151,13 @@ if scan == 0
         
         % Interpolate the simulated distribution onto the YAG axis
         xx = linspace(1,256,N);
-        ES = interp1(OUT.E.HIST(:,6)/100,xx);
+        ES = interp1(OUT.E.HIST(:,S20)/100,xx);
         
         % Calculate the centroid and integral of the distribution
         simsum = sum(ES);
         simcent = round(sum((1:N).*ES)/simsum);
         
         % embed interpolated distribution onto energy axis, with
-        % centr ros(1,PIX);
         ee(round(PIX/2-simcent):round(PIX/2-simcent+N-1)) = ES/simsum;
         
         % convolve energy spread with gaussian
@@ -197,11 +177,17 @@ if scan == 0
             
         figure(f1);
         plot(ENG_AX,Eplot,ENG_AX,ehappy);
-        text(-0.04,0.5e-3,num2str(res,'%10.3e'));
+        text(-0.05,1.5e-3,num2str(res,'%10.3e'),'fontsize',16);
+        text(-0.05,1.75e-3,num2str(OUT.I.PART(S20)*PARAM.INIT.NPART/PARAM.INIT.NESIM,'%10.3e'),'fontsize',16);
         figure(f2);
-        plot(OUT.Z.AXIS(:,6),OUT.Z.HIST(:,6));
+        plot(OUT.Z.AXIS(:,S20),OUT.Z.HIST(:,S20));
 
     end
+
+    
+    
+    
+    
     
 elseif scan == 1
     

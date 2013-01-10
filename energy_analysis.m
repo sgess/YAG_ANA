@@ -11,10 +11,12 @@ clear all;
 
 %mac69
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1103/';
 
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/';
 
 sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 
@@ -26,20 +28,27 @@ sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 % disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-03-094452.mat';
 
 %1138
-save_name  = '1138_test.mat';
+% save_name  = '1138_test.mat';
+% sim_name   = '5mm_scan.mat';
+% slim_name  = 'E200_1138_Slim.mat';
+% state_name = 'E200_1138_State.mat';
+% disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
+
+%1103
+save_name  = '1103_test.mat';
 sim_name   = '5mm_scan.mat';
-slim_name  = 'E200_1138_Slim.mat';
-state_name = 'E200_1138_State.mat';
-disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
+slim_name  = 'E200_1103_Slim.mat';
+state_name = 'E200_1103_State.mat';
+disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 
 load([data_dir slim_name]);
 load([data_dir state_name]);
 load([data_dir disp_name]);
 
-do_disp = 0;
+do_disp = 1;
 do_y = 0;
 plot_disp = 0;
-extract = 0;
+extract = 1;
 view_yag = 0;
 interp = 0;
 compare = 0;

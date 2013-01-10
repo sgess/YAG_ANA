@@ -70,8 +70,10 @@ for j = 1:nShots
     
     % NRTL stuff
     DATA.NRTL.PHAS(j) = good_data(j).aida.klys.phase;
-    if ~isempty(good_data(j).DR13_AMPL_11_VACT.val)
-        DATA.NRTL.AMPL(j) = good_data(j).DR13_AMPL_11_VACT.val;
+    if isfield(good_data(j),'DR13_AMPL_11_VACT')
+        if ~isempty(good_data(j).DR13_AMPL_11_VACT.val)
+            DATA.NRTL.AMPL(j) = good_data(j).DR13_AMPL_11_VACT.val;
+        end
     end
     
     
