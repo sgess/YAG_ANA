@@ -18,7 +18,7 @@ data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1103/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
 save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/';
 
-sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
+sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
 
 %1443
 % save_name  = 'NRTL_struct.mat';
@@ -36,7 +36,7 @@ sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/';
 
 %1103
 save_name  = '1103_test.mat';
-sim_name   = '5mm_scan.mat';
+sim_name   = 'E200_1103_scan.mat';
 slim_name  = 'E200_1103_Slim.mat';
 state_name = 'E200_1103_State.mat';
 disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
@@ -49,7 +49,7 @@ do_disp = 1;
 do_y = 0;
 plot_disp = 0;
 extract = 1;
-view_yag = 0;
+view_yag = 1;
 interp = 0;
 compare = 0;
 do_plot = 0;
@@ -76,7 +76,8 @@ end
 
 if interp
     disp('Interpolating simulations. . .');
-    INTERP = interp_sim(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
+    %INTERP = interp_sim(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
+    INTERP = interp_5D(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
     disp('Simulation interpolation complete.');
 end
 
