@@ -9,11 +9,15 @@ load(sim_file);
 %get param info
 [bins, l_el, n_el, r_el, p_el, c_el, n_out] = size(es);
 
+%store param info
+INTERP.I.VEC = [l_el n_el r_el p_el c_el];
+INTERP.I.IND = l_el*n_el*r_el*p_el*c_el;
+
 %interpolated energy spectrum
-INTERP.E.EE = zeros(PIX,l_el*n_el*r_el*p_el*c_el);
+INTERP.E.EE = zeros(l_el*n_el*r_el*p_el*c_el,PIX);
 
 %convolved energy spectrum
-INTERP.C.CC = zeros(PIX,l_el*n_el*r_el*p_el*c_el);
+INTERP.C.CC = zeros(l_el*n_el*r_el*p_el*c_el,PIX);
 
 %fwhm vals
 INTERP.E.FWHM = zeros(l_el, n_el, r_el, p_el, c_el);
@@ -30,13 +34,14 @@ g = g/sum(g);
 
 % Blur and interp
 for m = 1:c_el % nrtl ampl
+    disp(m);
     for l = 1:p_el % nrtl phase
         for k = 1:r_el % ramp phase
             for j = 1:n_el % num part
                 for i = 1:l_el % init length
                     
                     %index of interp matrix
-                    ind = i + 6*(j-1) + 36*(k-1) + 216*(l-1) + 1296*(m-1);
+                    ind = i + n_el*(j-1) + n_el*r_el*(k-1) + n_el*r_el*p_el*(l-1) + n_el*r_el*p_el*c_el*(m-1);
         
                     % Identify Max and Min of Simulated energy distribution
                     e_max = ee(bins,i,j,k,l,m,n_out)/100;
@@ -57,7 +62,7 @@ for m = 1:c_el % nrtl ampl
         
                     % embed interpolated distribution onto energy axis, with
                     % centroid of distribution at delta = 0
-                    INTERP.E.EE(round(PIX/2-simcent):round(PIX/2-simcent+N-1),ind) = ES/simsum;
+                    INTERP.E.EE(ind,round(PIX/2-simcent):round(PIX/2-simcent+N-1)) = ES/simsum;
         
                     % convolve energy spread with gaussian
                     yy = conv(ES,g);
@@ -69,11 +74,11 @@ for m = 1:c_el % nrtl ampl
         
                     % project convolved distribution onto energy axis, with
                     % centroid of distribution at delta = 0
-                    INTERP.C.CC(:,ind) = yy((concent-round(PIX/2)):(concent+round(PIX/2)-1))/consum;
+                    INTERP.C.CC(ind,:) = yy((concent-round(PIX/2)):(concent+round(PIX/2)-1))/consum;
         
                     %fwhm of energy and convolution
-                    [INTERP.E.FWHM(i,j,k,l,m),INTERP.E.LO(i,j,k,l,m),INTERP.E.HI(i,j,k,l,m)] = FWHM(ENG_AX,INTERP.E.EE(:,ind));
-                    [INTERP.C.FWHM(i,j,k,l,m),INTERP.C.LO(i,j,k,l,m),INTERP.C.HI(i,j,k,l,m)] = FWHM(ENG_AX,INTERP.C.CC(:,ind));
+                    [INTERP.E.FWHM(i,j,k,l,m),INTERP.E.LO(i,j,k,l,m),INTERP.E.HI(i,j,k,l,m)] = FWHM(ENG_AX,INTERP.E.EE(ind,:));
+                    [INTERP.C.FWHM(i,j,k,l,m),INTERP.C.LO(i,j,k,l,m),INTERP.C.HI(i,j,k,l,m)] = FWHM(ENG_AX,INTERP.C.CC(ind,:));
                     
                 end
             end
