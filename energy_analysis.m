@@ -35,9 +35,9 @@ sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
 % disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
 
 %1103
-save_name  = '1103_test.mat';
+save_name  = '1103_95yag.mat';
 sim_name   = 'E200_1103_scan.mat';
-interp_name= 'E200_1103_interp.mat';
+interp_name= 'E200_1103_interp95.mat';
 slim_name  = 'E200_1103_Slim.mat';
 state_name = 'E200_1103_State.mat';
 disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
@@ -51,14 +51,16 @@ do_y = 0;
 plot_disp = 0;
 extract = 1;
 view_yag = 0;
-interp = 0;
+interp = 1;
 compare = 1;
 do_plot = 0;
-savE = 0;
+savE = 1;
 
 if do_disp
     [eta_yag, beam_size] = DISP_ANA(data,plot_disp,do_y,savE,save_dir);
 end
+
+eta_yag = 0.95*eta_yag;
 
 %number of shots
 nShots = length(good_data);
@@ -79,7 +81,7 @@ if interp
     disp('Interpolating simulations. . .');
     %INTERP = interp_sim(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
     INTERP = interp_5D(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
-    save([sim_dir interp_name],'INTERP');
+    if savE; save([sim_dir interp_name],'INTERP'); end;
     disp('Simulation interpolation complete.');
 else
     load([sim_dir interp_name]);
@@ -89,11 +91,8 @@ if compare
     disp('Calculating residuals. . .');
     %RES = compare_data(DATA,INTERP,nShots,do_plot);
     RES = compare_5D(DATA,INTERP,nShots);
+    if savE; save([save_dir save_name],'RES'); end; 
     disp('Residual calculation complete.');
 end
 
-if savE
-    disp('Saving analysis. . .');
-    save([data_dir save_name],'DATA','INTERP','RES');
-    disp('Analysis saved.');
-end
+
