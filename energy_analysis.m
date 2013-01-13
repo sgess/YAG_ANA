@@ -51,8 +51,8 @@ do_y = 0;
 plot_disp = 0;
 extract = 1;
 view_yag = 0;
-interp = 1;
-compare = 1;
+interp = 0;
+compare = 0;
 do_plot = 0;
 savE = 1;
 

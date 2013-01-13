@@ -1,7 +1,7 @@
 clear all;
 
 save_dir = '/Users/sgess/Desktop/E200_1103/';
-file_name = 'E200_1103_scan';
+file_name = 'E200_1103_scan2';
 savE = 1;
 
 scan = 1;
@@ -10,38 +10,38 @@ global PARAM;
 
 
 E200_1103_PARAM;
-decker = -22.25;    
+decker = -20.3;    
     
 if scan == 1
     
     n_out = 2;
     
     % bunch length range
-    l_lo = 6.5e-3;
-    l_hi = 7.7e-3;
+    l_lo = 5.8e-3;
+    l_hi = 8.2e-3;
     
     % particle range
-    n_lo = 2.25e10;
-    n_hi = 2.70e10;
+    n_lo = 1.8e10;
+    n_hi = 2.40e10;
     
     % ramp phase range
-    r_lo = -.6;
-    r_hi = 0.6;
+    r_lo = -3.0;
+    r_hi = -1.0;
     
     % nrtl Phase range
-    p_lo = 88.9;
-    p_hi = 89.5;
+    p_lo = 88.7;
+    p_hi = 90.3;
     
     % comp range
-    c_lo = 0.0400;
-    c_hi = 0.0412;
+    c_lo = 0.0390;
+    c_hi = 0.0410;
     
     % number of sample points
-    l_el = 6;
-    n_el = 6;
-    r_el = 6;
-    p_el = 6;
-    c_el = 6;
+    l_el = 8;
+    n_el = 8;
+    r_el = 8;
+    p_el = 8;
+    c_el = 8;
     
     if test
         l_el = 1;

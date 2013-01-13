@@ -1,8 +1,8 @@
 clear all;
 
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1109/';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1103/';
 
-slim_name  = 'E200_1109_Slim.mat';
+slim_name  = 'E200_1103_Slim.mat';
 
 load([data_dir slim_name]);
 

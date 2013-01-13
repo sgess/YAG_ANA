@@ -24,7 +24,7 @@ e_blur = beam_size/eta_me;
 g = exp(-(ENG_AX.^2)/(2*e_blur^2));
 g = g/sum(g);
 
-r = 7;
+r = 65;
 
 ehappy = DATA.YAG.SPECTRUM(:,r)/sum(DATA.YAG.SPECTRUM(:,r));
 %ehappy = mean(DATA.YAG.SPECTRUM,2)/sum(mean(DATA.YAG.SPECTRUM,2));
@@ -34,29 +34,29 @@ f2 = 2;
 f3 = 3;
 if scan == 0
     
-    decker = -22.25;
-    ramp = -0.10;
+    decker = -20.3;
+    ramp = -2.10;
     
     PARAM.INIT.SIGZ0 = 6.80E-3;
-    PARAM.INIT.SIGD0 = 10.00E-4;
-    PARAM.INIT.NPART = 2.60E10;
-    PARAM.INIT.ASYM  = -0.300;
+    PARAM.INIT.SIGD0 = 9.00E-4;
+    PARAM.INIT.NPART = 2.12E10;
+    PARAM.INIT.ASYM  = -0.250;
     
-    PARAM.NRTL.AMPL  = 0.0412;
-    PARAM.NRTL.PHAS  = 89.35;
+    PARAM.NRTL.AMPL  = 0.0398;
+    PARAM.NRTL.PHAS  = 89.10;
     
     PARAM.NRTL.ELO   = -0.0340;
-    PARAM.NRTL.EHI   = 0.0220;
+    PARAM.NRTL.EHI   = 0.0340;
     
     PARAM.LI10.ELO   = -0.042;
-    PARAM.LI10.EHI   = 0.026;
+    PARAM.LI10.EHI   = 0.042;
     
     PARAM.LI20.ELO   = -0.034;
     PARAM.LI20.EHI   = 0.028;
     
-    PARAM.NRTL.R56   = 0.6036;
+    PARAM.NRTL.R56   = 0.6026;
     PARAM.NRTL.T566  = 1.075;
-    PARAM.LI10.R56   = -0.0760;
+    PARAM.LI10.R56   = -0.075786;
     
     PARAM.LONE.PHAS = decker+ramp;
     PARAM.LTWO.PHAS = ramp;
@@ -72,7 +72,7 @@ if scan == 0
         %ramp_i = -1.5;
         %decker_i = -21.315;
         %nrtl_ampl_i = 0.04045;
-        %nrtl_phas_i = 90.0;
+        nrtl_phas_i = 88.95;
         %sigz0_i = 7.7E-3;
         %sigd0_i = 7.5E-4;
         %part_i  = 2.6e10;
@@ -82,7 +82,7 @@ if scan == 0
             %ramp = (i-6)*ramp_i/10 + ramp_i;
             %decker = (i-6)*decker_i/100 + decker_i;
             %PARAM.NRTL.AMPL = (i-6)*nrtl_ampl_i/100 + nrtl_ampl_i;
-            %PARAM.NRTL.PHAS = (i-6)*nrtl_phas_i/1000 + nrtl_phas_i;
+            PARAM.NRTL.PHAS = (i-6)*nrtl_phas_i/1000 + nrtl_phas_i;
             %PARAM.INIT.SIGD0 = (i-6)*sigd0_i/100 + sigd0_i;
             %PARAM.INIT.SIGZ0 = (i-6)*sigz0_i/20 + sigz0_i;
             %PARAM.INIT.NPART = (i-6)*part_i/20 + part_i;
