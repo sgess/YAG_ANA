@@ -15,12 +15,12 @@ PARAM.SIMU.CONT  = 0;       % Contour plot
 
 % getting closer
 PARAM.INIT.SIGZ0 = 7.15E-3;  % RMS bunch length (m)
-PARAM.INIT.SIGD0 = 9.30E-4; % RMS energy spread
+PARAM.INIT.SIGD0 = 9.00E-4; % RMS energy spread
 PARAM.INIT.Z0BAR = 0;       % Z offset
 PARAM.INIT.D0BAR = 0;       % Energy offset
 PARAM.INIT.NESIM = 2E5;     % Number of simulated macro particles
 PARAM.INIT.NPART = 2.08E10;  % Number of electrons per bunch
-PARAM.INIT.ASYM  = -0.260;  % The Holtzapple skew
+PARAM.INIT.ASYM  = -0.250;  % The Holtzapple skew
 PARAM.INIT.TAIL  = 0;       % Not sure what this is
 PARAM.INIT.CUT   = 6;       % Not sure what this is
 
