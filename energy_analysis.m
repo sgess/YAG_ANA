@@ -53,19 +53,20 @@ interp_name= 'E200_1108_interp.mat';
 slim_name  = 'E200_1108_Slim.mat';
 state_name = 'E200_1108_State.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
-disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
+%disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
+disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-105028.mat';
 
 load([data_dir slim_name]);
 load([data_dir state_name]);
 load([data_dir disp_name]);
 
 do_disp = 1;
-do_y = 0;
-plot_disp = 0;
-extract = 1;
+do_y = 1;
+plot_disp = 1;
+extract = 0;
 view_yag = 0;
-interp = 1;
-compare = 1;
+interp = 0;
+compare = 0;
 do_plot = 0;
 savE = 0;
 
@@ -94,6 +95,7 @@ if extract
     disp('Data extraction complete.');
 end
 
+if 0
 
 if interp
     disp('Interpolating simulations. . .');
@@ -116,4 +118,4 @@ if compare
     disp('Residual calculation complete.');
 end
 
-
+end
