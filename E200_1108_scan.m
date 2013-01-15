@@ -75,6 +75,7 @@ if scan == 1
         for k = 1:r_el
             for l = 1:p_el;
                 for m = 1:c_el;
+                    disp(i);
                     
                     
                     
@@ -114,7 +115,7 @@ if scan == 1
     
     if savE
         save([save_dir file_name '.mat'],'PARAM','bl_fwhm','bl_sig','z_avg',...
-            'length','part','ramp','phase','NAMPL','decker',...
+            'length','ramp','phase','NAMPL','decker',...
             'e_avg','e_fwhm','e_sig','I_max','I_sig','N','bl','es','zz','ee');
     end
 
