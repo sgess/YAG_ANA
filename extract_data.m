@@ -1,4 +1,4 @@
-function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,nShots,view_yag)
+function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,view_yag)
 % Extract data from slimmed directory
 
 % NRTL stuff
@@ -25,6 +25,8 @@ DATA.YAG.RES = good_data(1).YAGS_LI20_2432.prof_RES;
 
 % YAG pixels
 DATA.YAG.PIX = good_data(1).YAGS_LI20_2432.prof_roiXN;
+DATA.YAG.MAXPIX = 0;
+DATA.YAG.pix = 0;
 
 % YAG Axis
 DATA.BEAM.ETA = eta_yag;
@@ -87,7 +89,13 @@ for j = 1:nShots
     DATA.PYRO.VAL(j) = good_data(j).BLEN_LI20_3158_BRAW.val;
     
     % YAG image alignment, centering, fwhm
-    IMG_1     = rot90(good_data(j).YAGS_LI20_2432.img,2)';
+    IMG_1 = rot90(good_data(j).YAGS_LI20_2432.img,2)';
+    %set bad pixel values to adjacent
+    if ~isempty(bad_pix)
+        for b = 1:length(bad_pix)
+            IMG_1(:,bad_pix(b)) = IMG_1(:,bad_pix(b)-1);
+        end
+    end
     LINE(:,j) = mean(IMG_1(lo_line:hi_line,:),1);
     P_cent(j) = sum(DATA.AXIS.XX.*double(LINE(:,j))')/sum(double(LINE(:,j)));
     E_cent(j) = sum(DATA.AXIS.ENG.*double(LINE(:,j))')/sum(double(LINE(:,j)));
@@ -128,6 +136,12 @@ for j = 1:nShots
     
     % FWHM of tailored spectrum
     [DATA.YAG.FWHM(j),DATA.YAG.LO(j),DATA.YAG.HI(j)] = FWHM(DATA.AXIS.ENG,DATA.YAG.SPECTRUM(:,j));
+    lopix = find(DATA.YAG.SPECTRUM(:,j),1,'first');
+    hipix = find(DATA.YAG.SPECTRUM(:,j),1,'last');
+    pixels = hipix - lopix;
+    if pixels > DATA.YAG.MAXPIX
+        DATA.YAG.MAXPIX = pixels;
+    end
     
     % Integral of tailored spectrum
     DATA.YAG.SUM(j) = sum(DATA.YAG.SPECTRUM(:,j));
@@ -137,14 +151,35 @@ for j = 1:nShots
         s1 = 10; 
         figure(s1); 
         subplot(2,1,1); 
-        imagesc(IMG_1); 
+        imagesc(IMG_1);
+        hold on;
+        line([0 DATA.YAG.PIX],[lo_line lo_line],'color','r');
+        line([0 DATA.YAG.PIX],[hi_line hi_line],'color','r');
+        hold off;
         subplot(2,1,2); 
         plot(DATA.AXIS.ENG,cutLINE(:,j),...
             DATA.AXIS.ENG(i_min(j)),cutLINE(i_min(j),j),'r*',...
             DATA.AXIS.ENG(i_max(j)),cutLINE(i_max(j),j),'g*',...
             DATA.AXIS.ENG(indcent(j)),cutLINE(indcent(j),j),'m*',...
             DATA.AXIS.ENG(lo(j)),cutLINE(lo(j),j),'c*',...
-            DATA.AXIS.ENG(hi(j)),cutLINE(hi(j),j),'k*'); 
+            DATA.AXIS.ENG(hi(j)),cutLINE(hi(j),j),'k*');
         pause;
     end
+end
+
+%store some smaller versions and force even pixels
+if mod(DATA.YAG.MAXPIX,2)
+    DATA.YAG.pix = DATA.YAG.MAXPIX+101;
+else
+    DATA.YAG.pix = DATA.YAG.MAXPIX+100;
+end
+DATA.YAG.spectrum = zeros(DATA.YAG.pix,nShots);
+DATA.YAG.sum = zeros(1,nShots);
+DATA.AXIS.xx  = DATA.YAG.RES*(1:DATA.YAG.pix) - DATA.YAG.RES*DATA.YAG.pix/2;
+DATA.AXIS.eng = DATA.AXIS.xx/(DATA.BEAM.ETA*1e3);
+for j = 1:nShots
+    
+    DATA.YAG.spectrum(:,j) = double(cutLINE((indcent(j)-DATA.YAG.pix/2):(indcent(j)+DATA.YAG.pix/2-1),j));
+    DATA.YAG.sum(j) = sum(DATA.YAG.spectrum(:,j));
+    
 end

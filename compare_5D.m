@@ -24,7 +24,7 @@ for Y=1:nShots
     disp(['Progress = ' num2str(Y*100/nShots,'%0.2f') '%']);
     
     % This is a PIX by IND matrix with the YAG spectrum repeated IND times
-    SPECS = ones(INTERP.I.IND,1) * DATA.YAG.SPECTRUM(:,Y)'/DATA.YAG.SUM(Y);
+    SPECS = ones(INTERP.I.IND,1) * (DATA.YAG.spectrum(:,Y)/DATA.YAG.sum(Y))';
     
     % simple subtract off simulated data (should also be PIX x IND)
     res_simp = SPECS - INTERP.E.EE;
@@ -83,7 +83,7 @@ for Y=1:nShots
                     for i = 1:l_el % init length
                     
                         %index of interp matrix
-                        ind = i + 6*(j-1) + 36*(k-1) + 216*(l-1) + 1296*(m-1);
+                        ind = i + n_el*(j-1) + n_el*r_el*(k-1) + n_el*r_el*p_el*(l-1) + n_el*r_el*p_el*c_el*(m-1);
                         
                         RES.SIMP.SQ(i,j,k,l,m,Y) = simp_sq(ind);
                         RES.SIMP.AB(i,j,k,l,m,Y) = simp_ab(ind);

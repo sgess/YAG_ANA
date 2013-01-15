@@ -62,7 +62,7 @@ for m = 1:c_el % nrtl ampl
         
                     % embed interpolated distribution onto energy axis, with
                     % centroid of distribution at delta = 0
-                    INTERP.E.EE(ind,round(PIX/2-simcent):round(PIX/2-simcent+N-1)) = ES/simsum;
+                    INTERP.E.EE(ind,(PIX/2-simcent):(PIX/2-simcent+N-1)) = ES/simsum;
         
                     % convolve energy spread with gaussian
                     yy = conv(ES,g);
@@ -74,7 +74,7 @@ for m = 1:c_el % nrtl ampl
         
                     % project convolved distribution onto energy axis, with
                     % centroid of distribution at delta = 0
-                    INTERP.C.CC(ind,:) = yy((concent-round(PIX/2)):(concent+round(PIX/2)-1))/consum;
+                    INTERP.C.CC(ind,:) = yy((concent-PIX/2):(concent+PIX/2-1))/consum;
         
                     %fwhm of energy and convolution
                     [INTERP.E.FWHM(i,j,k,l,m),INTERP.E.LO(i,j,k,l,m),INTERP.E.HI(i,j,k,l,m)] = FWHM(ENG_AX,INTERP.E.EE(ind,:));
