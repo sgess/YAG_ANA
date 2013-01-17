@@ -40,7 +40,10 @@
   LI20_ISR  = PARAM.LI20.ISR;   %
   LI20_ELO  = PARAM.LI20.ELO;   % S20 low energy cut
   LI20_EHI  = PARAM.LI20.EHI;   % S20 high energy cut
-  
+  LI20_R16  = PARAM.LI20.R16;   % Dispersion
+  LI20_T166 = PARAM.LI20.T166;  % Chromatic dispersion
+  LI20_beta = PARAM.LI20.BETA;  % beta function
+  LI20_emit = PARAM.LI20.EMIT;  % emittance
   
   % Initial beam parameters
   inp       = 'G';		        % gaussian Z and dE/E (see sigz0 =..., sigd0 =...)
@@ -101,6 +104,7 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 % Z-cut limits |	code=36            z_min           z_max            -               -               -
 % con-N z-cut  |	code=37            dN/N             -               -               -               -
 % modulation   |	code=44           mod-amp        lambda/m           -               -               -
+% chromatic map|    code=98            R16/mm         T166/mm         beta/m       emittance/m          -
 % STOP	       |	code=99             -               -               -               -               -
 %=============================================================================================================
 % CODE<0 makes a plot here, CODE>0 gives no plot here.
@@ -108,22 +112,23 @@ comment = 'FACET in Li20';	% text comment which appears at bottom of plots
 
 
 beamline = [
-       11		0              0                    lambdaS   0		  0             % S-band
-       11		NRTL_ampl      NRTL_phas            lambdaS   1		  NRTL_leff     % Compressor cavity AMPL DR13 13 VDES
-       26	    NRTL_ELO       NRTL_EHI             0		  0       0             % Approximate energy acceptance of NRTL
-       6		NRTL_R56       NRTL_T566            E0        0		  0             % Design NRTL ~0.603, BDES to KMOD for E-164 gives 0.588
-       11		LONE_gain      LONE_phas            lambdaS   1       LONE_leff     % 2-6, nominal 9GeV, no feedback
-       13       E1             LONE_ampl            -90       90      lambdaS       % Energy feedback to set 9GeV in chicane
-       7	    LI10_R56       E1                   0         0       0             % 2nd half of the chicane. Design was -0.0745, as built -0.076
-       22       LI10_ISR       0                    0         0       0             % Approximate SR growth in E-spread from chicane
-       26       LI10_ELO       LI10_EHI             0         0       0             % Momentum Slits in FACET
-       37		0.01           1                    0		  0		  0             % Clip any rediculously long tails
-      -10       E2             LTWO_phas            lambdaS   1       LTWO_leff     % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
-       6		LI20_R56       LI20_T566            E2        0		  0             % FACET 'dogleg' like chicane
-       22       LI20_ISR       0                    0         0       0             % Approximate SR growth in E-spread from dogleg
-       37       0.01           1                    0		  0		  0             % Clip any rediculously long tails
-       26       LI20_ELO       LI20_EHI             0         0       0             % Momentum Slits in FACET
-       99	    0              0                    0		  0		  0             % End
+       11		0              0             lambdaS    0           0             % S-band
+       11		NRTL_ampl      NRTL_phas     lambdaS    1           NRTL_leff     % Compressor cavity AMPL DR13 13 VDES
+       26	    NRTL_ELO       NRTL_EHI      0          0           0             % Approximate energy acceptance of NRTL
+       6		NRTL_R56       NRTL_T566     E0         0           0             % Design NRTL ~0.603, BDES to KMOD for E-164 gives 0.588
+       11		LONE_gain      LONE_phas     lambdaS    1           LONE_leff     % 2-6, nominal 9GeV, no feedback
+       13       E1             LONE_ampl     -90        90          lambdaS       % Energy feedback to set 9GeV in chicane
+       7	    LI10_R56       E1            0          0           0             % 2nd half of the chicane. Design was -0.0745, as built -0.076
+       22       LI10_ISR       0             0          0           0             % Approximate SR growth in E-spread from chicane
+       26       LI10_ELO       LI10_EHI      0          0           0             % Momentum Slits in FACET
+       37		0.01           1             0          0           0             % Clip any rediculously long tails
+      -10       E2             LTWO_phas     lambdaS    1           LTWO_leff     % Boost to 23 GeV. 868m w/LCLS-II mods from P. Emma email 4-FEB-2011
+       6		LI20_R56       LI20_T566     E2         0           0             % FACET 'dogleg' like chicane
+       22       LI20_ISR       0             0          0           0             % Approximate SR growth in E-spread from dogleg
+       37       0.01           1             0          0           0             % Clip any rediculously long tails
+       26       LI20_ELO       LI20_EHI      0          0           0             % Momentum Slits in FACET
+       98       LI20_R16       LI20_T166     LI20_beta  LI20_emit   0             % Create chromatically dispersed distribution
+       99	    0              0             0          0           0             % End
        ];
    
 

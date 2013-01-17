@@ -1,7 +1,7 @@
 %clear all;
 %load('../DATA/E200_1108/E200_1108_Slim.mat');
 
-nShots = length(good_data);
+%nShots = length(good_data);
 
 eta_yag = 120;
 
@@ -31,10 +31,10 @@ g = exp(-(ENG_AX.^2)/(2*e_blur^2));
 g = g/sum(g);
 %g=ones(1,PIX)/PIX;
 
-r = 1;
+r = 42;
 
 ehappy = DATA.YAG.SPECTRUM(:,r)/DATA.YAG.SUM(:,r);
-
+ex = zeros(PIX,1);
 
 global PARAM;
 
@@ -49,35 +49,40 @@ f1 = 1;
 f2 = 2;
 f3 = 3;
     
-% decker = -17.4;
-% ramp = +0.70;
+ decker = -16.8;
+ %ramp = +0.9286;
+ ramp = -0.0;
 % 
-% PARAM.INIT.SIGZ0 = 7.00E-3;
-% PARAM.INIT.SIGD0 = 8.00E-4;
-% PARAM.INIT.NPART = 2.00E10;
-% PARAM.INIT.ASYM  = -0.250;
+PARAM.INIT.SIGZ0 = 5.70E-3;
+PARAM.INIT.SIGD0 = 5.50E-4;
+PARAM.INIT.NPART = 2.10E10;
+PARAM.INIT.ASYM  = -0.100;
 % 
-% PARAM.NRTL.AMPL  = 0.033;
-% PARAM.NRTL.PHAS  = 88.80;
+ PARAM.NRTL.AMPL  = 0.0330;
+ PARAM.NRTL.PHAS  = 88.70;
 % 
-% PARAM.NRTL.ELO   = -0.0250;
-% PARAM.NRTL.EHI   = 0.0250;
+PARAM.NRTL.ELO   = -0.0330;
+PARAM.NRTL.EHI   = 0.0300;
 % 
-% PARAM.LI10.ELO   = -0.042;
-% PARAM.LI10.EHI   = 0.042;
+PARAM.LI10.ELO   = -0.036;
+PARAM.LI10.EHI   = 0.034;
 % 
-% PARAM.LI20.ELO   = -0.034;
-% PARAM.LI20.EHI   = 0.028;
+PARAM.LI20.ELO   = -0.000;
+PARAM.LI20.EHI   = 0.034;
 % 
 % PARAM.NRTL.R56   = 0.6026;
 % PARAM.NRTL.T566  = 1.075;
 % PARAM.LI10.R56   = -0.075786;
 % 
-% PARAM.LONE.PHAS = decker+ramp;
-% PARAM.LTWO.PHAS = ramp;
+ PARAM.LONE.PHAS = decker+ramp;
+ PARAM.LTWO.PHAS = ramp;
 % 
 % PARAM.LI20.R56   = 0.0050;
 % PARAM.LI20.T566  = 0.100;
+PARAM.LI20.R16   = 120;
+PARAM.LI20.T166  = 0;
+PARAM.LI20.BETA  = 0;
+PARAM.LI20.EMIT  = 100e-6;
 
 dither = 0;
 
@@ -159,21 +164,41 @@ else
     e_max = OUT.E.AXIS(256,S20)/100;
     e_min = OUT.E.AXIS(1,S20)/100;
     
+    % Identify Max and Min of distorted energy distribution
+    ex_max = OUT.X.AXIS(256)/PARAM.LI20.R16;
+    ex_min = OUT.X.AXIS(1)/PARAM.LI20.R16;
+
     % Find the Max and Min on the YAG energy axis
     [~,iMax] = min(abs(e_max - ENG_AX));
     [~,iMin] = min(abs(e_min - ENG_AX));
     N = iMax - iMin + 1;
     
+    % Find the Max and Min on the YAG energy axis
+    [~,xMax] = min(abs(ex_max - ENG_AX));
+    [~,xMin] = min(abs(ex_min - ENG_AX));
+    Nx = xMax - xMin + 1;
+    
     % Interpolate the simulated distribution onto the YAG axis
     xx = linspace(1,256,N);
     ES = interp1(OUT.E.HIST(:,S20)/100,xx);
+    
+    % Interpolate the simulated distribution onto the YAG axis
+    xe = linspace(1,256,Nx);
+    EX = interp1(OUT.X.HIST/PARAM.LI20.R16,xe);
     
     % Calculate the centroid and integral of the distribution
     simsum = sum(ES);
     simcent = round(sum((1:N).*ES)/simsum);
     
+    % Calculate the centroid and integral of the distribution
+    esum = sum(EX);
+    ecent = round(sum((1:Nx).*EX)/esum);
+    
     % embed interpolated distribution onto energy axis, with
     ee(round(PIX/2-simcent):round(PIX/2-simcent+N-1)) = ES/simsum;
+    
+    % embed interpolated distribution onto energy axis, with
+    ex(round(PIX/2-ecent):round(PIX/2-ecent+Nx-1)) = EX/esum;
     
     % convolve energy spread with gaussian
     yy = conv(ES,g);
@@ -190,10 +215,16 @@ else
     e_res = ehappy - Eplot';
     res = sum(e_res.*e_res);
     
+    ex_res = ehappy - ex;
+    xres = sum(ex_res.^2);
+    
     figure(f1);
-    plot(ENG_AX,Eplot,ENG_AX,ehappy);
-    text(-0.05,1.5e-3,num2str(res,'%10.3e'),'fontsize',16);
-    text(-0.05,1.75e-3,num2str(OUT.I.PART(S20)*PARAM.INIT.NPART/PARAM.INIT.NESIM,'%10.3e'),'fontsize',16);
+    %plot(ENG_AX,Eplot,ENG_AX,ehappy);
+    plot(ENG_AX(375:775),ex(375:775),ENG_AX(375:775),ehappy(375:775));
+    %text(-0.05,1.5e-3,num2str(res,'%10.3e'),'fontsize',16);
+    %text(-0.05,1.75e-3,num2str(OUT.I.PART(S20)*PARAM.INIT.NPART/PARAM.INIT.NESIM,'%10.3e'),'fontsize',16);
+    text(-0.00,1.5e-3,num2str(xres,'%10.3e'),'fontsize',16);
+    text(-0.00,1.75e-3,num2str(OUT.I.PART(S20)*PARAM.INIT.NPART/PARAM.INIT.NESIM,'%10.3e'),'fontsize',16);
     figure(f2);
     plot(OUT.Z.AXIS(:,S20),OUT.Z.HIST(:,S20));
     

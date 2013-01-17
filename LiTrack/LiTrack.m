@@ -688,6 +688,15 @@ for j  = 1:nb					% loop over all beamline sections of BL-file
 	d = d + id_rms*randn(length(d),1);	% incread dE/E by the incoherent addition [ ]
     E = Ebar*(1 + d);			% load energy array [GeV]
   end
+  if abs(cod) == 98         % second order energy distribution
+      r16 = beamline(j,2);
+      t166= beamline(j,3);
+      beta= beamline(j,4);
+      emit= beamline(j,5);
+      gam = Ebar*1000/0.510998928;
+      sig = 1000*sqrt(beta*emit/gam);
+      XX = r16*d + t166*d.^2 + sig*randn(length(d),1);
+  end 
   ii = find(z);
   z_bar = 1E3*mean(z(ii));	% mean z-pos AFTER CUTS [mm]
   if cod < 0 | cod == 99    % plot after each negative code point in beamline
@@ -924,6 +933,7 @@ for j  = 1:nb					% loop over all beamline sections of BL-file
       %end
     end
   end                                               % end cod < 0 | cod == 99 stuff
+  
   if abs(cod) == 99
     break
   end
@@ -971,6 +981,13 @@ if nargout == 1
     LT_OUTPUT.I.PART = fcutj;
     LT_OUTPUT.I.PEAK = I_pkj;
     LT_OUTPUT.I.SIG  = I_pkfj;
+    
+    if exist('XX')
+        LT_OUTPUT.X.DIST = XX;
+        [Nx,X]  = hist(XX,Nbin);
+        LT_OUTPUT.X.HIST = Nx;
+        LT_OUTPUT.X.AXIS = X;
+    end
 end
 
 end_time = get_time;

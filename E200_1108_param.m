@@ -108,6 +108,10 @@ PARAM.LI20.T566  = 0.100;   % Sector 20 chicane T566 (m) % = 100 mm for R56 = 5m
 PARAM.LI20.ISR   = 0.8E-5;  % ISR energy spread from bends
 PARAM.LI20.ELO   = -0.030;   % RTL lower momentum cut (GeV)
 PARAM.LI20.EHI   = 0.030;    % RTL upper momentum cut (GeV)
+PARAM.LI20.R16   = 120;
+PARAM.LI20.T166  = 1000;
+PARAM.LI20.BETA  = 5;
+PARAM.LI20.EMIT  = 100e-6;
 
 % from week of jan 7-11
 % PARAM.LI20.NLO   = 0;       % notch low

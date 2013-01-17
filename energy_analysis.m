@@ -22,7 +22,8 @@ data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1108/';
 save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/';
 
 
-sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
+%sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
+sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1108/';
 
 %1443
 % save_name  = 'NRTL_struct.mat';
@@ -47,28 +48,28 @@ sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
 % disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 
 %1108
-save_name  = '1109_95yag.mat';
-sim_name   = 'E200_1103_scan2.mat';
-interp_name= 'E200_1108_interp.mat';
+save_name  = '1108_eta95.mat';
+sim_name   = 'E200_1108_scan.mat';
+interp_name= 'E200_1108_interp95.mat';
 slim_name  = 'E200_1108_Slim.mat';
 state_name = 'E200_1108_State.mat';
-%disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
+disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
-disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-105028.mat';
+%disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-105028.mat';
 
 load([data_dir slim_name]);
 load([data_dir state_name]);
 load([data_dir disp_name]);
 
 do_disp = 1;
-do_y = 1;
-plot_disp = 1;
-extract = 0;
+do_y = 0;
+plot_disp = 0;
+extract = 1;
 view_yag = 0;
-interp = 0;
-compare = 0;
+interp = 1;
+compare = 1;
 do_plot = 0;
-savE = 0;
+savE = 1;
 
 if do_disp
     disp('Analyzing dispersion data. . .');
@@ -95,13 +96,12 @@ if extract
     disp('Data extraction complete.');
 end
 
-if 0
-
 if interp
     disp('Interpolating simulations. . .');
     %INTERP = interp_sim(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
     %INTERP = interp_5D(DATA.YAG.MAXPIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
-    INTERP = interp_5D(DATA.YAG.pix,DATA.AXIS.eng,beam_size,eta_yag,[sim_dir sim_name]);
+    %INTERP = interp_5D(DATA.YAG.pix,DATA.AXIS.eng,beam_size,eta_yag,[sim_dir sim_name]);
+    INTERP = interp_4D(DATA.YAG.pix,DATA.AXIS.eng,beam_size,eta_yag,[sim_dir sim_name]);
     if savE; save([sim_dir interp_name],'INTERP'); end;
     disp('Simulation interpolation complete.');
 else
@@ -113,9 +113,8 @@ end
 if compare
     disp('Calculating residuals. . .');
     %RES = compare_data(DATA,INTERP,nShots,do_plot);
-    RES = compare_5D(DATA,INTERP,nShots);
+    %RES = compare_5D(DATA,INTERP,nShots);
+    RES = compare_4D(DATA,INTERP,nShots);
     if savE; save([save_dir save_name],'RES'); end; 
     disp('Residual calculation complete.');
-end
-
 end
