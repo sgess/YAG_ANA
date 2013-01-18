@@ -1,7 +1,7 @@
-%clear all;
-%load('../DATA/E200_1108/E200_1108_Slim.mat');
+clear all;
+load('../DATA/E200_1108/E200_1108_Slim.mat');
 
-%nShots = length(good_data);
+nShots = length(good_data);
 
 eta_yag = 120;
 
@@ -15,7 +15,7 @@ hi_line = 200;
 
 bad_pix = [638 639];
 
-%DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,0);
+DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,0);
 
 
 
@@ -67,7 +67,7 @@ PARAM.NRTL.EHI   = 0.0300;
 PARAM.LI10.ELO   = -0.036;
 PARAM.LI10.EHI   = 0.034;
 % 
-PARAM.LI20.ELO   = -0.000;
+PARAM.LI20.ELO   = -0.034;
 PARAM.LI20.EHI   = 0.034;
 % 
 % PARAM.NRTL.R56   = 0.6026;

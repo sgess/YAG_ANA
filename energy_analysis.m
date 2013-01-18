@@ -65,11 +65,11 @@ do_disp = 1;
 do_y = 0;
 plot_disp = 0;
 extract = 1;
-view_yag = 0;
-interp = 1;
-compare = 1;
+view_yag = 1;
+interp = 0;
+compare = 0;
 do_plot = 0;
-savE = 1;
+savE = 0;
 
 if do_disp
     disp('Analyzing dispersion data. . .');
