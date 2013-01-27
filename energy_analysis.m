@@ -65,7 +65,7 @@ do_disp = 1;
 do_y = 0;
 plot_disp = 0;
 extract = 1;
-view_yag = 1;
+view_yag = 0;
 interp = 0;
 compare = 0;
 do_plot = 0;
@@ -78,7 +78,7 @@ if do_disp
     disp('Dispersion analyis complete.');
 end
 
-eta_yag = 0.95*eta_yag;
+eta_yag = 1.00*eta_yag;
 
 %number of shots
 nShots = length(good_data);
