@@ -3,9 +3,11 @@ clear all;
 %arg
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1103/';
 
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1138/';
+save_dir = '/Users/sgess/Desktop/plots/E200/E200_1103/';
 
 %sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
@@ -13,17 +15,17 @@ clear all;
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1103/';
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1108/';
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1108/';
 
 
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/';
 
 
 %sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
-sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1108/';
+%sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1108/';
 
 %1443
 % save_name  = 'NRTL_struct.mat';
@@ -40,20 +42,20 @@ sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1108/';
 % disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
 
 %1103
-% save_name  = '1103_95yag.mat';
-% sim_name   = 'E200_1103_scan2.mat';
-% interp_name= 'E200_1103_interp2.mat';
-% slim_name  = 'E200_1103_Slim.mat';
-% state_name = 'E200_1103_State.mat';
-% disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
+save_name  = '1103_95yag.mat';
+sim_name   = 'E200_1103_scan2.mat';
+interp_name= 'E200_1103_interp2.mat';
+slim_name  = 'E200_1103_Slim.mat';
+state_name = 'E200_1103_State.mat';
+disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 
 %1108
-save_name  = '1108_eta95.mat';
-sim_name   = 'E200_1108_scan.mat';
-interp_name= 'E200_1108_interp95.mat';
-slim_name  = 'E200_1108_Slim.mat';
-state_name = 'E200_1108_State.mat';
-disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
+% save_name  = '1108_eta95.mat';
+% sim_name   = 'E200_1108_scan.mat';
+% interp_name= 'E200_1108_interp95.mat';
+% slim_name  = 'E200_1108_Slim.mat';
+% state_name = 'E200_1108_State.mat';
+% disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-105028.mat';
 
