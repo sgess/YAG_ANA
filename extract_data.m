@@ -1,4 +1,4 @@
-function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,view_yag)
+function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,view_yag,too_wide)
 % Extract data from slimmed directory
 
 % NRTL stuff
@@ -168,18 +168,20 @@ for j = 1:nShots
 end
 
 %store some smaller versions and force even pixels
-if mod(DATA.YAG.MAXPIX,2)
-    DATA.YAG.pix = DATA.YAG.MAXPIX+101;
-else
-    DATA.YAG.pix = DATA.YAG.MAXPIX+100;
-end
-DATA.YAG.spectrum = zeros(DATA.YAG.pix,nShots);
-DATA.YAG.sum = zeros(1,nShots);
-DATA.AXIS.xx  = DATA.YAG.RES*(1:DATA.YAG.pix) - DATA.YAG.RES*DATA.YAG.pix/2;
-DATA.AXIS.eng = DATA.AXIS.xx/(DATA.BEAM.ETA*1e3);
-for j = 1:nShots
-    
-    DATA.YAG.spectrum(:,j) = double(cutLINE((indcent(j)-DATA.YAG.pix/2):(indcent(j)+DATA.YAG.pix/2-1),j));
-    DATA.YAG.sum(j) = sum(DATA.YAG.spectrum(:,j));
-    
+if too_wide
+    if mod(DATA.YAG.MAXPIX,2)
+        DATA.YAG.pix = DATA.YAG.MAXPIX+101;
+    else
+        DATA.YAG.pix = DATA.YAG.MAXPIX+100;
+    end
+    DATA.YAG.spectrum = zeros(DATA.YAG.pix,nShots);
+    DATA.YAG.sum = zeros(1,nShots);
+    DATA.AXIS.xx  = DATA.YAG.RES*(1:DATA.YAG.pix) - DATA.YAG.RES*DATA.YAG.pix/2;
+    DATA.AXIS.eng = DATA.AXIS.xx/(DATA.BEAM.ETA*1e3);
+    for j = 1:nShots
+        
+        DATA.YAG.spectrum(:,j) = double(cutLINE((indcent(j)-DATA.YAG.pix/2):(indcent(j)+DATA.YAG.pix/2-1),j));
+        DATA.YAG.sum(j) = sum(DATA.YAG.spectrum(:,j));
+        
+    end
 end

@@ -4,9 +4,9 @@ clear all;
 % data_fat = 'E200_1138_Step_1.mat';
 % data_thin = 'E200_1138_Slim.mat';
 
-data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
-data_fat = 'E200_1443_Step_1.mat';
-data_thin = 'E200_1443_Slim.mat';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/MR_TCAV_1501/';
+data_fat = 'MR_TCAV_sampling_1501_Step_01.mat';
+data_thin = 'MR_TCAV_sampling_1501_slim.mat';
 
 savE = 1;
 
@@ -40,7 +40,7 @@ names = fieldnames(data.Sample_01);
 
 %Find profile monitors
 prof = strncmp(fieldnames(data.Sample_01),'PROF',4);
-otrs = strncmp(fieldnames(data.Sample_01),'OTRS',4);
+%otrs = strncmp(fieldnames(data.Sample_01),'OTRS',4);
 
 %dump profile monitors and cocatanate samples
 for i=1:nSamp;
@@ -48,7 +48,7 @@ for i=1:nSamp;
     Num = num2str(i,'%02d');
     
     d1 = rmfield(data.(['Sample_' Num]),names(prof));
-    d1 = rmfield(d1,names(otrs));
+    %d1 = rmfield(d1,names(otrs));
     if exist('d','var')
         d = [d d1];
     else
