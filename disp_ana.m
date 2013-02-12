@@ -68,10 +68,10 @@ if plot_disp
     set(l,'fontsize',16);
     set(l,'location','northwest');
     v = axis;
-    text(0.3*v(2),0.65*v(3),['\eta = ' num2str(eta_bpm_2445,'%0.2f') ' mm'],'fontsize',14,'color','g');
-    text(0.3*v(2),0.75*v(3),['T_{166} = ' num2str(T166_bpm_2445,'%0.2f') ' mm'],'fontsize',14,'color','g');
-    text(0.3*v(2),0.85*v(3),['\eta = ' num2str(px_2445(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
-    text(0.3*v(2),0.95*v(3),['T_{166} = ' num2str(px_2445(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    text(0.23*v(2),0.65*v(3),['\eta = ' num2str(eta_bpm_2445,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.23*v(2),0.75*v(3),['T_{166} = ' num2str(T166_bpm_2445,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.23*v(2),0.85*v(3),['\eta = ' num2str(px_2445(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    text(0.23*v(2),0.95*v(3),['T_{166} = ' num2str(px_2445(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
     hold off;
     if savE; saveas(gca,[save_dir 'bpm2445_disp.pdf']); end;
     
@@ -87,10 +87,10 @@ if plot_disp
     set(l,'fontsize',16);
     set(l,'location','northwest');
     v = axis;
-    text(0.3*v(2),0.50*v(3),['\eta = ' num2str(eta_bpm_2050,'%0.2f') ' mm'],'fontsize',14,'color','g');
-    text(0.3*v(2),0.65*v(3),['T_{166} = ' num2str(T166_bpm_2050,'%0.2f') ' mm'],'fontsize',14,'color','g');
-    text(0.3*v(2),0.80*v(3),['\eta = ' num2str(px_2050(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
-    text(0.3*v(2),0.95*v(3),['T_{166} = ' num2str(px_2050(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    text(0.23*v(2),0.50*v(3),['\eta = ' num2str(eta_bpm_2050,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.23*v(2),0.65*v(3),['T_{166} = ' num2str(T166_bpm_2050,'%0.2f') ' mm'],'fontsize',14,'color','g');
+    text(0.23*v(2),0.80*v(3),['\eta = ' num2str(px_2050(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
+    text(0.23*v(2),0.95*v(3),['T_{166} = ' num2str(px_2050(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
     hold off;
     if savE; saveas(gca,[save_dir 'bpm2050_disp.pdf']); end;
     
@@ -108,8 +108,8 @@ if plot_disp
         ylabel('Y (mm)','fontsize',16);
         title('BPM 2445','fontsize',16);
         v = axis;
-        text(0.35*v(2),0.10*v(3),['\eta_y = ' num2str(py_2445(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
-        text(0.35*v(2),0.15*v(3),['T_{366} = ' num2str(py_2445(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
+        text(0.35*v(2),0,['\eta_y = ' num2str(py_2445(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
+        text(0.35*v(2),-0.025,['T_{366} = ' num2str(py_2445(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
         hold off;
         if savE; saveas(gca,[save_dir 'bpm2445y_disp.pdf']); end;
         
@@ -121,8 +121,8 @@ if plot_disp
         ylabel('Y (mm)','fontsize',16);
         title('BPM 2050','fontsize',16);
         v = axis;
-        text(0.35*v(2),0.40*v(3),['\eta_y = ' num2str(py_2050(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
-        text(0.35*v(2),0.45*v(3),['T_{366} = ' num2str(py_2050(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
+        text(0.35*v(2),0.95*v(3),['\eta_y = ' num2str(py_2050(3),'%0.2f') ' mm'],'fontsize',14,'color','r');
+        text(0.35*v(2),0.98*v(3),['T_{366} = ' num2str(py_2050(2),'%0.2f') ' mm'],'fontsize',14,'color','r');
         hold off;
         if savE; saveas(gca,[save_dir 'bpm2050y_disp.pdf']); end;
         

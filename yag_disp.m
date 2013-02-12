@@ -1,7 +1,12 @@
 clear all;
 
-data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/MR_TCAV_1501/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/MR_TCAV_1501/';
+savE = 0;
+
+%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/MR_TCAV_1501/';
+%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/MR_TCAV_1501/';
+
+data_dir = '/Users/sgess/Desktop/data/E200_DATA/MR_TCAV_DISP/';
+save_dir = '/Users/sgess/Desktop/plots/E200/MR_TCAV_DISP/';
 
 yag_name_20   = 'ProfMon-YAGS_LI20_2432-2012-07-04-020725.mat';
 yag_name_50   = 'ProfMon-YAGS_LI20_2432-2012-07-04-020829.mat';
@@ -15,22 +20,26 @@ res = 12.05;
 x = 12.05 * (1:608);
 x = (x - mean(x))/1000;
 
-% figure(1);
-% 
-% subplot(1,3,1);
-% imagesc(x,1:356,yag20.data.img);
-% title('20 MeV Energy Offset','fontsize',14);
-% xlabel('X (mm)','fontsize',14);
-% subplot(1,3,2);
-% imagesc(x,1:356,yag50.data.img);
-% title('50 MeV Energy Offset','fontsize',14);
-% xlabel('X (mm)','fontsize',14);
-% subplot(1,3,3);
-% imagesc(x,1:356,yag80.data.img);
-% title('80 MeV Energy Offset','fontsize',14);
-% xlabel('X (mm)','fontsize',14);
+figure(1);
 
-%saveas(gca,[save_dir 'YAG_IMGS.pdf']);
+subplot(1,3,1);
+imagesc(x,1:356,yag20.data.img);
+title('20 MeV Energy Offset','fontsize',14);
+xlabel('X (mm)','fontsize',14);
+subplot(1,3,2);
+imagesc(x,1:356,yag50.data.img);
+title('50 MeV Energy Offset','fontsize',14);
+xlabel('X (mm)','fontsize',14);
+subplot(1,3,3);
+imagesc(x,1:356,yag80.data.img);
+title('80 MeV Energy Offset','fontsize',14);
+xlabel('X (mm)','fontsize',14);
+
+if savE
+saveas(gca,[save_dir 'YAG_IMGS.pdf']);
+saveas(gca,[save_dir 'YAG_IMGS.png']);
+saveas(gca,[save_dir 'YAG_IMGS.tiff']);
+end
 
 yag_line20 = mean(double(yag20.data.img(100:125,:)),1);
 yag_line50 = mean(double(yag50.data.img(100:125,:)),1);
@@ -77,10 +86,11 @@ plot(x(yc_80),yag_line80(yc_80),'ys','markersize',13,'MarkerFaceColor','y');
 
 hold off;
 
+if savE
 saveas(gca,[save_dir 'YAG_lines.pdf']);
 saveas(gca,[save_dir 'YAG_lines.png']);
 saveas(gca,[save_dir 'YAG_lines.tiff']);
-
+end
 
 delta = [0.0983 0.2457 0.3931];
 flo = [0 x(y50_lo)-x(y20_lo) x(y80_lo)-x(y20_lo)];
@@ -98,6 +108,16 @@ pfmax = pmax(1)*delta.^2 + pmax(2)*delta + pmax(3);
 pfcent = pcent(1)*delta.^2 + pcent(2)*delta + pcent(3);
 pfhi = phi(1)*delta.^2 + phi(2)*delta + phi(3);
 
+dfit = delta/100;
+plo_2 = polyfit(dfit,flo,2);
+pmax_2 = polyfit(dfit,fmax,2);
+pcent_2 = polyfit(dfit,fcent,2);
+phi_2 = polyfit(dfit,fhi,2);
+
+plo_1 = polyfit(dfit,flo,1);
+pmax_1 = polyfit(dfit,fmax,1);
+pcent_1 = polyfit(dfit,fcent,1);
+phi_1 = polyfit(dfit,fhi,1);
 
 figure(3);
 hold on;
@@ -117,6 +137,8 @@ xlabel('\delta (%)','fontsize',14);
 ylabel('\DeltaX (mm)','fontsize',14);
 hold off;
 
+if savE
 saveas(gca,[save_dir 'disp_lines.pdf']);
 saveas(gca,[save_dir 'disp_lines.png']);
 saveas(gca,[save_dir 'disp_lines.tiff']);
+end
