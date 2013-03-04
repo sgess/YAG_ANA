@@ -1,13 +1,7 @@
-function klysarrow(num)
+function klysarrow(PHAS,LINAC_KLYZ,SBST_IND,IND_ALL,Ylabel,Title,file,save_dir,savE)
 
-MACH = get_amp_and_phase(num,0,0,0);
 
-%E2 = PARAM.ENRG.E2;
-%E1 = PARAM.ENRG.E1;
-%E0 = PARAM.ENRG.E0;
-
-E0210 = 9.0 - 1.19;
-%E1120 = E2 - E1; 
+E0210 = 7.81;
 
 MAG = MACH.KLYS.AMPL(1:71)';
 DIR = -MACH.KLYS.PHAS(1:71)';

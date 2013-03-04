@@ -80,8 +80,11 @@ pdes_chrp = -sum(PDES_CHRP/1000);
 pdes_deck = atand(-sum(PDES_CHRP/1000)/sum(PDES_EADD/1000));
 pdes_hard = atand(-sum(PDES_CHRP/1000)/7.81);
 
+E02_10 = state.lem.energy(2)-state.lem.energy(1);
+
 MACH.CHRP.PACT = pact_chrp;
 MACH.CHRP.PDES = pdes_chrp;
-
+MACH.CHRP.PHI_ACT = atand(pact_chrp/E02_10);
+MACH.CHRP.PHI_DES = atand(pdes_chrp/E02_10);
 
 
