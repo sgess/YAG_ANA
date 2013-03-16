@@ -361,7 +361,7 @@ if(plot_sects)
     %Sector phase arrow
     figure(j);
     j = j + 1;
-    
+    clf;
     sectarrow(SECT_LEM(1:9)/1000,SECT_PHAS(1:9),CHIRP_ENG,CHIRP_PHA,state.lem.energy(2)-state.lem.energy(1),save_dir,savE);
     
     

@@ -4,12 +4,12 @@ clear all;
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1443/';
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1138/';
 %data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1103/';
-data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1108/';
+%data_dir = '/Users/sgess/Desktop/data/E200_DATA/E200_1108/';
 
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1443/';
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1138/';
 %save_dir = '/Users/sgess/Desktop/plots/E200/E200_1103/';
-save_dir = '/Users/sgess/Desktop/plots/E200/E200_1108/';
+%save_dir = '/Users/sgess/Desktop/plots/E200/E200_1108/';
 
 %sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
@@ -17,13 +17,13 @@ save_dir = '/Users/sgess/Desktop/plots/E200/E200_1108/';
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1443/';
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1138/';
 %data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1103/';
-%data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/E200_1108/';
+data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1108/';
 
 
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1443/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1138/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/';
-%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/';
+save_dir = '/Users/sgess/Desktop/FACET/PLOTS/HALF_PYRO/E200_1108/';
 
 
 %sim_dir = '/Users/sgess/Desktop/FACET/2012/DATA/LiTrackScans/E200_1103/';
@@ -57,19 +57,20 @@ sim_name   = 'E200_1108_scan.mat';
 interp_name= 'E200_1108_interp95.mat';
 slim_name  = 'E200_1108_Slim.mat';
 state_name = 'E200_1108_State.mat';
+disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/dispersion/'; 
 disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-043249.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-105028.mat';
 
 load([data_dir slim_name]);
 load([data_dir state_name]);
-load([data_dir disp_name]);
+load([disp_dir disp_name]);
 
 do_disp = 1;
 do_y = 0;
 plot_disp = 0;
 extract = 1;
-view_yag = 0;
+view_yag = 1;
 interp = 0;
 compare = 0;
 do_plot = 0;
