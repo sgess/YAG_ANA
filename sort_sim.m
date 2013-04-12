@@ -5,9 +5,11 @@ load('E200_1103_retry2.mat');
 
 residodo = zeros(8,8,8,8,397);
 ProfXLi = zeros(646,8,8,8,8,397);
+
 %for i=1:1
  for i=1:length(cat_dat.YAG_FWHM)
    
+     display(i);
     xx_y = cat_dat.yag_ax';
     Lineout = cat_dat.YAG_SPEC(:,i);
     %Lineout = cat_dat.YAG_MEAN;
@@ -48,11 +50,26 @@ b = F(H);
 c = D(H,F(H));
 d = B(H,F(H),D(H,F(H)));
 
-figure(1);
-plot(line_x,Line_minBG,line_x,ProfXLi(:,a,b,c,d,i));
-figure(2);
-plot(zz(:,a,b,c,d,3),bl(:,a,b,c,d,3));
+cat_dat.IND{i} = [a b c d];
+cat_dat.RES(i) = G;
+cat_dat.IPEAK(i) = I_max(a,b,c,d,3);
+cat_dat.ISIG(i) = I_sig(a,b,c,d,3);
+cat_dat.NPART(i) = N(a,b,c,d,3);
+cat_dat.FWHM(i) = bl_fwhm(a,b,c,d,3);
+cat_dat.SIG(i) = bl_sig(a,b,c,d,3);
 
-pause(0.1);
+cat_dat.SIM_EL(i) = part(a);
+cat_dat.SIM_AMPL(i) = NAMPL(b);
+cat_dat.SIM_0210(i) = LITW(c);
+cat_dat.SIM_1120(i) = LIEL(d);
+
+
+
+%figure(1);
+%plot(line_x,Line_minBG,line_x,ProfXLi(:,a,b,c,d,i));
+%figure(2);
+%plot(zz(:,a,b,c,d,3),bl(:,a,b,c,d,3));
+
+%pause(0.1);
 
 end
