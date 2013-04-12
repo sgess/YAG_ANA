@@ -97,6 +97,80 @@ if extract
     disp('Data extraction complete.');
 end
 
+
+cat_dat.NRTL_PHAS = [];
+cat_dat.NRTL_AMPL = [];
+
+cat_dat.PID_BSA = [];
+cat_dat.PID_AIDA = [];
+cat_dat.PID_PROF = [];
+
+cat_dat.BPM_2050_X = [];
+cat_dat.BPM_2050_Y = [];
+cat_dat.BPM_2050_TMIT = [];
+
+cat_dat.BPM_2445_X = [];
+cat_dat.BPM_2445_Y = [];
+cat_dat.BPM_2445_TMIT = [];
+
+cat_dat.BPM_3101_X = [];
+cat_dat.BPM_3101_Y = [];
+cat_dat.BPM_3101_TMIT = [];
+
+cat_dat.BPM_3036_X = [];
+cat_dat.BPM_3036_Y = [];
+cat_dat.BPM_3036_TMIT = [];
+
+cat_dat.TORO_2452_TMIT = [];
+cat_dat.TORO_3163_TMIT = [];
+cat_dat.TORO_DR13_TMIT = [];
+
+cat_dat.PYRO = [];
+
+cat_dat.YAG_FWHM = [];
+cat_dat.YAG_SPEC = [];
+
+for g=1:5
+    
+   cat_dat.NRTL_PHAS  = [cat_dat.NRTL_PHAS  DATA(g).NRTL.PHAS];
+   cat_dat.NRTL_AMPL  = [cat_dat.NRTL_AMPL  DATA(g).NRTL.AMPL];
+   
+   cat_dat.PID_BSA    = [cat_dat.PID_BSA    DATA(g).PID.BSA];
+   cat_dat.PID_AIDA   = [cat_dat.PID_AIDA   DATA(g).PID.AIDA];
+   cat_dat.PID_PROF   = [cat_dat.PID_PROF   DATA(g).PID.PROF];
+   
+   cat_dat.BPM_2050_X = [cat_dat.BPM_2050_X DATA(g).BPM_2050.X];
+   cat_dat.BPM_2050_Y = [cat_dat.BPM_2050_Y DATA(g).BPM_2050.Y];
+   cat_dat.BPM_2050_TMIT = [cat_dat.BPM_2050_TMIT DATA(g).BPM_2050.TMIT];
+
+   cat_dat.BPM_2445_X = [cat_dat.BPM_2445_X DATA(g).BPM_2445.X];
+   cat_dat.BPM_2445_Y = [cat_dat.BPM_2445_Y DATA(g).BPM_2445.Y];
+   cat_dat.BPM_2445_TMIT = [cat_dat.BPM_2445_TMIT DATA(g).BPM_2445.TMIT];
+
+   cat_dat.BPM_3036_X = [cat_dat.BPM_3036_X DATA(g).BPM_3036.X];
+   cat_dat.BPM_3036_Y = [cat_dat.BPM_3036_Y DATA(g).BPM_3036.Y];
+   cat_dat.BPM_3036_TMIT = [cat_dat.BPM_3036_TMIT DATA(g).BPM_3036.TMIT];
+   
+   cat_dat.BPM_3101_X = [cat_dat.BPM_3101_X DATA(g).BPM_3101.X];
+   cat_dat.BPM_3101_Y = [cat_dat.BPM_3101_Y DATA(g).BPM_3101.Y];
+   cat_dat.BPM_3101_TMIT = [cat_dat.BPM_3101_TMIT DATA(g).BPM_3101.TMIT];
+   
+   cat_dat.TORO_2452_TMIT = [cat_dat.TORO_2452_TMIT DATA(g).TORO_2452.TMIT];
+   cat_dat.TORO_3163_TMIT = [cat_dat.TORO_3163_TMIT DATA(g).TORO_3163.TMIT];
+   cat_dat.TORO_DR13_TMIT = [cat_dat.TORO_DR13_TMIT DATA(g).TORO_DR13.TMIT];
+   
+   cat_dat.PYRO       = [cat_dat.PYRO       DATA(g).PYRO.VAL];
+   
+   cat_dat.YAG_FWHM   = [cat_dat.YAG_FWHM   DATA(g).YAG.FWHM];
+   cat_dat.YAG_SPEC   = [cat_dat.YAG_SPEC   DATA(g).YAG.spectrum];
+   
+end
+
+[cat_dat.py_sort, cat_dat.ind_sort] = sort(cat_dat.PYRO);
+
+save('concat_full_pyro.mat','cat_dat');
+
+
 % if interp
 %     disp('Interpolating simulations. . .');
 %     %INTERP = interp_sim(DATA.YAG.PIX,DATA.AXIS.ENG,beam_size,eta_yag,[sim_dir sim_name]);
