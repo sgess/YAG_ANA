@@ -25,7 +25,7 @@ for Y =1:87;
     end
     
     vind = RES.CON.SQIND{Y};
-    ind = vind(1)+8*vind(2)+64*vind(3)+512*vind(4) + 1;
+    ind = vind(1)+(8-1)*vind(2)+(64-1)*vind(3)+(512-1)*vind(4) + 1;
     i = vind(1)+1;
     k = vind(2)+1;
     l = vind(3)+1;

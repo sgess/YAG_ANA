@@ -21,7 +21,8 @@ DATA.BPM_2050.Y = zeros(1,nShots);
 DATA.PYRO.VAL = zeros(1,nShots);
 
 % YAG Resolution
-DATA.YAG.RES = good_data(1).YAGS_LI20_2432.prof_RES;
+%DATA.YAG.RES = good_data(1).YAGS_LI20_2432.prof_RES;
+DATA.YAG.RES = 9.62;
 
 % YAG pixels
 DATA.YAG.PIX = good_data(1).YAGS_LI20_2432.prof_roiXN;
