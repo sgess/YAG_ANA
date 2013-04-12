@@ -1,4 +1,4 @@
-function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,view_yag,too_wide)
+function DATA = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,view_yag,too_wide,spec_pix)
 % Extract data from slimmed directory
 
 % NRTL stuff
@@ -13,9 +13,25 @@ DATA.PID.PROF = zeros(1,nShots);
 % BPM stuff
 DATA.BPM_2445.X = zeros(1,nShots);
 DATA.BPM_2050.X = zeros(1,nShots);
+DATA.BPM_3101.X = zeros(1,nShots);
+DATA.BPM_3036.X = zeros(1,nShots);
 
 DATA.BPM_2445.Y = zeros(1,nShots);
 DATA.BPM_2050.Y = zeros(1,nShots);
+DATA.BPM_3101.Y = zeros(1,nShots);
+DATA.BPM_3036.Y = zeros(1,nShots);
+
+DATA.BPM_2445.TMIT = zeros(1,nShots);
+DATA.BPM_2050.TMIT = zeros(1,nShots);
+DATA.BPM_3101.TMIT = zeros(1,nShots);
+DATA.BPM_3036.TMIT = zeros(1,nShots);
+
+% TORO stuff
+DATA.TORO_2452.TMIT = zeros(1,nShots);
+DATA.TORO_3163.TMIT = zeros(1,nShots);
+DATA.TORO_DR13.TMIT = zeros(1,nShots);
+
+
 
 %PYRO
 DATA.PYRO.VAL = zeros(1,nShots);
@@ -83,8 +99,23 @@ for j = 1:nShots
     % BPM stuff
     DATA.BPM_2445.X(j) = good_data(j).aida.bpms(1).x;
     DATA.BPM_2050.X(j) = good_data(j).aida.bpms(16).x;
+    DATA.BPM_3036.X(j) = good_data(j).aida.bpms(27).x;
+    DATA.BPM_3101.X(j) = good_data(j).aida.bpms(26).x;
+    
     DATA.BPM_2445.Y(j) = good_data(j).aida.bpms(1).y;
     DATA.BPM_2050.Y(j) = good_data(j).aida.bpms(16).y;
+    DATA.BPM_3036.Y(j) = good_data(j).aida.bpms(27).y;
+    DATA.BPM_3101.Y(j) = good_data(j).aida.bpms(26).y;
+    
+    DATA.BPM_2445.TMIT(j) = good_data(j).aida.bpms(1).tmit;
+    DATA.BPM_2050.TMIT(j) = good_data(j).aida.bpms(16).tmit;
+    DATA.BPM_3036.TMIT(j) = good_data(j).aida.bpms(27).tmit;
+    DATA.BPM_3101.TMIT(j) = good_data(j).aida.bpms(26).tmit;
+    
+    % Toro stuff
+    DATA.TORO_2452.TMIT(j) = good_data(j).aida.toro(3).tmit;
+    DATA.TORO_3163.TMIT(j) = good_data(j).aida.toro(2).tmit;
+    DATA.TORO_DR13.TMIT(j) = good_data(j).aida.toro(4).tmit;
     
     % PYRO Stuff
     DATA.PYRO.VAL(j) = good_data(j).BLEN_LI20_3158_BRAW.val;
@@ -170,10 +201,14 @@ end
 
 %store some smaller versions and force even pixels
 if too_wide
-    if mod(DATA.YAG.MAXPIX,2)
-        DATA.YAG.pix = DATA.YAG.MAXPIX+101;
+    if nargin == 10
+        DATA.YAG.pix = spec_pix;
     else
-        DATA.YAG.pix = DATA.YAG.MAXPIX+100;
+        if mod(DATA.YAG.MAXPIX,2)
+            DATA.YAG.pix = DATA.YAG.MAXPIX+101;
+        else
+            DATA.YAG.pix = DATA.YAG.MAXPIX+100;
+        end
     end
     DATA.YAG.spectrum = zeros(DATA.YAG.pix,nShots);
     DATA.YAG.sum = zeros(1,nShots);
