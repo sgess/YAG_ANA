@@ -1,7 +1,7 @@
 clear all;
 
-save_dir = '/Users/sgess/Desktop/';
-file_name = 'E200_1103_retry';
+%save_dir = '/Users/sgess/Desktop/';
+file_name = 'E200_1103_retry2';
 savE = 1;
 
 scan = 1;
@@ -65,10 +65,12 @@ if scan == 1
     
     bl      = zeros(PARAM.SIMU.BIN,n_el,c_el,tw_el,el_el,n_out);
     es      = zeros(PARAM.SIMU.BIN,n_el,c_el,tw_el,el_el,n_out);
+    sy      = zeros(PARAM.SIMU.BIN,n_el,c_el,tw_el,el_el);
     
     zz      = zeros(PARAM.SIMU.BIN,n_el,c_el,tw_el,el_el,n_out);
     ee      = zeros(PARAM.SIMU.BIN,n_el,c_el,tw_el,el_el,n_out);
-    
+    xx      = zeros(PARAM.SIMU.BIN,n_el,c_el,tw_el,el_el);
+     
     
     for i = 1:n_el
         for j = 1:c_el
@@ -107,6 +109,9 @@ if scan == 1
                             ee(:,i,j,k,l,o) = OUT.E.AXIS(:,o);
                             
                         end
+                        
+                        sy(:,i,j,k,l) = OUT.X.HIST;
+                        xx(:,i,j,k,l) = OUT.X.AXIS;
                     
                 end
             end
@@ -114,9 +119,9 @@ if scan == 1
     end
     
     if savE
-        save([save_dir file_name '.mat'],'PARAM','bl_fwhm','bl_sig','z_avg',...
+        save([file_name '.mat'],'PARAM','bl_fwhm','bl_sig','z_avg',...
             'part','NAMPL','LITW','LIEL',...
-            'e_avg','e_fwhm','e_sig','I_max','I_sig','N','bl','es','zz','ee');
+            'e_avg','e_fwhm','e_sig','I_max','I_sig','N','bl','es','zz','ee','sy','xx');
     end
 
 end
