@@ -167,7 +167,7 @@ for g=1:5
 end
 
 [cat_dat.py_sort, cat_dat.ind_sort] = sort(cat_dat.PYRO);
-
+cat_dat.yag_ax = DATA(g).AXIS.xx/1000;
 save('concat_full_pyro.mat','cat_dat');
 
 
