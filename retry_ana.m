@@ -38,7 +38,7 @@ slim_name  = {'E200_1108_Slim.mat';...
               'E200_1110_Slim.mat';...
               'E200_1111_Slim.mat';...
               'E200_1112_Slim.mat';};
-          
+           
 %state_name = 'E200_1103_State.mat';
 state_name = 'E200_1108_State.mat';
 
@@ -70,7 +70,7 @@ view_yag = 0;
 interp = 0;
 compare = 0;
 do_plot = 0;
-savE = 0;
+savE = 1;
 too_wide = 1;
 
 if do_disp
@@ -81,8 +81,8 @@ if do_disp
 end
 
 %YAG lineout lines
-lo_line = 175;
-hi_line = 200;
+lo_line = 350;
+hi_line = 375;
 
 bad_pix = [638 639];
 spec = 646;
@@ -168,7 +168,7 @@ end
 
 [cat_dat.py_sort, cat_dat.ind_sort] = sort(cat_dat.PYRO);
 cat_dat.yag_ax = DATA(g).AXIS.xx/1000;
-save('concat_half_pyro.mat','cat_dat');
+if savE; save('concat_half_pyro_wide.mat','cat_dat'); end;
 
 
 % if interp
