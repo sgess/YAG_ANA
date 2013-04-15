@@ -122,6 +122,8 @@ for j = 1:nShots
     
     % YAG image alignment, centering, fwhm
     IMG_1 = rot90(good_data(j).YAGS_LI20_2432.img,2)';
+    BG = IMG_1(:,800:end);
+    
     %set bad pixel values to adjacent
     if ~isempty(bad_pix)
         for b = 1:length(bad_pix)
@@ -182,19 +184,36 @@ for j = 1:nShots
     if view_yag
         s1 = 10; 
         figure(s1); 
-        subplot(2,1,1); 
-        imagesc(IMG_1);
+        subplot(3,1,1); 
+        image(IMG_1);
         hold on;
         line([0 DATA.YAG.PIX],[lo_line lo_line],'color','r');
         line([0 DATA.YAG.PIX],[hi_line hi_line],'color','r');
         hold off;
-        subplot(2,1,2); 
+        subplot(3,1,2); 
         plot(DATA.AXIS.ENG,cutLINE(:,j),...
             DATA.AXIS.ENG(i_min(j)),cutLINE(i_min(j),j),'r*',...
             DATA.AXIS.ENG(i_max(j)),cutLINE(i_max(j),j),'g*',...
             DATA.AXIS.ENG(indcent(j)),cutLINE(indcent(j),j),'m*',...
             DATA.AXIS.ENG(lo(j)),cutLINE(lo(j),j),'c*',...
             DATA.AXIS.ENG(hi(j)),cutLINE(hi(j),j),'k*');
+        %figure(1);
+        subplot(3,1,3);
+        [vals,bins]=hist(double(IMG_1(:)),200);
+        semilogy(bins,vals,'*');
+        axis([0 300 1e0 1e5]);
+        %subplot(2,2,1);
+        %imagesc(BG);
+        %colorbar;
+        %subplot(2,2,3);
+        %plot(mean(BG));
+        %subplot(2,2,2);
+        %plot(mean(BG,2));
+        %figure(2);
+        %x = mean(BG);
+        %y = fft(x);
+        %semilogy(abs(y(4:164)));
+        display(j);
         pause;
     end
 end

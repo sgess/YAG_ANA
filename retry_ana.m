@@ -1,21 +1,27 @@
 clear all;
 
+full = 1;
+half = 0;
+
 %mcme
-% data_dir = {'/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1103/';...
-%             '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1104/';...
-%             '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1105/';...
-%             '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1106/';...
-%             '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1107/';};
-        
-        
+if full
+data_dir = {'/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1103/';...
+            '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1104/';...
+            '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1105/';...
+            '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1106/';...
+            '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/E200_1107/';};
+end        
+   
+if half
 data_dir = {'/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1108/';...
             '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1109/';...
             '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1110/';...
             '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1111/';...
             '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1112/';};
-        
-%save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/';
-save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/';
+end
+
+if full; save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/'; end;
+if half; save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/'; end;
 %sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
 %arg
@@ -23,27 +29,30 @@ save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/';
 % save_dir = '/Users/sgess/Desktop/plots/E200/E200_1108/';
 % sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
-%save_name  = '1103_retry.mat';
-save_name  = '1108_retry2.mat';
+if full; save_name  = '1103.mat'; end;
+if half; save_name  = '1108.mat'; end;
 
+if full
+slim_name  = {'E200_1103_Slim.mat';...
+              'E200_1104_Slim.mat';...
+              'E200_1105_Slim.mat';...
+              'E200_1106_Slim.mat';...
+              'E200_1107_Slim.mat';};
+end
 
-% slim_name  = {'E200_1103_Slim.mat';...
-%               'E200_1104_Slim.mat';...
-%               'E200_1105_Slim.mat';...
-%               'E200_1106_Slim.mat';...
-%               'E200_1107_Slim.mat';};
-
+if half
 slim_name  = {'E200_1108_Slim.mat';...
               'E200_1109_Slim.mat';...
               'E200_1110_Slim.mat';...
               'E200_1111_Slim.mat';...
               'E200_1112_Slim.mat';};
+end
            
-%state_name = 'E200_1103_State.mat';
-state_name = 'E200_1108_State.mat';
+if full; state_name = 'E200_1103_State.mat'; end;
+if half; state_name = 'E200_1108_State.mat'; end;
 
-%disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/dispersion/';
-disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/dispersion/';
+if full; disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/dispersion/'; end;
+if half; disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/dispersion/'; end;
 
 disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 
@@ -81,8 +90,8 @@ if do_disp
 end
 
 %YAG lineout lines
-lo_line = 350;
-hi_line = 375;
+lo_line = 200;
+hi_line = 225;
 
 bad_pix = [638 639];
 spec = 646;
@@ -168,7 +177,7 @@ end
 
 [cat_dat.py_sort, cat_dat.ind_sort] = sort(cat_dat.PYRO);
 cat_dat.yag_ax = DATA(g).AXIS.xx/1000;
-if savE; save('concat_half_pyro_wide.mat','cat_dat'); end;
+if savE; save(['concat_' save_name],'cat_dat'); end;
 
 
 % if interp
