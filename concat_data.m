@@ -12,7 +12,10 @@ save_dir = '/Users/sgess/Desktop/FACET/PLOTS/FULL_PYRO/PYRO/';
 
 %[mres, mind] = min(cat_dat.RES);
 
-for i = 1:397
+nmin = 340;
+nmax = 360;
+
+for i = nmin:nmax
     
     ind_n = cat_dat.IND{i};
     prof_ax = zz(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4),3);
@@ -43,15 +46,26 @@ for i = 1:397
     plot(prof_ax,profile,'r','linewidth',2);
     
     subplot(2,2,3);
-    plot(cat_dat.RES(1:i));
-    axis([0 397 0 max(cat_dat.RES(1:i))]);
+    plot(cat_dat.RES(nmin:i));
+    %axis([nmin nmax 0 max(cat_dat.RES(nmin:nmax))]);
     
     pause(0.01);
 end
-%hist(cat_dat.SIM_EL,8);
-%hist(cat_dat.SIM_AMPL,8);
-%hist(cat_dat.SIM_0210,8);
-%hist(cat_dat.SIM_1120,8);
+
+figure(2);
+subplot(2,2,1);
+hist(cat_dat.SIM_EL(nmin:nmax),8);
+title('Number of Particles');
+subplot(2,2,2);
+hist(cat_dat.SIM_AMPL(nmin:nmax),8);
+title('NRTL Ampl');
+subplot(2,2,3);
+hist(cat_dat.SIM_0210(nmin:nmax),8);
+title('2-10 Phase');
+subplot(2,2,4);
+hist(cat_dat.SIM_1120(nmin:nmax),8);
+title('11-20 Phase');
+
 
 
 % [Ip_sort, ind_Ip] = sort(cat_dat.IPEAK);

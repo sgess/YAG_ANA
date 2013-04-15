@@ -1,4 +1,4 @@
-function [eta_yag, beam_size] = DISP_ANA(data,plot_disp,do_y,savE,save_dir)
+function [eta_yag, beam_size] = disp_ana(data,plot_disp,do_y,savE,save_dir)
 % Dispersion analysis script
 
 %Create BPM arrays
