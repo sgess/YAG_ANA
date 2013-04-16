@@ -12,13 +12,13 @@ PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
 PARAM.ENRG.E2    = 20.35;   % Energy at S20 (GeV)
 
 % Beam initial conditions
-PARAM.INIT.SIGZ0 = 8.20E-3; % RMS bunch length (m)
-PARAM.INIT.SIGD0 = 8.70E-4; % RMS energy spread
+PARAM.INIT.SIGZ0 = 8.00E-3; % RMS bunch length (m)
+PARAM.INIT.SIGD0 = 8.00E-4; % RMS energy spread
 PARAM.INIT.Z0BAR = 0;       % Z offset
 PARAM.INIT.D0BAR = 0;       % Energy offset
 PARAM.INIT.NESIM = 2E5;     % Number of simulated macro particles
 PARAM.INIT.NPART = 2.00E10; % Number of electrons per bunch
-PARAM.INIT.ASYM  = -0.19;  % The Holtzapple skew
+PARAM.INIT.ASYM  = -0.15;  % The Holtzapple skew
 PARAM.INIT.TAIL  = 0;       % Not sure what this is
 PARAM.INIT.CUT   = 6;       % Not sure what this is
 
@@ -27,7 +27,7 @@ PARAM.NRTL.AMPL  = 0.0388;   % RTL compressor ampl (MV)
 PARAM.NRTL.PHAS  = 90.00;   % RTL compressor phase (deg)
 PARAM.NRTL.LEFF  = 2.1694;  % RTL cavity length (m)
 PARAM.NRTL.R56   = 0.6026;  % RTL chicane R56 (m)
-PARAM.NRTL.T566  = 1.000;   % RTL chicane T566 (m)
+PARAM.NRTL.T566  = 1.010;   % RTL chicane T566 (m)
 PARAM.NRTL.ELO   = -0.0250; % RTL lower momentum cut (GeV)
 PARAM.NRTL.EHI   = 0.0250;  % RTL upper momentum cut (GeV)
 
