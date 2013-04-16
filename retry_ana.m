@@ -1,7 +1,7 @@
 clear all;
 
-full = 1;
-half = 0;
+full = 0;
+half = 1;
 
 %mcme
 if full
@@ -79,7 +79,7 @@ view_yag = 0;
 interp = 0;
 compare = 0;
 do_plot = 0;
-savE = 1;
+savE = 0;
 too_wide = 1;
 
 if do_disp
@@ -138,6 +138,7 @@ cat_dat.PYRO = [];
 
 cat_dat.YAG_FWHM = [];
 cat_dat.YAG_SPEC = [];
+cat_dat.YAG_SUM = [];
 
 for g=1:5
     
@@ -172,6 +173,7 @@ for g=1:5
    
    cat_dat.YAG_FWHM   = [cat_dat.YAG_FWHM   DATA(g).YAG.FWHM];
    cat_dat.YAG_SPEC   = [cat_dat.YAG_SPEC   DATA(g).YAG.spectrum];
+   cat_dat.YAG_SUM    = [cat_dat.YAG_SUM   DATA(g).YAG.SUM];
    
 end
 

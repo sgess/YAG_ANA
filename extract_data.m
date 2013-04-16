@@ -64,6 +64,7 @@ hi = zeros(1,nShots);
 DATA.YAG.FWHM = zeros(1,nShots);
 DATA.YAG.LO = zeros(1,nShots);
 DATA.YAG.HI = zeros(1,nShots);
+DATA.YAG.SUM = zeros(1,nShots);
 
 % YAG centroid
 P_cent = zeros(1,nShots);
@@ -123,6 +124,7 @@ for j = 1:nShots
     % YAG image alignment, centering, fwhm
     IMG_1 = rot90(good_data(j).YAGS_LI20_2432.img,2)';
     BG = IMG_1(:,800:end);
+    DATA.YAG.SUM(j) = sum(IMG_1(:));
     
     %set bad pixel values to adjacent
     if ~isempty(bad_pix)
