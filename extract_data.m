@@ -165,9 +165,11 @@ for j = 1:nShots
     
     %embed at center
     if indcent(j) < round(DATA.YAG.PIX/2)
+        
         DATA.YAG.SPECTRUM(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j) = cutLINE(1:round(DATA.YAG.PIX/2+indcent(j)+1),j);
     else
-        DATA.YAG.SPECTRUM(1:round(DATA.YAG.PIX/2+indcent(j)+1),j) = cutLINE(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j);
+        indcent(j) = round(DATA.YAG.PIX/2) -2;
+        DATA.YAG.SPECTRUM(round(DATA.YAG.PIX/2-indcent(j)):DATA.YAG.PIX,j) = cutLINE(1:round(DATA.YAG.PIX/2+indcent(j)+1),j);
     end
     
     % FWHM of tailored spectrum
@@ -187,7 +189,7 @@ for j = 1:nShots
         s1 = 10; 
         figure(s1); 
         subplot(3,1,1); 
-        image(IMG_1);
+        imagesc(IMG_1);
         hold on;
         line([0 DATA.YAG.PIX],[lo_line lo_line],'color','r');
         line([0 DATA.YAG.PIX],[hi_line hi_line],'color','r');
@@ -216,7 +218,7 @@ for j = 1:nShots
         %y = fft(x);
         %semilogy(abs(y(4:164)));
         display(j);
-        pause;
+        pause(0.1);
     end
 end
 

@@ -1,7 +1,8 @@
 clear all;
 
 full = 0;
-half = 1;
+half = 0;
+seba = 1;
 
 %mcme
 if full
@@ -20,8 +21,15 @@ data_dir = {'/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1108/';...
             '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/E200_1112/';};
 end
 
+if seba
+    data_dir = '/Users/sgess/Desktop/FACET/2012/DATA/JULY_2_DATA/';
+end
+
 if full; save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1103/'; end;
 if half; save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/'; end;
+if seba; save_dir = '/Users/sgess/Desktop/FACET/PLOTS/JULY_2_DATA/'; end;
+
+
 %sim_dir = '/Users/sgess/Desktop/data/LiTrack_scans/';
 
 %arg
@@ -31,6 +39,8 @@ if half; save_dir = '/Users/sgess/Desktop/FACET/PLOTS/E200_1108/'; end;
 
 if full; save_name  = '1103.mat'; end;
 if half; save_name  = '1108.mat'; end;
+if seba; save_name  = 'July2.mat'; end;
+
 
 if full
 slim_name  = {'E200_1103_Slim.mat';...
@@ -47,14 +57,28 @@ slim_name  = {'E200_1108_Slim.mat';...
               'E200_1111_Slim.mat';...
               'E200_1112_Slim.mat';};
 end
+if seba
+slim_name  = {'E200_1324_Slim.mat';...
+              'E200_1325_Slim.mat';...
+              'E200_1326_Slim.mat';...
+              'E200_1327_Slim.mat';...
+              'E200_1328_Slim.mat';...
+              'E200_1330_Slim.mat';...
+              'E200_1335_Slim.mat';};
+end
            
 if full; state_name = 'E200_1103_State.mat'; end;
 if half; state_name = 'E200_1108_State.mat'; end;
+if seba; state_name = 'E200_1324_State.mat'; end;
+
 
 if full; disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/FULL_PYRO/dispersion/'; end;
 if half; disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/HALF_PYRO/dispersion/'; end;
+if seba; disp_dir = '/Users/sgess/Desktop/FACET/2012/DATA/JULY_2_DATA/'; end;
 
-disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
+if full || half; disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat'; end;
+%if seba; disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-02-065518.mat'; end;
+if seba; disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-02-090655.mat'; end;
 
 %1108
 %save_name  = '1108_retry.mat';
@@ -68,14 +92,14 @@ disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-06-30-054158.mat';
 %disp_name  = 'facet_dispersion-SCAVENGY.MKB-2012-07-01-105028.mat';
 
 
-load([data_dir{1} state_name]);
+if full || half; load([data_dir{1} state_name]); else load([data_dir state_name]); end;
 load([disp_dir disp_name]);
 
 do_disp = 1;
 do_y = 1;
 plot_disp = 0;
 extract = 1;
-view_yag = 0;
+view_yag = 1;
 interp = 0;
 compare = 0;
 do_plot = 0;
@@ -93,14 +117,15 @@ end
 lo_line = 200;
 hi_line = 225;
 
+
 bad_pix = [638 639];
-spec = 646;
+spec = 550;
 if extract
     disp('Extracting data. . .');
-    for i=1:length(data_dir)
-    load([data_dir{i} slim_name{i}]);
-    nShots = length(good_data);
-    DATA(i) = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots,view_yag,too_wide,spec);
+    for i=1:length(slim_name)
+    if full || half; load([data_dir{i} slim_name{i}]); else load([data_dir slim_name{i}]); end;
+    nShots(i) = length(good_data);
+    DATA(i) = extract_data(good_data,eta_yag,beam_size,lo_line,hi_line,bad_pix,nShots(i),view_yag,too_wide,spec);
     clear('good_data');
     end
     disp('Data extraction complete.');
@@ -140,7 +165,7 @@ cat_dat.YAG_FWHM = [];
 cat_dat.YAG_SPEC = [];
 cat_dat.YAG_SUM = [];
 
-for g=1:5
+for g=1:length(slim_name)
     
    cat_dat.NRTL_PHAS  = [cat_dat.NRTL_PHAS  DATA(g).NRTL.PHAS];
    cat_dat.NRTL_AMPL  = [cat_dat.NRTL_AMPL  DATA(g).NRTL.AMPL];
@@ -179,6 +204,7 @@ end
 
 [cat_dat.py_sort, cat_dat.ind_sort] = sort(cat_dat.PYRO);
 cat_dat.yag_ax = DATA(g).AXIS.xx/1000;
+cat_dat.nshots = nShots;
 if savE; save(['concat_' save_name],'cat_dat'); end;
 
 
