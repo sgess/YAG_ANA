@@ -1,8 +1,11 @@
 clear all
 %savE = 1;
-load('concat_full_pyro.mat');
-load('E200_1103_retry2.mat');
-savE = 1;
+%load('concat_full_pyro.mat');
+%load('concat_full_pyro_wide.mat');
+%load('E200_1103_retry2.mat');
+load('fuckfuckfuckfuckfuck.mat');
+load('fuck.mat');
+savE = 0;
 save_dir = '/Users/sgess/Desktop/FACET/PLOTS/FULL_PYRO/PYRO/';
 %save_dir = '/Users/sgess/Desktop/FACET/PLOTS/HALF_PYRO/PYRO/';
 
@@ -12,14 +15,18 @@ save_dir = '/Users/sgess/Desktop/FACET/PLOTS/FULL_PYRO/PYRO/';
 
 %[mres, mind] = min(cat_dat.RES);
 
-nmin = 340;
-nmax = 360;
+nmin = 1;
+nmax = 397;
+
+cat_dat.prof_ax = zeros(128,397);
+cat_dat.profile = zeros(128,397);
+cat_dat.ProfX = zeros(646,397);
 
 for i = nmin:nmax
     
     ind_n = cat_dat.IND{i};
-    prof_ax = zz(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4),3);
-    profile = bl(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4),3);
+    cat_dat.prof_ax(:,i) = zz(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4));
+    cat_dat.profile(:,i) = bl(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4));
    
     spectra = sy(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4));
     spec_ax = xx(:,ind_n(1),ind_n(2),ind_n(3),ind_n(4));
@@ -36,38 +43,44 @@ for i = nmin:nmax
     SimDisp = interpSimXXX(spec_ax,spectra,cat_dat.yag_ax,128,center-x_avg);
     SumX = sum(SimDisp);
     normX = SumLine/SumX;
-    ProfX = normX*SimDisp;
+    cat_dat.ProfX(:,i) = normX*SimDisp;
     
     subplot(2,2,1);
-    plot(cat_dat.yag_ax,cat_dat.YAG_SPEC(:,i),'b',cat_dat.yag_ax,ProfX,'g','linewidth',2);
+    plot(cat_dat.yag_ax,cat_dat.YAG_SPEC(:,i),'b',cat_dat.yag_ax,cat_dat.ProfX(:,i),'g','linewidth',2);
     legend('sYAG','LiTrack');
 
     subplot(2,2,2);
-    plot(prof_ax,profile,'r','linewidth',2);
+    plot(cat_dat.prof_ax(:,i),cat_dat.profile(:,i),'r','linewidth',2);
     
     subplot(2,2,3);
     plot(cat_dat.RES(nmin:i));
     %axis([nmin nmax 0 max(cat_dat.RES(nmin:nmax))]);
     
-    pause(0.01);
+    %pause(0.01);
 end
 
 figure(2);
 subplot(2,2,1);
-hist(cat_dat.SIM_EL(nmin:nmax),8);
+hist(cat_dat.SIM_EL(nmin:nmax),10);
 title('Number of Particles');
 subplot(2,2,2);
-hist(cat_dat.SIM_AMPL(nmin:nmax),8);
-title('NRTL Ampl');
+hist(cat_dat.SIM_PHAS(nmin:nmax),10);
+title('NRTL Phas');
 subplot(2,2,3);
-hist(cat_dat.SIM_0210(nmin:nmax),8);
+hist(cat_dat.SIM_0210(nmin:nmax),10);
 title('2-10 Phase');
 subplot(2,2,4);
-hist(cat_dat.SIM_1120(nmin:nmax),8);
+hist(cat_dat.SIM_1120(nmin:nmax),10);
 title('11-20 Phase');
 
 
-
+for i = 1:397
+    figure(1);
+    plot(cat_dat.yag_ax,cat_dat.YAG_SPEC(:,sort_res_ind(i)),'b',cat_dat.yag_ax,cat_dat.ProfX(:,sort_res_ind(i)),'g','linewidth',2);
+    figure(2);
+    plot(cat_dat.prof_ax(:,sort_res_ind(i)),cat_dat.profile(:,sort_res_ind(i)),'r','linewidth',2);
+    pause;
+end
 % [Ip_sort, ind_Ip] = sort(cat_dat.IPEAK);
 % [Sig_sort, ind_Sig] = sort(cat_dat.SIG);
 % ind_Sig = ind_Sig(1:(end-5));
