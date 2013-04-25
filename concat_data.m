@@ -56,7 +56,7 @@ for i = nmin:nmax
     plot(cat_dat.RES(nmin:i));
     %axis([nmin nmax 0 max(cat_dat.RES(nmin:nmax))]);
     
-    %pause(0.01);
+    pause(0.01);
 end
 
 figure(2);
@@ -72,6 +72,8 @@ title('2-10 Phase');
 subplot(2,2,4);
 hist(cat_dat.SIM_1120(nmin:nmax),10);
 title('11-20 Phase');
+
+
 
 
 for i = 1:397
