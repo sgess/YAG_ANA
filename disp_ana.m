@@ -1,22 +1,24 @@
 function [eta_yag, beam_size] = disp_ana(data,plot_disp,do_y,savE,save_dir)
 % Dispersion analysis script
 
+n_pts = 7;
+
 %Create BPM arrays
-x_2050=zeros(30,7);
-x_2445=zeros(30,7);
-y_2050=zeros(30,7);
-y_2445=zeros(30,7);
+x_2050=zeros(30,n_pts);
+x_2445=zeros(30,n_pts);
+y_2050=zeros(30,n_pts);
+y_2445=zeros(30,n_pts);
 
 % BPM X,Y in mm
-x_2050(:,:)=data.x(9,:,:);
-x_2445(:,:)=data.x(19,:,:);
+x_2050(:,:)=data.x(9,:,1:n_pts);
+x_2445(:,:)=data.x(19,:,1:n_pts);
 
-y_2050(:,:)=data.y(9,:,:);
-y_2445(:,:)=data.y(19,:,:);
+y_2050(:,:)=data.y(9,:,1:n_pts);
+y_2445(:,:)=data.y(19,:,1:n_pts);
 
 % Energy in MeV
-e=zeros(30,7);
-e(:,:)=data.energy(1,:,:);
+e=zeros(30,n_pts);
+e(:,:)=data.energy(1,:,1:n_pts);
 
 % delta
 d=zeros(30,7);
