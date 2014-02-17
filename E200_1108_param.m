@@ -1,4 +1,4 @@
-PARAM.MACH.RAMP  = 0;       % phase ramp
+.5 PARAM.MACH.RAMP  = 0;       % phase ramp
 
 PARAM.ENRG.E0    = 1.19;    % Energy from ring (GeV)
 PARAM.ENRG.E1    = 9.0;     % Energy at S10 (GeV)
